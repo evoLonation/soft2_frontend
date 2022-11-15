@@ -41,17 +41,49 @@ export default {
       //基于准备好的dom，初始化chart实例
       let myChart = echarts.init(document.getElementById('charts-contianer'));
 
-      var xAxisData = [];
-      var data1 = [];
-      var data2 = [];
-      for(var i = 0; i < 100; i++) {
-        xAxisData.push('A' + i);
-        data1.push((Math.sin(i/5)*(i/5-10)+i/6)*5);
-        data2.push((Math.cos(i/5)*(i/5-10)+i/6)*5);
-      }
+      let CalxAxis = function () {
+        let arr = [];
+        for(let index = 2003; index <= 2022; index ++) {
+          arr.push(index);
+        }
+        return arr;
+      };
+
+      let CalData1 = function () {
+        let arr = [];
+        var num = 1;
+        for(let index = 1; index <= 20; index++) {
+          arr.push(num);
+          num = num + 5;
+          if(num > 20) {
+            num = num % 2;
+            num = num * (Math.random() % 5);
+          }
+        }
+        return arr;
+      };
+
+      let CalData2 = function() {
+        let arr = [];
+        var num = 3;
+        for(let index = 1; index <= 20; index++) {
+          arr.push(num);
+          num = num + 7;
+          if(num > 30) {
+            num = num % 4;
+            num = num * (Math.random() % 5);
+          }
+        }
+        return arr;
+      };
+
+      var xAxisData = CalxAxis();
+      var data1 = CalData1();
+      var data2 = CalData2();
+
       var option={
         legend: {
-          data: ['bar1', 'bar2']
+          data: ['历年成果数', '历年被引量']
         },
         toolbox: {
           // y: 'bottom',
@@ -75,7 +107,7 @@ export default {
         yAxis: {},
         series: [
           {
-            name: 'bar1',
+            name: '历年成果数',
             type: 'bar',
             data: data1,
             emphasis: {
@@ -86,7 +118,7 @@ export default {
             }
           },
           {
-            name: 'bar2',
+            name: '历年被引量',
             type: 'bar',
             data: data2,
             emphasis: {
