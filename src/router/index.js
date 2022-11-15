@@ -21,6 +21,11 @@ const routes = [
         name: "scholar",
         component: () => import('../views/scholar/ScholarHome')
     },
+    {
+        path: '/scholar/testChart',
+        name: "chart",
+        component: () => import('../views/scholar/TestNewEchart')
+    }
 ];
 
 const router = createRouter({
