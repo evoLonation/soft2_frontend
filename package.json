@@ -13,6 +13,7 @@
     "core-js": "^3.8.3",
     "echarts": "^5.4.0",
     "element-plus": "^2.2.21",
+    "pinia": "^2.0.23",
     "unplugin-auto-import": "^0.11.4",
     "unplugin-icons": "^0.14.13",
     "unplugin-vue-components": "^0.22.9",

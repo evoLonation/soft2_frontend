@@ -13,6 +13,10 @@ import VueAxios from 'vue-axios'
 // import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { createPinia } from 'pinia'
+
+axios.defaults.headers.common['HTTP2_HEADER_AUTHORIZATION'] = "";
+axios.defaults.baseURL = '/api/';
 
 
 const app = createApp(App)
@@ -24,4 +28,5 @@ app
     // .use(store)
     .use(router)
     .use(VueAxios,axios,Request)
+    .use(createPinia())
     .mount('#app')
