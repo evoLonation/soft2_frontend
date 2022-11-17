@@ -25,6 +25,11 @@ const routes = [
         path: '/scholar/testChart',
         name: "chart",
         component: () => import('../views/scholar/TestNewEchart')
+    },
+    {
+        path: '/netTest', //开发测试，以后会删
+        name: 'net',
+        component: () => import('../views/scholar/RelationNet/testNet')
     }
 ];
 

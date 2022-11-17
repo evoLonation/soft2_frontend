@@ -8,13 +8,8 @@
     </el-row>
     <el-card shadow="never" v-if="this.comment !== null">
       <el-row class="user-info">
-        <el-col>{{this.comment.userName}}:</el-col>
-      </el-row>
-      <el-row class="content">
-        <el-col>{{this.comment.content}}</el-col>
-      </el-row>
-      <el-row class="like-date" gutter="2">
-        <el-col :span="0.5" style="float:right;" :offset="19">
+        <el-col :span="2">{{this.comment.userName}}:</el-col>
+        <el-col :span="1" :offset="17">
           <el-button circle v-if="this.comment.liked" @click="dislike(this.comment.id)" style="cursor: pointer">
             <el-icon ><StarFilled /></el-icon>
           </el-button>
@@ -24,6 +19,9 @@
         </el-col>
         <el-col :span="1" class="likes1">{{this.comment.likes}}</el-col>
         <el-col :span="2" class="date1">{{this.comment.date}}</el-col>
+      </el-row>
+      <el-row class="content">
+        <el-col>{{this.comment.content}}</el-col>
       </el-row>
     </el-card>
     <div v-else style="padding: 20px 20px 20px 20px">暂无评论</div>
@@ -44,13 +42,8 @@
     <el-row style="height: 20px"></el-row>
     <el-card v-for="cmt in this.comments" :key="cmt" shadow="hover" custom-class="card" >
       <el-row class="user-info">
-        <el-col>{{cmt.userName}}:</el-col>
-      </el-row>
-      <el-row class="content">
-        <el-col>{{cmt.content}}</el-col>
-      </el-row>
-      <el-row class="like-date">
-        <el-col :span="1.5" style="float:right;" :offset="16">
+        <el-col :span="3">{{cmt.userName}}:</el-col>
+        <el-col :span="2" style="float:right;" :offset="12">
           <el-button circle size="small" v-if="cmt.liked" @click="dislike(cmt.id)" style="cursor: pointer">
             <el-icon ><StarFilled /></el-icon>
           </el-button>
@@ -58,8 +51,11 @@
             <el-icon ><Star /></el-icon>
           </el-button>
         </el-col>
-        <el-col :span="1.5" class="likes">{{cmt.likes}}</el-col>
-        <el-col :span="4" class="date">{{cmt.date}}</el-col>
+        <el-col :span="2" class="likes">{{cmt.likes}}</el-col>
+        <el-col :span="2" class="date">{{cmt.date}}</el-col>
+      </el-row>
+      <el-row class="content">
+        <el-col>{{cmt.content}}</el-col>
       </el-row>
     </el-card>
   </el-drawer>
@@ -151,9 +147,7 @@ export default {
   margin-top: 20px;
 }
 .user-info{
-  font-weight: bold;
   line-height: 1;
-  font-size: 13px;
 }
 .content {
   line-height: 1;
@@ -161,17 +155,13 @@ export default {
   margin-top: 10px;
   color: dimgrey;
 }
-.like-date {
-  margin-top: 1%;
-  height: 5%;
-}
 .date{
-  margin-top: 1%;
+  margin-top: 1.5%;
   margin-left: 3%;
   font-size: 10px;
 }
 .date1{
-  margin-top: 0.5%;
+  margin-top: 0.6%;
   margin-left: 3%;
   font-size: 12px;
 }
@@ -180,11 +170,11 @@ export default {
   margin-bottom: 10px;
 }
 .likes{
-   margin-top: 1%;
+   margin-top: 1.5%;
    font-size: 10px
  }
 .likes1{
-  margin-top: 0.5%;
+  margin-top: 0.6%;
   font-size: 12px
 }
 </style>

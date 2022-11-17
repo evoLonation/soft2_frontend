@@ -2,7 +2,6 @@ import G6 from "@antv/g6";
 export class Graph {
     graph
     data
-    predictLayout
     isSelect
     constructor(width, height, container) {
         this.graph = new G6.Graph({
@@ -28,10 +27,10 @@ export class Graph {
                 },
             },
             defaultEdge: {
-              type: 'can-running',
+                type: 'can-running',
             },
             layout: {
-                type: 'force',
+                type: 'force2',
                 preventOverlap: true,
                 nodeSize: 100,
                 linkDistance: 150,
@@ -186,13 +185,6 @@ export class Graph {
         this.setAnimate(data)
         this.graph.data(data)
         this.setLayout().then(r => console.log(r));
-        let node
-        data.nodes.forEach((n)=>{
-            if (n.type === 'major')
-                node = n;
-        })
-        let info = JSON.parse(JSON.stringify(node.info))
-        window.postMessage(info, '*')
     }
 
     render(){
@@ -205,13 +197,6 @@ export class Graph {
             return;
         }
         e.item.getEdges().forEach((edge) => this.graph.setItemState(edge, 'running', true));
-        let node
-        this.data.nodes.forEach((n)=>{
-            if (n.id === e.item.getID())
-                node = n;
-        })
-        let info = JSON.parse(JSON.stringify(node.info))
-        window.postMessage(info, '*')
     }
 
     initListener(){
