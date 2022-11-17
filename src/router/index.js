@@ -14,7 +14,7 @@ const routes = [
     {
         path: '/paper/:paperId',
         name: "paper",
-        component: () => import('../views/paper/paperHome')
+        component: () => import('../views/paper/Paper.vue')
     },
     {
         path: '/scholar/:scholarId',

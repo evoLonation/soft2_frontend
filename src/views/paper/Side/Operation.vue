@@ -1,0 +1,161 @@
+<template>
+  <div class="wrap-op">
+    <el-row class="op"><el-col>操作
+        <el-icon class="icon"><Tools /></el-icon>
+      </el-col>
+    </el-row>
+    <div style="display: flex">
+      <el-row class="op">
+        <el-tooltip class="item" effect="light" content="收藏" placement="top">
+          <el-button circle @click="this.star" class="button" size="large"><el-icon><Star /></el-icon></el-button>
+        </el-tooltip>
+      </el-row>
+      <el-row class="op">
+        <el-tooltip class="item" effect="light" content="引用" placement="top">
+          <el-button circle @click="this.cite" class="button" size="large"><el-icon><Share/></el-icon></el-button>
+        </el-tooltip>
+      </el-row>
+      <el-row class="op">
+        <el-tooltip class="item" effect="light" content="发起互助" placement="top">
+          <el-button circle @click="this.help" class="button" size="large"><el-icon><Help /></el-icon></el-button>
+        </el-tooltip>
+      </el-row>
+    </div>
+    <el-row class="op"><el-col>原文链接
+        <el-icon class="icon"><Link /></el-icon>
+    </el-col>
+    </el-row>
+    <el-row class="op" v-for="url in this.urls" :key="url">
+      <el-image></el-image>
+    </el-row>
+  </div>
+
+<!--引用格式对话框-->
+  <el-dialog v-model="this.showCite" custom-class="dialog">
+    <template #title>
+      <el-menu
+      :default-active="'1'"
+      class="el-menu-demo"
+      mode="horizontal"
+      @select="this.changeCite"
+      >
+      <el-menu-item index="1">GB/T 7714</el-menu-item>
+      <el-menu-item index="2">MLA</el-menu-item>
+      <el-menu-item index="3">APA</el-menu-item>
+      <el-menu-item index="4">BibTex</el-menu-item>
+      <el-menu-item index="5">CAJ-CD</el-menu-item>
+      </el-menu>
+    </template>
+    <div>{{this.citation}}</div>
+    <template #footer>
+      <el-button style="float: right; margin-right: 20px;" @click="this.copyCitation()" circle size="large"><el-icon><DocumentCopy /></el-icon></el-button>
+    </template>
+  </el-dialog>
+</template>
+
+<script>
+import {Help, Link, Share, Star, Tools, DocumentCopy} from "@element-plus/icons";
+import {ElMessage} from "element-plus";
+export default {
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: "Operation",
+  props: [],
+  components: {Help, Share, Tools, Star, Link, DocumentCopy},
+  setup(){
+
+  },
+  mounted() {// 从state获取Id用于操作的接口，urls用于提供原文链接
+    this.getId()
+    this.getUrls()
+  },
+  data(){
+    return{
+      id: "",
+      showCite: false,
+      urls: null,
+      citations: {
+        gb: "gb", //GB/T 7714格式
+        mla: "mla",//MLA格式
+        apa: "apa",//APA格式
+        bibtex: "bibtex",//BibTex格式
+        caj_cd: "caj_cd",//CAJ-CD格式
+      },
+      citation: '',
+    }
+  },
+  methods: {
+    getId(){
+
+    },
+    getUrls(){
+
+    },
+    cite(){
+      this.showCite = true;
+      //TODO: get cite forms
+
+
+      this.citation = this.citations.gb
+    },
+    changeCite(key){
+      switch (key) {
+        case '1': this.citation = this.citations.gb; break;
+        case '2': this.citation = this.citations.mla; break;
+        case '3': this.citation = this.citations.apa; break;
+        case '4': this.citation = this.citations.bibtex; break;
+        case '5': this.citation = this.citations.caj_cd; break;
+        default: console.log("err")
+      }
+    },
+    copyCitation(){
+      let inputElement = document.createElement('input')
+      inputElement.value = this.citation
+      document.body.appendChild(inputElement)
+      inputElement.select()
+      document.execCommand('Copy')
+      inputElement.remove()
+      ElMessage("已复制")
+    },
+    star(){
+      //TODO: star the paper (or cancel)?
+    },
+    help(){
+      //TODO: 路由跳转到互助界面，带参数？
+    },
+  }
+}
+</script>
+
+<style scoped>
+.wrap-op {
+  margin-left: 30px;
+  margin-top: 30px;
+  width: 290px;
+  max-height: 500px;
+  border-radius: 3%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+}
+.op {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+.icon {
+  float: right;
+  margin-top: 4px;
+  margin-right: 20px;
+}
+.el-menu-demo{
+  height: 30px;
+}
+.button{
+
+}
+</style>
+<style>
+.dialog{
+  min-height: 200px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+}
+</style>
+

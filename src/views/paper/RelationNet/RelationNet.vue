@@ -1,0 +1,131 @@
+<template>
+  <div class="wrap-net">
+    <div id="net" class="g6-graph"></div>
+    <div class="info">
+      <el-row>
+        <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
+      </el-row>
+      <el-row style="display: flex">
+        <el-col :span="5" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author.id)">{{author.name}}</el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="30" class="year">{{this.info.year}}</el-col>
+      </el-row>
+      <el-row>
+        <el-col span="30" class="abstract">{{this.info.abstract}}</el-col>
+      </el-row>
+    </div>
+  </div>
+</template>
+
+<script>
+import {Graph} from "@/views/paper/RelationNet/Graph";
+import Data from "@/views/paper/RelationNet/Data";
+
+export default {
+  name: "RelationNet",
+  props: [],
+  components: [],
+  beforeUnmount () {
+     window.removeEventListener('message', (e) => {
+       this.showInfo(e.data)
+     })
+  },
+  mounted() {
+    const data = Data.data
+    this.graph = new Graph(
+        700,
+        500,
+        document.getElementById("net"));
+    this.graph.loadData(data)
+    this.graph.render()
+    this.graph.initListener()
+    window.addEventListener('message', (e) => {
+      this.showInfo(e.data)
+    })
+    return {
+      data
+    }
+  },
+  data(){
+    return{
+      graph: null,
+      info: {
+        title: 'title',
+        id: '??????',
+        abstract: 'abstract',
+        authors: ['author1', 'author2'],
+        year: 'date',
+      },
+    }
+  },
+  methods: {
+    showInfo(info) { //显示详细信息
+      const limit = 800;
+      if(info.abstract.length !== undefined && info.abstract.length > limit){
+        info.abstract = info.abstract.substring(0, limit) + "......";
+      }
+      this.info = info
+    },
+    openPaper(id){
+      //TODO: push到文献详情
+      console.log(id)
+    },
+    openAuthor(id){
+      //TODO: push到学者主页
+      console.log(id)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.wrap-net{
+  margin-top: 30px;
+  display: flex;
+  max-height: 500px;
+}
+.title{
+  cursor: pointer;
+  font-family: '微软雅黑',sans-serif;
+  line-height:2;
+  font-size: 22px;
+  font-weight: bold;
+}
+.title:hover{
+  text-decoration: underline;
+}
+.author{
+  color: darkgrey;
+  cursor: pointer;
+  line-height:2;
+  font-size: 12px;
+}
+.author:hover{
+  text-decoration: underline;
+}
+.year{
+  line-height: 2;
+  font-size: 12px;
+}
+.abstract{
+  line-height: 1.5;
+}
+.g6-graph {
+  width: 700px;
+  height: 500px;
+  margin-right: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  border-radius: 3%;
+}
+.info {
+  float: left;
+  width: 500px;
+  padding: 10px 15px;
+  max-height: 500px;
+  margin-left: 2%;
+  border-radius: 3%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+}
+
+</style>
