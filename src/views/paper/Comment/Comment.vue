@@ -38,7 +38,7 @@
         <el-input type="textarea" :rows="2" placeholder="请输入评论" v-model="commentText" style="width: 420px"/>
       </el-col>
       <el-col :span="1">
-        <el-button circle size="large"><el-icon><Promotion /></el-icon></el-button>
+        <el-button circle size="large" @click="this.publishComment"><el-icon><Promotion /></el-icon></el-button>
       </el-col>
     </el-row>
     <el-row style="height: 20px"></el-row>
@@ -69,6 +69,7 @@
 import Data from "@/views/paper/Info/Data";
 import {DArrowRight, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -123,6 +124,13 @@ export default {
         }
       })
     },
+    publishComment(){
+      if (this.commentText.length === 0){
+        ElMessage('评论不能为空')
+        return
+      }
+      console.log(this.commentText)
+    }
   },
 }
 </script>
