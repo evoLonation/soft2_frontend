@@ -1,4 +1,5 @@
-/*使用时注意传参，具体传参方式参考testSearch，
+/*
+  使用时注意传参，具体传参方式参考testSearch，
   其中type代表类型：
       普通请使用0（int），在添加学术成功页面使用1-3，分别代表申请认领、已经认领和论文申诉
 */
@@ -79,19 +80,12 @@ export default {
   /*border: 2px blue solid;*/
   margin-left: 48px;
   margin-top: 20px;
+  height: 30px;
   margin-right: 48px;
   font-size: 16px;
   color: #b0b2b3;
 }
 
-.paper_abstract_2{
-  /*border: 2px blue solid;*/
-  margin-left: 48px;
-  margin-top: 20px;
-  margin-right: 300px;
-  font-size: 16px;
-  color: #b0b2b3;
-}
 
 .paper_author{
   /*border: 2px green solid;*/

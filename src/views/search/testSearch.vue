@@ -1,6 +1,7 @@
 <template>
-  <paper-show style="margin-top: 30px;margin-left: 30px" :paper-name="paperName" :abstract="this.abstract"
-    :author="this.author" :org="org"  :num="num" :type="type"
+  <paper-show style="margin-top: 30px;margin-left: 30px"
+              :paper-name="paperName" :abstract="this.abstract"
+                :author="this.author" :org="org"  :num="num" :type="type"
   ></paper-show>
 </template>
 
@@ -16,7 +17,7 @@ export default {
       author:"MyShirt",
       org:"北航",
       num:12,
-      type:3,
+      type:0,
     }
   }
 }
