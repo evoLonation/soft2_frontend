@@ -45,6 +45,7 @@ export class Graph {
             nodeStateStyles: {
                 hover: {
                     fill: 'lightsteelblue',
+                    cursor: 'pointer',
                 },
                 click: {
                     stroke: 'lightsteelblue',
@@ -221,9 +222,11 @@ export class Graph {
             });
             this.graph.setItemState(e.item, 'hover', false);
             this.graph.setItemState(e.item, 'click', true);
+            let id = JSON.parse(JSON.stringify(e.item.getID()))
+            window.postMessage(id, '*')
         });
         this.graph.on('dragend', () => {
-            this.setLayout().then(r => console.log(r));
+            this.setLayout().catch((err)=>console.log(err))
         });
         this.graph.on('click', (ev) => {
             if (ev.item === undefined){

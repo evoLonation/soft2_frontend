@@ -238,7 +238,7 @@ export class Graph {
             this.graph.setItemState(e.item, 'click', true);
         });
         this.graph.on('dragend', () => {
-            this.setLayout().then(r => console.log(r));
+            this.setLayout().catch((err)=>console.log(err))
         });
         this.graph.on('click', (ev) => {
             if (ev.item === undefined){
