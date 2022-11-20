@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import Data from "@/views/paper/Info/Data";
+import {useStore} from "@/store";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Reference",
@@ -24,11 +25,13 @@ export default {
   },
   methods: {
     getRefs(){
-      this.references = Data.info.references
+      const store = useStore()
+      this.references = store.paperInfo.references
     },
     openPaper(row){
       const id = row.id
       console.log(id)
+      this.$router.push({path: `/paper/${id}`})
     }
   }
 }

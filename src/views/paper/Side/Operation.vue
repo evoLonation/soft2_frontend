@@ -56,21 +56,23 @@
 <script>
 import {Help, Link, Share, Star, Tools, DocumentCopy} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
+import {useStore} from "@/store";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Operation",
   props: [],
   components: {Help, Share, Tools, Star, Link, DocumentCopy},
   setup(){
-
+    return{
+      store: useStore()
+    }
   },
   mounted() {// 从state获取Id用于操作的接口，urls用于提供原文链接
-    this.getId()
     this.getUrls()
   },
   data(){
     return{
-      id: "",
       showCite: false,
       urls: null,
       citations: {
@@ -84,17 +86,16 @@ export default {
     }
   },
   methods: {
-    getId(){
-
-    },
     getUrls(){
-
+      this.urls = this.store.paperInfo.urls
     },
     cite(){
       this.showCite = true;
-      //TODO: get cite forms
-
-
+      this.axios.post('paper/cite',{
+        'id': this.store.paperId
+      }).then(res=>{
+        this.citations = res.data
+      })
       this.citation = this.citations.gb
     },
     changeCite(key){
@@ -118,6 +119,12 @@ export default {
     },
     star(){
       //TODO: star the paper (or cancel)?
+      this.axios.post('paper/star', {
+        'id': this.store.paperId
+      }).then(res=>{
+        const code = res.code
+        console.log(code)
+      })
     },
     help(){
       //TODO: 路由跳转到互助界面，带参数？

@@ -31,7 +31,6 @@
     <RelationNet name="part"></RelationNet>
     <PaperComment name="part"></PaperComment>
   </div>
-
 </template>
 
 <script>
@@ -41,20 +40,35 @@ import Operation from "@/views/paper/Side/Operation";
 import Reference from "@/views/paper/Reference/Reference";
 import PaperComment from "@/views/paper/Comment/Comment";
 import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
+import PaperInfo from "@/views/paper/Data/PaperInfo";
+import { useRoute } from "vue-router";
+import {useStore} from "@/store";
+import { getCurrentInstance, onBeforeMount} from "vue";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Paper",
   components: {Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RelationNet, Info, PaperComment},
   props: [],
-  setup(){//用接口获取详情并存入state，子组件mount时再从state获取
-    //TODO: getInfo
-
-    //TODO: saveInfo
-
-    //TODO: getRelationNet
-
-    //TODO: saveRelationNet
-
+  setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
+    let { proxy } = getCurrentInstance();
+    const router = useRoute();
+    const store = useStore();
+    onBeforeMount(()=>{
+      const paperId = router.params.paperId;
+      let gotInfo = false
+      store.paperId = paperId
+      proxy.$http.post('paper/', {
+        "id": paperId,
+      }).then((res) => {
+        store.paperInfo = res.data
+        gotInfo = true
+      })
+      if (!gotInfo){
+        store.paperInfo = PaperInfo.info
+        console.log('未获取到详情，使用本地测试数据')
+      }
+    })
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll, true)

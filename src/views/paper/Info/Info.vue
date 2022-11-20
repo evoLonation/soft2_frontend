@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Data from "@/views/paper/Info/Data";
+import {useStore} from "@/store"
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -37,7 +37,6 @@ export default {
   props: [],
   components: {},
   setup(){
-
   },
   mounted(){
     this.getInfo()
@@ -49,10 +48,11 @@ export default {
   },
   methods: {
     getInfo(){ // 从state获取文献信息
-      this.info = Data.info
+      const store = useStore()
+      this.info = store.paperInfo
     },
     openAuthor(id){
-      //TODO: push到学者主页
+      //push 到学者主页
       console.log(id)
     },
   },
