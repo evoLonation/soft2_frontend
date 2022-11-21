@@ -29,7 +29,7 @@ const routes = [
     {
         path: '/scholar/testPie',
         name: "pie",
-        component: () => import('../views/scholar/TestNewPie')
+        component: () => import('../views/scholar/Pie/TestNewPie')
     },
     {
         path: '/netTest', //开发测试，以后会删
