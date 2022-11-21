@@ -17,15 +17,15 @@ const routes = [
         component: () => import('../views/paper/Paper.vue')
     },
     {
-        path: '/scholar/:scholarId',
+        path: '/scholar',
         name: "scholar",
         component: () => import('../views/scholar/ScholarHome')
     },
-    {
-        path: '/scholar/testChart',
-        name: "chart",
-        component: () => import('../views/scholar/TestNewEchart')
-    },
+    // {
+    //     path: '/scholar/testChart',
+    //     name: "chart",
+    //     component: () => import('../views/scholar/TestNewEchart')
+    // },
     {
         path: '/scholar/testPie',
         name: "pie",

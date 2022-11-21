@@ -77,6 +77,7 @@ export default {
         },
         toolbox: {},
         tooltip: {},
+        // color: ['#409EFF', '#67C23A'],
         xAxis: {
           data: xAxisData,
           splitLine: {
@@ -195,15 +196,19 @@ export default {
      }
   }
 }
+
+export class ChartView {
+}
 </script>
 
 <style lang="scss" scoped>
 .charts-container {
-  width: 65%;
+  width: 60%;
   display: flex;
   padding: 2% 0 2% 0;
   margin: auto auto auto 50px;
-  height: 510px;
-  border: 1px solid #f00;
+  height: 410px;
+  border-radius: 10px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
 }
 </style>
