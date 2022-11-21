@@ -27,6 +27,11 @@ const routes = [
         component: () => import('../views/scholar/TestNewEchart')
     },
     {
+        path: '/scholar/testPie',
+        name: "pie",
+        component: () => import('../views/scholar/TestNewPie')
+    },
+    {
         path: '/netTest', //开发测试，以后会删
         name: 'net',
         component: () => import('../views/scholar/RelationNet/testNet')
