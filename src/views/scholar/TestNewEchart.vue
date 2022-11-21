@@ -4,23 +4,7 @@
 
 <script>
 // 引入echarts核心模块，核心模块提供了echarts使用必须要的接口
-import * as echarts from 'echarts/core';
-// 引入折线图图表，图表后缀都为Chart
-import {LineChart} from 'echarts/charts';
-// 引入提示框，标题，直接坐标系组件，组件后缀都为Component
-import { TitleComponent, GridComponent} from 'echarts/components';
-// 引入legend组件
-import { LegendComponent } from  'echarts/components';
-// 引入toolBox组件
-import { ToolboxComponent } from  'echarts/components';
-// 引入toolTip组件
-import { TooltipComponent } from 'echarts/components';
-// 引入BarChart组件
-import { BarChart } from 'echarts/charts';
-// 引入Canvas渲染器，注意引入CanvasRenderer或者SVGRenderer是必须的一步
-import { CanvasRenderer } from 'echarts/renderers';
-echarts.use([CanvasRenderer, LineChart, TitleComponent, GridComponent]);
-echarts.use([LegendComponent, ToolboxComponent, TooltipComponent, BarChart]);
+import * as echarts from 'echarts';
 
 export default {
   name: "TestNewEchart",
@@ -57,7 +41,7 @@ export default {
           num = num + 5;
           if(num > 20) {
             num = num % 2;
-            num = num * (Math.random() % 5);
+            num = Math.round(num * (Math.random() % 5));
           }
         }
         return arr;
@@ -71,32 +55,27 @@ export default {
           num = num + 7;
           if(num > 100) {
             num = num % 4;
-            num = num * (Math.random() % 5);
+            num = Math.round(num * (Math.random() % 5));
           }
         }
         return arr;
       };
 
+      let CalMax = function (arr) {
+        return arr.max;
+      }
+
       var xAxisData = CalxAxis();
       var data1 = CalData1();
       var data2 = CalData2();
+      var data1_max = CalMax(data1);
+      var data2_max = CalMax(data2);
 
       var option={
         legend: {
           data: ['历年成果数', '历年被引量']
         },
-        toolbox: {
-          // y: 'bottom',
-          feature: {
-            magicType: {
-              type: ['stack']
-            },
-            dataView: {},
-            saveAsImage: {
-              pixelRatio: 2
-            }
-          }
-        },
+        toolbox: {},
         tooltip: {},
         xAxis: {
           data: xAxisData,
@@ -104,12 +83,87 @@ export default {
             show: false
           }
         },
-        yAxis: {},
+        dataZoom: [{
+          type: 'slider',
+          show: true,
+          height: 15,
+          left: '10%',
+          right: '10%',
+          bottom: '2%',
+          start: 60,
+          end: 100,
+          zoomLoxk: true,
+          xAxisIndex: [0],
+          showDataShadow: false,
+        }, {
+          type: 'inside'
+        }],
+        yAxis: [
+          {
+            type: 'value',
+            name: "历年成果数",
+            position: 'left',
+            min: 0,
+            max: data1_max,
+            splitNumber: 5,
+            axisLine: {
+              show: true
+            },
+            axisTick: {
+              show: true,
+              interval: (data2_max-0)/5,
+            },
+            axisLabel: {
+              textStyle: {
+                color: "#999"
+              },
+              formatter: function(v) {
+                return v;
+              }
+            },
+            splitLine: {
+              show: false,
+              lineStyle: {
+                type: "dashed"
+              }
+            }
+          },
+          {
+            type: 'value',
+            name: "历年被引量",
+            position: "right",
+            min: 0,
+            max: data2_max,
+            splitNumber: 5,
+            axisLine: {
+              show: true
+            },
+            axisTick: {
+              show: true,
+              interval: (data2_max-0)/5,
+            },
+            axisLabel: {
+              textStyle: {
+                color: "#999"
+              },
+              formatter: function(v) {
+                return v;
+              }
+            },
+            splitLine: {
+              show: false,
+              lineStyle: {
+                type: "dashed"
+              }
+            }
+          }
+        ],
         series: [
           {
             name: '历年成果数',
             type: 'bar',
             data: data1,
+            left: 0,
             emphasis: {
               focus: 'series'
             },
@@ -121,6 +175,8 @@ export default {
             name: '历年被引量',
             type: 'bar',
             data: data2,
+            left: 0,
+            yAxisIndex: 1,
             emphasis: {
               focus: 'series'
             },
@@ -135,6 +191,7 @@ export default {
         }
       };
       myChart.setOption(option);
+      window.addEventListener('resize', function () {myChart.resize();});
      }
   }
 }
@@ -142,9 +199,11 @@ export default {
 
 <style lang="scss" scoped>
 .charts-container {
-  width: 80%;
-  margin: 100px auto;
-  height: 410px;
-  // border: 1px solid #f00;
+  width: 65%;
+  display: flex;
+  padding: 2% 0 2% 0;
+  margin: auto auto auto 50px;
+  height: 510px;
+  border: 1px solid #f00;
 }
 </style>

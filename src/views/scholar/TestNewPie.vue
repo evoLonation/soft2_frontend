@@ -43,16 +43,22 @@ export default {
 
       var option = {
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          show: true,
+          formatter: function (params) {
+            return params.data.name + "&nbsp;&nbsp;" + params.data.value + "%";
+          }
         },
         legend: {
           top: '5%',
-          left: 'center'
+          left: 'center',
         },
+        color: ['#409EFF', '#b1b3b8'],
         series: [
           {
+            width: '100%',
             type: 'pie',
-            radius:['40%', '50%'],
+            radius:['80px', '100px'],
             avoidLabelOverlap: false,
             itemStyle: {
               borderRadius: 2,
@@ -63,13 +69,13 @@ export default {
               show: false,
               position: 'center'
             },
-            // emphasis: {
-            //   label: {
-            //     show: true,
-            //     fontSize: '40',
-            //     fontWeight: 'bold'
-            //   }
-            // },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '30',
+                fontWeight: 'bold'
+              }
+            },
             labelLine: {
               show: false
             },
@@ -85,9 +91,10 @@ export default {
 
 <style lang="scss" scoped>
 .pies-container {
-  width: 80%;
-  margin: 100px auto;
-  height: 410px;
+  width: 250px;
+  margin: auto;
+  height: 350px;
+  display: flex;
   // border: 1px solid #f00;
 }
 </style>
