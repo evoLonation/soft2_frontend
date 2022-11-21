@@ -25,6 +25,11 @@ const routes = [
         path: '/scholar/testChart',
         name: "chart",
         component: () => import('../views/scholar/TestNewEchart')
+    },
+    {
+        path: '/scholar/testPie',
+        name: "pie",
+        component: () => import('../views/scholar/TestNewPie')
     }
 ];
 

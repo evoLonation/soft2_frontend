@@ -3,7 +3,7 @@
 </template>
 
 <script>
-// 引入二charts核心模块，核心模块提供了echarts使用必须要的接口
+// 引入echarts核心模块，核心模块提供了echarts使用必须要的接口
 import * as echarts from 'echarts/core';
 // 引入折线图图表，图表后缀都为Chart
 import {LineChart} from 'echarts/charts';
@@ -69,7 +69,7 @@ export default {
         for(let index = 1; index <= 20; index++) {
           arr.push(num);
           num = num + 7;
-          if(num > 30) {
+          if(num > 100) {
             num = num % 4;
             num = num * (Math.random() % 5);
           }
