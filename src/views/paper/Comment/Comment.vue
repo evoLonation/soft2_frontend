@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import Data from "@/views/paper/Info/Data";
 import {DArrowRight, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
+import {useStore} from "@/store";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -74,7 +74,8 @@ export default {
   components: {Promotion, DArrowRight, Star, StarFilled},
   setup(){
     return {
-      commentText: ref('')
+      commentText: ref(''),
+      store: useStore()
     }
   },
   mounted() {
@@ -99,25 +100,35 @@ export default {
   },
   methods: {
     getComments(){
-      this.comments = Data.info.comments
+      this.comments = this.store.paperInfo.comments
       this.comment = this.comments[0]
     },
     like(id){
-
-      this.comments.forEach((cmt)=>{
-        if (cmt.id === id){
-          cmt.likes++
-          cmt.liked = true
-        }
+      this.axios.post('paper/comment/like', {
+        'id': this.comment.id
+      }).then(res=>{
+        const code = res.code
+        console.log(code)
+        this.comments.forEach((cmt)=>{
+          if (cmt.id === id){
+            cmt.likes++
+            cmt.liked = true
+          }
+        })
       })
     },
     dislike(id){
-
-      this.comments.forEach((cmt)=>{
-        if (cmt.id === id){
-          cmt.likes--
-          cmt.liked = false
-        }
+      this.axios.post('paper/comment/dislike', {
+        'id': this.comment.id
+      }).then(res=>{
+        const code = res.data.code
+        console.log(code)
+        this.comments.forEach((cmt)=>{
+          if (cmt.id === id){
+            cmt.likes--
+            cmt.liked = false
+          }
+        })
       })
     },
     publishComment(){
@@ -125,7 +136,13 @@ export default {
         ElMessage('评论不能为空')
         return
       }
-      console.log(this.commentText)
+      this.axios.post('paper/comment/', {
+        'id': this.comment.id,
+        'content': this.commentText
+      }).then(res=>{
+        const code = res.code
+        console.log(code)
+      })
     }
   },
 }

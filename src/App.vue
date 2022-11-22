@@ -5,8 +5,7 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-// import LoginWindow from "@/components/loginWindow";
+
 
 export default {
   name: 'App',

@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-net">
-    <div id="net" class="g6-graph"></div>
+    <div id="net" class="g6-graph" v-loading="this.loading" element-loading-text="论文关系网计算中..."></div>
     <div class="info">
       <el-row>
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
@@ -21,6 +21,7 @@
 <script>
 import {Graph} from "@/views/paper/RelationNet/Graph";
 import Data from "@/views/paper/RelationNet/Data";
+import {useStore} from "@/store";
 
 export default {
   name: "RelationNet",
@@ -31,35 +32,68 @@ export default {
        this.showInfo(e.data)
      })
   },
+  setup(){
+    const store = useStore()
+    return{
+      store
+    }
+  },
   mounted() {
-    const data = Data.data
-    this.graph = new Graph(
-        700,
-        500,
-        document.getElementById("net"));
-    this.graph.loadData(data)
-    this.graph.render()
-    this.graph.initListener()
+    setTimeout(()=>{
+      this.initGraph()
+      this.loading = false
+    },5000) //模拟等待时间
+    this.info = this.store.paperInfo
+    this.paperId = this.store.paperId
     window.addEventListener('message', (e) => {
       this.showInfo(e.data)
     })
-    return {
-      data
-    }
   },
   data(){
     return{
       graph: null,
       info: {
         title: 'title',
-        id: '??????',
         abstract: 'abstract',
         authors: ['author1', 'author2'],
         year: 'date',
       },
+      paperId: "",
+      loading: true,
     }
   },
   methods: {
+    sleep(time) {
+      let timeStamp = new Date().getTime();
+      let endTime = timeStamp + time;
+      // eslint-disable-next-line no-constant-condition
+      while (true) if (new Date().getTime() > endTime) return;
+    },
+    initGraph(){
+      this.graph = new Graph(
+          700,
+          500,
+          document.getElementById("net"));
+      let data = this.getData()
+      this.graph.loadData(data)
+      this.graph.render()
+      this.graph.initListener()
+    },
+    getData(){
+      let gotData = false
+      let data = null
+      this.axios.post('paper/relationNet', {
+        'id': this.store.paperId
+      }).then(res=>{
+        data = res.data
+        gotData = true
+      })
+      if (!gotData){
+        data = Data.data
+        console.log('获取关系网失败，使用本地测试数据')
+      }
+      return data
+    },
     showInfo(info) { //显示详细信息
       const limit = 800;
       if(info.abstract.length !== undefined && info.abstract.length > limit){
@@ -68,13 +102,13 @@ export default {
       this.info = info
     },
     openPaper(id){
-      //TODO: push到文献详情
       console.log(id)
+      this.$router.push({path: `/paper/${id}`})
     },
     openAuthor(id){
       //TODO: push到学者主页
       console.log(id)
-    }
+    },
   }
 }
 </script>
