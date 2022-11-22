@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 350px">
+  <div style="width: 350px; margin-right: 40px">
     <el-carousel
         trigger="click"
         height="490px"

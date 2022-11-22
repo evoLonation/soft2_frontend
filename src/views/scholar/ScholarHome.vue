@@ -34,6 +34,7 @@
         <RelView style="margin-top: 40px"/>
       </div>
       <div class="style_need">
+        <PaperView style="margin-top: 40px"/>
         <PieView style="margin-top: 40px"/>
       </div>
     </el-main>
@@ -46,6 +47,7 @@ import InfoView from "./Basic/BasicInfo"
 import OpView from "./Operator/MyOperator"
 import RelView from "./Relations/MyRelations"
 import PieView from "./Pie/MyContribution"
+import PaperView from "./Paper/PaperList"
 
 export default {
   name: "ScholarHome",
@@ -54,7 +56,8 @@ export default {
     InfoView,
     OpView,
     RelView,
-    PieView
+    PieView,
+    PaperView
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll, true)
