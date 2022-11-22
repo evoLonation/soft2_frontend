@@ -22,6 +22,14 @@
             <Share style="color: white;"/>
           </el-icon>
         </div>
+        <div class="ID">
+          <div class="ID_title">
+            <p>学者ID号</p>
+          </div>
+          <div class="ID_content">
+            <p>scholarID</p>
+          </div>
+        </div>
       </div>
       <div class="indexes">
         <div class="index">
@@ -71,7 +79,7 @@ export default {
 
 <style scoped>
 .basic-info {
-  width: 900px;
+  width: 1000px;
   height: 200px;
   display: flex;
   margin: auto auto auto 50px;
@@ -103,7 +111,7 @@ export default {
 
 .name-pos {
   height: 40px;
-  width: 50%;
+  width: 87%;
   margin: 45px auto auto 40px;
   vertical-align: bottom;
   display: flex;
@@ -178,5 +186,37 @@ export default {
   /*border-right: 1px dashed rgba(0,0,0,0.40);*/
   text-align: center;
   display: inline-block;
+}
+
+.ID {
+  width: 30%;
+  height: 100%;
+  border: 1px dashed #a0cfff;
+  margin: auto 0 auto auto;
+  border-radius: 20px;
+  display: flex;
+}
+
+.ID:hover {
+  box-shadow: 0 0 1px rgba(0,0,0,0.20),0 0 6px rgba(0,0,0,0.06);
+}
+
+.ID_title {
+  width: 40%;
+  height: 100%;
+  line-height: 14px;
+  font-size: 14px;
+  border-right: 1px dashed #a0cfff;
+  text-align: center;
+  color: #73767a;
+}
+
+.ID_content {
+  width: 60%;
+  height: 100%;
+  line-height: 14px;
+  font-size: 14px;
+  text-align: center;
+  color: #73767a;
 }
 </style>

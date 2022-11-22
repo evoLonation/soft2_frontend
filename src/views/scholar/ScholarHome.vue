@@ -25,8 +25,14 @@
     </el-aside>
 
     <el-main class="wrap-paper" @scroll="this.handleScroll">
-      <InfoView style="margin-top: 10px"/>
-      <ChartView style="margin-top: 50px"/>
+      <div class="style_need">
+        <InfoView style="margin-top: 10px"/>
+        <OpView style="margin-top: 10px"/>
+      </div>
+      <div class="style_need">
+        <ChartView style="margin-top: 40px"/>
+        <RelView style="margin-top: 40px"/>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -34,12 +40,16 @@
 <script>
 import ChartView from "./Static/TestNewEchart"
 import InfoView from "./Basic/BasicInfo"
+import OpView from "./Operator/MyOperator"
+import RelView from "./Relations/MyRelations"
 
 export default {
   name: "ScholarHome",
   components: {
     ChartView,
     InfoView,
+    OpView,
+    RelView,
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll, true)
@@ -76,6 +86,7 @@ export default {
 .wrap-paper {
   margin-left: 150px;
 }
+
 .navigation{
   position: fixed;
   z-index: 100;
@@ -84,5 +95,9 @@ export default {
   margin-top: 30px;
   border-radius: 10px;
   box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
+}
+
+.style_need {
+  display: flex;
 }
 </style>

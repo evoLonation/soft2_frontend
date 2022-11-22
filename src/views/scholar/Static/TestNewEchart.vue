@@ -203,7 +203,7 @@ export class ChartView {
 
 <style lang="scss" scoped>
 .charts-container {
-  width: 900px;
+  width: 1000px;
   display: flex;
   padding: 2% 0 2% 0;
   margin: auto auto auto 50px;

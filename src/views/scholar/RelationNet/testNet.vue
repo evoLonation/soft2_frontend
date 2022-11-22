@@ -1,5 +1,5 @@
 <template>
-  <el-button round @click="this.initGraph()">打开学者关系网</el-button>
+  <el-button class="more" round @click="this.initGraph()">more>></el-button>
   <el-dialog v-model="this.showNet" center id="dialog">
     <template #header>
       <el-tooltip :content="this.value" placement="top" effect="light">
@@ -79,5 +79,13 @@ export default {
 </script>
 
 <style scoped>
+.more {
+  border: none;
+  margin: 10px 77px auto auto;
+  color: #73767a;
+}
 
+.more:hover {
+  background: white;
+}
 </style>
