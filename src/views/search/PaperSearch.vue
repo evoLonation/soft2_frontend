@@ -82,18 +82,45 @@
   </div>
   <div class="paper_main">
     <div class="paper_main_left">
-      <el-tree
-          ref="tree"
-          :props="props"
-          :load="loadNode"
-          lazy
-          show-checkbox
-          @check-change="handleCheckChange"
-      />
-      <button @click="getCheckedNodes">ssss</button>
+      <el-collapse style="margin-left: 10px;margin-right: 10px">
+        <el-collapse-item>
+          <template #title >
+            <span style="margin-left: 40%;font-size: 25px">主题</span>
+          </template>
+          <div v-for="index in themes.length" :key="index">
+            <el-checkbox v-model="themesCheck[index-1]" style="margin-left: 40%">{{ this.themes[index-1].name }}</el-checkbox>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title >
+            <span style="margin-left: 40%;font-size: 25px">领域</span>
+          </template>
+          <div v-for="index in fields.length" :key="index">
+            <el-checkbox v-model="fieldsCheck[index-1]" style="margin-left: 40%">{{ this.fields[index-1].name }}</el-checkbox>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title >
+            <span style="margin-left: 40%;font-size: 25px">年份</span>
+          </template>
+          <div v-for="index in years.length" :key="index">
+            <el-checkbox v-model="yearsCheck[index-1]" style="margin-left: 40%">{{ this.years[index-1].name }}</el-checkbox>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
     <div class="paper_main_right">
-      <div><span style="font-family: 幼圆; font-size: 20px;">一共为您找到{{this.paperNum}}条数据:</span></div>
+      <div style="margin-left: 30px;margin-top: 20px;display: inline-block;width: 80%"><span style="font-family: 幼圆; font-size: 20px;">一共为您找到{{this.paperNum}}条数据:</span></div>
+      <div style="display: inline-block;width: 15%;">
+        <el-select v-model="sortType" placeholder="按相关性降序" style="width: 80%;border-radius: 10px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
+          <el-option
+              v-for="item in sorts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
       <div class="example-pagination-block">
         <div v-for="item in papers" :key="item">
           <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
@@ -101,7 +128,7 @@
                       style="margin-left: 50px;margin-top: 20px"></paper-show>
         </div>
         <el-pagination background layout="prev, pager, next" :total="this.paperNum" page-size="10"
-                style="margin-left: 40%;margin-right: 40%"/>
+                style="margin-left: 40%;margin-right: 40%;margin-top: 50px;margin-bottom: 30px"/>
       </div>
     </div>
 
@@ -111,6 +138,7 @@
 <script>
 
 import PaperShow from "@/components/paperShow";
+import qs from "qs";
 
 export default {
   components: {PaperShow},
@@ -150,6 +178,21 @@ export default {
           value: '作者单位',
           label: '作者单位',
         },
+      ],
+      sortType:'',
+      sorts:[
+        {
+          label:'按相关性降序',
+          value:'按相关性降序'
+        },
+        {
+          label:'按被引量降序',
+          value:'按被引量降序'
+        },
+        {
+          label:'按时间降序',
+          value:'按时间降序'
+        }
       ],
       inputValue:['',''],
       ANvalue:['AND','AND','AND'],
@@ -191,9 +234,12 @@ export default {
       ],
       beginYear:0,
       endYear:0,
-      themes:[{name :'theme1',isLeaf:true},{name:"theme2",isLeaf: true}],
+      themes:[{name :'theme1'},{name:"theme2"}],
+      themesCheck:[false,false],
       fields:[{name:"aa"},{name:"bb"}],
+      fieldsCheck:[false,false],
       years:[{name:"2001"},{name:"2002"}],
+      yearsCheck:[false,false],
     }
   },
   methods:{
@@ -254,9 +300,11 @@ export default {
       }, 500);
     }
   },
-  // created() {
-  //
-  // }
+  created() {
+    let searchType=qs.parse(this.$route.query.searchType);
+    this.inputValue[0]=this.$route.query.content;
+    this.value[0]=searchType.type;
+  }
 }
 
 </script>
@@ -323,7 +371,7 @@ export default {
 .normal_search{
   border: 1px #777755 solid;
   box-shadow: 1px 1px 3px #888888;
-  border-radius: 3px;
+  border-radius: 20px;
   /*height: 300px;*/
   margin-left: 20%;
   margin-right: 20%;
@@ -333,7 +381,7 @@ export default {
 .advance_search{
   border: 1px #777755 solid;
   box-shadow: 1px 1px 3px #888888;
-  border-radius: 3px;
+  border-radius: 20px;
   /*height: 300px;*/
   margin-left: 20%;
   margin-right: 20%;
@@ -341,13 +389,15 @@ export default {
 }
 
 .paper_main{
-  border: 3px red solid;
+  /*border: 3px red solid;*/
   margin-top: 30px;
   height: 900px;
 }
 
 .paper_main_left{
-  border: 3px rebeccapurple solid;
+  border: 1px #777755 solid;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   vertical-align: top;
   display: inline-block;
   width: 20%;
@@ -355,13 +405,17 @@ export default {
 }
 
 .paper_main_right{
-  border: 3px rosybrown solid;
+  border: 1px #777755 solid;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   vertical-align: top;
+  margin-left: 3%;
   display: inline-block;
-  width: 79%;
+  width: 76%;
 }
 
 .example-pagination-block{
   margin-top: 30px;
 }
+
 </style>

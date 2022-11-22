@@ -8,6 +8,8 @@
 
 <script>
 import PaperShow from "@/components/paperShow";
+import searchType from "@/assets/searchType.json";
+import qs from "qs";
 export default {
   name: "testSearch",
   components: {PaperShow},
@@ -23,12 +25,7 @@ export default {
   },
   methods:{
     JumpToSearch(){
-      this.$router.push({
-        path:'/paperSearch',
-        params:{
-
-        }
-      })
+      this.$router.push({path:'/paperSearch',query:{searchType: qs.stringify(searchType.searchType[3]),content:"dname"}});
     }
   }
 }
