@@ -21,6 +21,11 @@ const routes = [
         name: "scholar",
         component: () => import('../views/scholar/ScholarHome')
     },
+    {
+        path: '/field',
+        name: "field",
+        component: () => import('../views/field/FieldPage')
+    },
     // {
     //     path: '/scholar/testChart',
     //     name: "chart",
