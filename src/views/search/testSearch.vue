@@ -3,6 +3,7 @@
               :paper-name="paperName" :abstract="this.abstract"
                 :author="this.author" :org="org"  :num="num" :type="type"
   ></paper-show>
+  <el-button @click="JumpToSearch">test</el-button>
 </template>
 
 <script>
@@ -18,6 +19,16 @@ export default {
       org:"北航",
       num:12,
       type:0,
+    }
+  },
+  methods:{
+    JumpToSearch(){
+      this.$router.push({
+        path:'/paperSearch',
+        params:{
+
+        }
+      })
     }
   }
 }
