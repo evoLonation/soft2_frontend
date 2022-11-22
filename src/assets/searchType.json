@@ -3,26 +3,30 @@
   "searchType" :[
     {
       "id": 0,
-      "type" : "作者"
+      "type" : "标题"
     },
     {
       "id": 1,
-      "type" : "关键字"
+      "type" : "作者"
     },
     {
       "id": 2,
-      "type" : "摘要"
+      "type" : "关键字"
     },
     {
       "id": 3,
-      "type" : "DOI"
+      "type" : "摘要"
     },
     {
       "id": 4,
-      "type" : "期刊"
+      "type" : "DOI"
     },
     {
       "id": 5,
+      "type" : "期刊"
+    },
+    {
+      "id": 6,
       "type" : "作者单位"
     }
   ]
