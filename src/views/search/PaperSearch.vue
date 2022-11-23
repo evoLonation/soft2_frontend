@@ -211,10 +211,6 @@ export default {
           label: 'NOT',
         },
       ],
-      props: {
-        label: 'name',
-        children: 'zones'
-      },
       papers:[
         {
           "title": "test0",
@@ -381,7 +377,23 @@ export default {
       }, 500);
     },
     handleCurrentChange(){
-      //todo:axios
+      //todo:axios 页面变换
+      let toSend={
+        search_content: [{"type":0,"search_type":0,"content":"","is_exact":0}],
+        start_year:2000,
+        end_year:2020,
+        page: this.nowPage,
+        sort_type:0,
+      };
+      this.axios({
+        method:'post',
+        url:'/api/search/paper',
+        data:JSON.stringify(toSend)
+      }).then((res) =>{
+        console.log(res.data);
+
+      })
+
       console.log(this.nowPage);
     }
   },
