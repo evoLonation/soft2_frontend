@@ -15,9 +15,17 @@
   <div class="show">
 
     <div class="paper" id="paper" @mousewheel="scrollFn1">
-      <div v-for="(item, index) in list1" :key="index">
-        <div class="header">
-          <h1 style="text-align: center; padding: 25px">论文</h1>
+      <div v-for="(item, index) in PaperList" :key="index">
+        <div>
+          <list
+              :type="item.type"
+              :author="item.author"
+              :abstract="item.abstract"
+              :num="item.num"
+              :org="item.org"
+              :paperName="item.paperName"
+              style="margin: auto"
+          />
         </div>
       </div>
       <div class="loading">
@@ -29,7 +37,7 @@
     <div class="scholar" id="scholar" @mousewheel="scrollFn2">
       <h1 style="text-align: center">领域杰出学者</h1>
       <el-divider />
-      <div v-for="(item, index) in list2" :key="index">
+      <div v-for="(item, index) in ScholarList" :key="index">
         <div class="show_scholar">
           <div class="scholar_name">
             <el-icon ><User /></el-icon>
@@ -60,10 +68,12 @@
 </template>
 
 <script>
-
+import list from "../../components/paperShow"
 export default {
   name: 'FieldPage',
-
+  components: {
+    list
+  },
   data() {
     return {
       field_name: "机器学习",
@@ -73,8 +83,25 @@ export default {
       count1: 3,
       count2: 5,
       flag1: false,
-      list1: [1, 2, 3],
-      list2: [
+      PaperList: [
+        {
+          type: "0",
+          author: "赵正阳",
+          abstract: "游戏发生在一个被称作“提瓦特”的幻想世界，在这里，被神选中的人将被授予“神之眼”，导引元素之力。",
+          num: "114514",
+          org: "北京工地大学软件安装学院",
+          paperName: "深度分析鲁迅《论他妈的》中的文学风骨",
+        },
+        {
+          type: "0",
+          author: "赵正阳",
+          abstract: "不知不觉间，今年的最后一个新番季已经过去一半了，也是时候开始关注明年一月番的消息了",
+          num: "11",
+          org: "北京工地大学软件安装学院",
+          paperName: "浅谈近年日本番剧清一色异世界龙傲天后宫厕纸剧情的内在驱动力",
+        }
+      ],
+      ScholarList: [
         {
           name: 'Ameame',
           n_paper: 8,
@@ -110,7 +137,7 @@ export default {
       if(winHeight + st >= docHeight) {
         //TODO: 调用加载函数
         console.log('1触底了')
-        if(this.list1.length >= 20) {
+        if(this.PaperList.length >= 20) {
           this.loading1 = false
           if(!this.flag1) {
             document.getElementById("paper").style.position = "sticky"
@@ -120,7 +147,16 @@ export default {
         }
         else {
           this.count1++
-          this.list1.push(this.count1)
+          this.PaperList.push(
+              {
+                type: "0",
+                author: "刘禹宏",
+                abstract: "蓝色妖姬是一种加工花卉，由月季和蔷薇多种杂交及研制所得。它通常是用一种染色剂和助染剂调合成着色剂，将鲜花喷染成型，最早来自荷兰",
+                num: "0",
+                org: "红色风暴",
+                paperName: "历史风云（3）————蓝色妖姬与她的黄金切尔西",
+              }
+          )
         }
       }
     },
@@ -136,7 +172,7 @@ export default {
       document.getElementById("scholar").style.height = docHeight + "px"
       if(winHeight + st >= docHeight) {
         console.log('2触底了')
-        if(this.list2.length >= 12) {
+        if(this.ScholarList.length >= 12) {
           this.loading2 = false
 
           document.getElementById("scholar").style.position = "sticky"
@@ -147,7 +183,7 @@ export default {
         else {
           //TODO: 调用加载函数
           this.count2++
-          this.list2.push({
+          this.ScholarList.push({
             name: '赵正阳',
             n_paper: 0,
             n_citation: 1,
