@@ -1,7 +1,5 @@
 <template>
-
-<div></div>
-
+消息
 </template>
 
 <script>

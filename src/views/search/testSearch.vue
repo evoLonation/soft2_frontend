@@ -4,15 +4,21 @@
                 :author="this.author" :org="org"  :num="num" :type="type"
   ></paper-show>
   <el-button @click="JumpToSearch">test</el-button>
+
+
+  <scholar-list style="margin-top: 30px;margin-left: 30px"
+              :name="paperName" :institution="org" :paper_num="num"
+        ></scholar-list>
 </template>
 
 <script>
 import PaperShow from "@/components/paperShow";
 import searchType from "@/assets/searchType.json";
 import qs from "qs";
+import ScholarList from "@/components/scholarList";
 export default {
   name: "testSearch",
-  components: {PaperShow},
+  components: {ScholarList, PaperShow},
   data(){
     return{
       paperName:"论文标题",

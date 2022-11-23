@@ -70,6 +70,14 @@ export default {
   position: relative;
 }
 
+.paper_skeleton:hover{
+  border-radius: 10px;
+  border: 1px #777755 solid;
+  box-shadow:  1px 3px 5px lightgray;
+  width: 975px;
+  height: 150px;
+  position: relative;
+}
 .paper_name{
   position: absolute;
   margin-left: 48px;

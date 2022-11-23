@@ -23,14 +23,8 @@
         <div class="scholar_searched">
             <div v-for="(item,index) in scholars.slice(0,6)" :key="index"
                  style=" height: 150px; width: 400px;
-                    display: inline-block;  margin-left: 40px;margin-top: 20px; border: 3px white solid;
-                                border-radius: 10px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
-                    <el-avatar :size="100" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" style="margin-top: 25px;margin-left: 20px"/>
-              <div style="display: inline-block;vertical-align: top;height: 100%;width: 275px">
-                <div style="font-size: 23px;margin-left: 20px;margin-top: 15px; color: #007dfa;">{{item.name}}</div>
-                <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;">{{item.institution}}</div>
-                <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;">发表的论文数:{{item.paper_num}}</div>
-              </div>
+                    display: inline-block;  margin-left: 40px;margin-top: 20px;">
+                    <scholar-list :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
             </div>
         </div>
         <el-pagination background layout="prev, pager, next, jumper" :total="this.num" page-size="6" v-model:current-page="nowPage" @current-change="handleCurrentChange()"
@@ -40,8 +34,10 @@
 </template>
 
 <script>
+import ScholarList from "@/components/scholarList";
 export default {
   name: "ScholarSearch",
+  components: {ScholarList},
   data(){
     return{
       inputOrg:'',
@@ -102,7 +98,20 @@ export default {
   },
   methods:{
     handleCurrentChange(){
+      let toSend={
+        page:this.nowPage,//一次性返回的学者条目（1page为6条）
+        name:this.inputName,//学者名
+        institution:this.inputOrg//机构名
+      };
       //todo:axios
+      this.axios({
+        method:'post',
+        url:'/api/search/scholar',
+        data:JSON.stringify(toSend),
+      }).then((res)=>{
+        console.log(res.data);
+      })
+
       console.log(this.nowPage);
     }
   }

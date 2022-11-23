@@ -1,13 +1,12 @@
 <template>
-<h1>
-  test
-
-</h1>
+  <h1>
+    HelpTips
+  </h1>
 </template>
 
 <script>
 export default {
-  name: "AdminNavigationBar"
+  name: "HelpTips"
 }
 </script>
 

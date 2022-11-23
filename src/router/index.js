@@ -6,6 +6,33 @@ import lyhRoutes from "@/router/test/lyh";
 import jxrRoutes from "@/router/test/jxr";
 import thrRoutes from "@/router/test/thr";
 
+const helpCenter = {
+    path: "help-center",
+    name: "HelpCenter",
+    component: () => import('../views/help/HelpCenter'),
+}
+const myHelp = {
+    path: "my-help",
+    name: "MyHelp",
+    component: () => import('../views/help/MyHelp/MyHelp'),
+}
+const myRequest = {
+    path: "my-request",
+    name: "MyRequest",
+    component: () => import('../views/help/MyRequest/MyRequest'),
+}
+const createRequest = {
+    path: "create-request",
+    name: "CreateRequest",
+    component: () => import('../views/help/MyRequest/CreateRequest'),
+}
+const helpTips = {
+    path: "help-tips",
+    name: "HelpTips",
+    component: () => import('../views/help/HelpTips'),
+}
+
+
 const routes = [
     {
         path: "/",
@@ -24,16 +51,17 @@ const routes = [
             {
                 path: '/user-info',
                 name: 'UserInfo',
-
+                component: () => import('../views/user/UserInform')
             },
             {
                 path: '/paper-search',
                 name: 'PaperSearch',
-
+                component: () => import('../views/search/PaperSearch')
             },
             {
                 path: '/scholar-search',
                 name: 'ScholarSearch',
+                component: () => import('../views/search/ScholarSearch')
             },
             {
                 path: '/paper/:paperId',
@@ -49,6 +77,18 @@ const routes = [
                 path: '/field',
                 name: 'Field',
             },
+            {
+                path: '/help',
+                name: 'Help',
+                component: ()=> import('../views/help/Help'),
+                children: [
+                    helpCenter,
+                    myHelp,
+                    myRequest,
+                    createRequest,
+                    helpTips,
+                ]
+            },
         ],
     },
     {
@@ -59,7 +99,10 @@ const routes = [
             {
                 path: 'apply-list',
                 name: 'ApplyList',
-            },
+            },{
+                path: 'complain-list',
+                name: 'ComplainList'
+            }
 
         ],
     },
