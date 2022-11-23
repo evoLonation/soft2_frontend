@@ -1,17 +1,25 @@
 <template>
   <router-view/>
-  <login-window/>
-  <p>???</p>
+  <button @click="jump">跳转</button>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-import LoginWindow from "@/components/loginWindow";
 
 export default {
   name: 'App',
   components: {
-    LoginWindow,
+  },
+  methods: {
+    jump(){
+      this.$router.push({
+        path: '/help/myRequest/createRequest',
+        params: {
+          title:'这篇学术成果的标题',
+          author: ['赵正阳', '刘禹宏', '姜星如', '蓝色妖姬', '宇将军'],
+          magazine: 'Science' ,
+        }
+      })
+    }
   }
 }
 </script>

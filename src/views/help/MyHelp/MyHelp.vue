@@ -3,6 +3,7 @@
     style="background-color: white"
   >
     <el-tabs stretch=stretch
+             v-model="activeName"
              @tab-change="handleClick">
       <el-tab-pane label="全部" name="all_help"/>
       <el-tab-pane label="待确认" name="TobeConfirmed_help"/>
@@ -20,6 +21,11 @@
 export default {
   name: "MyHelp",
 
+  data(){
+    return {
+      activeName: "all_help",
+    }
+  },
 
   methods: {
     handleClick(name) {

@@ -53,8 +53,18 @@ export default {
         link: "",
         notes: "",
         wealth: "",
-      }
+      },
     }
+  },
+  // methods :{
+  //   init(){
+  //     console.log(this.$route.params);
+  //   },
+  // },
+
+  created() {
+    console.log("create");
+    console.log(this.$route.params);
   }
 }
 </script>

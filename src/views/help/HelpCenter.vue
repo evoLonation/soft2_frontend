@@ -21,9 +21,7 @@
                 placeholder="Please Input"
                 :suffix-icon="Search"
             >
-
             </el-input>
-
           </div>
 
           <el-breadcrumb separator="/">
@@ -36,8 +34,6 @@
           </el-breadcrumb>
 
         </el-header>
-
-
 
         <el-main
           style="margin-top: 20px; background-color: white"
@@ -59,8 +55,6 @@
         </el-main>
 
       </el-container>
-
-
 
       <el-aside style="
         background-color: white;
@@ -120,6 +114,30 @@ export default {
   data(){
     return {
       requestList: [
+        {
+          title: "分段计费题别忘列方程",
+          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
+          user: "杨航1234",
+          time: "2022-11-09 11:16:56",
+        },
+        {
+          title: "分段计费题别忘列方程",
+          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
+          user: "杨航1234",
+          time: "2022-11-09 11:16:56",
+        },
+        {
+          title: "分段计费题别忘列方程",
+          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
+          user: "杨航1234",
+          time: "2022-11-09 11:16:56",
+        },
+        {
+          title: "分段计费题别忘列方程",
+          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
+          user: "杨航1234",
+          time: "2022-11-09 11:16:56",
+        },
         {
           title: "分段计费题别忘列方程",
           link: "http://doc.paperpass.com/journal/20150299jrzxs.html",

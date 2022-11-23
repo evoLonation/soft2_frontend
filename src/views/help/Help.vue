@@ -1,5 +1,8 @@
 <template>
-  <div style="background-color: #F2F2F2; padding-top: 30px">
+  <div style="background-color: #F2F2F2;
+    height: 100%;
+    padding-bottom: 30px;
+    padding-top: 30px">
 
     <div style="
       background-color: white;
@@ -38,7 +41,7 @@
 
       width: 90%;
       margin: 30px auto;
-">
+    ">
       <router-view/>
     </div>
 
