@@ -24,16 +24,17 @@ const routes = [
             {
                 path: '/user-info',
                 name: 'UserInfo',
-
+                component: () => import('../views/user/UserInform')
             },
             {
                 path: '/paper-search',
                 name: 'PaperSearch',
-
+                component: () => import('../views/search/PaperSearch')
             },
             {
                 path: '/scholar-search',
                 name: 'ScholarSearch',
+                component: () => import('../views/search/ScholarSearch')
             },
             {
                 path: '',
