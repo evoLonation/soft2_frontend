@@ -1,16 +1,77 @@
 import {createRouter, createWebHashHistory} from "vue-router"
+import zzyRoutes from "@/router/test/zzy";
+import wyfRoutes from "@/router/test/wyf";
+import gytRoutes from "@/router/test/gyt";
+import lyhRoutes from "@/router/test/lyh";
+import jxrRoutes from "@/router/test/jxr";
+import thrRoutes from "@/router/test/thr";
 
 const routes = [
     {
         path: "/",
-        redirect: 'Home'
+        redirect: '/home'
+    },
+    {
+        path: "/",
+        name: 'User',
+        component: () => import('../views/User'),
+        children : [
+            {
+                path: '/home',
+                name: 'Home',
+                component: () => import('../views/home/HomePage')
+            },
+            {
+                path: '/user-info',
+                name: 'UserInfo',
+
+            },
+            {
+                path: '/paper-search',
+                name: 'PaperSearch',
+
+            },
+            {
+                path: '/scholar-search',
+                name: 'ScholarSearch',
+            },
+            {
+                path: '',
+                name: '',
+            },
+            {
+                path: '/paper/:paperId',
+                name: 'Paper',
+            },
+            {
+                path: '/message',
+                name: 'Message',
+            },
+            {
+                path: ''
+            },
+            {
+                path: '/field',
+                name: 'Field',
+            },
+            {
+
+            },
+        ],
+    },
+    {
+        path: "/admin",
+        name: 'Admin',
+        component: () => import('../views/User'),
+        children : [
+            {
+                path: 'apply-list',
+                name: 'ApplyList',
+            },
+
+        ],
     },
 
-    {
-        path: '/home',
-        name: 'Home',
-        component: () => import('../views/home/HomePage')
-    },
     {
         path: '/paper/:paperId',
         name: "paper",
@@ -31,6 +92,16 @@ const routes = [
         name: "pie",
         component: () => import('../views/scholar/Pie/TestNewPie')
     },
+    // {
+    //     path: '/scholar/testChart',
+    //     name: "chart",
+    //     component: () => import('../views/scholar/TestNewEchart')
+    // },
+    {
+        path: '/test',
+        name: "test",
+        component: () => import('../test')
+    },
     {
         path: '/netTest', //开发测试，以后会删
         name: 'net',
@@ -38,15 +109,16 @@ const routes = [
     },
     {
         path:'/testSearch',
-        name: 'serach',
+        name: 'search',
         component: () => import('../views/search/testSearch')
     }
 ];
-
+const allRoutes = routes.concat(zzyRoutes).concat(wyfRoutes).concat(gytRoutes).concat(lyhRoutes).concat(jxrRoutes).concat(thrRoutes);
+console.log(allRoutes);
 const router = createRouter({
     //采用hash 模式
     history: createWebHashHistory(),
-    routes, //使用上方定义的路由配置
+    routes : allRoutes, //使用上方定义的路由配置
 });
 
-export default router
+export default router;
