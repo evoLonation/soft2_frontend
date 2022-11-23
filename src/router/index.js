@@ -1,19 +1,97 @@
 import {createRouter, createWebHashHistory} from "vue-router"
 // 文献互助
+// help
 const helpCenter =  {
     path: 'helpCenter',
     name: 'helpCenter',
     component:() =>import('../views/help/HelpCenter'),
 };
+const all_help =  {
+    path: 'all_help',
+    name: 'all_help',
+    component:() =>import('../views/help/MyHelp/AllHelp'),
+};
+const TobeConfirmed_help =  {
+    path: 'TobeConfirmed_help',
+    name: 'TobeConfirmed_help',
+    component:() =>import('../views/help/MyHelp/TobeConfirmed'),
+};
+const complaint_help =  {
+    path: 'complaint_help',
+    name: 'complaint_help',
+    component:() =>import('../views/help/MyHelp/Complaint'),
+};
+const success_help =  {
+    path: 'success_help',
+    name: 'success_help',
+    component:() =>import('../views/help/MyHelp/Success'),
+};
+const failed_help =  {
+    path: 'failed_help',
+    name: 'failed_help',
+    component:() =>import('../views/help/MyHelp/Failed'),
+};
 const myHelp =  {
     path: 'myHelp',
     name: 'myHelp',
-    component:() =>import('../views/help/MyHelp'),
+    component:() =>import('../views/help/MyHelp/MyHelp'),
+    children: [
+        all_help,
+        TobeConfirmed_help,
+        complaint_help,
+        success_help,
+        failed_help
+    ]
+};
+// request
+const all_request =  {
+    path: 'all_request',
+    name: 'all_request',
+    component:() =>import('../views/help/MyRequest/AllRequest'),
+};
+const TobeHelp =  {
+    path: 'TobeHelp',
+    name: 'TobeHelp',
+    component:() =>import('../views/help/MyRequest/TobeHelp'),
+};
+const TobeConfirmed_request =  {
+    path: 'TobeConfirmed_request',
+    name: 'TobeConfirmed_request',
+    component:() =>import('../views/help/MyRequest/TobeConfirmed'),
+};
+const complaint_request =  {
+    path: 'complaint_request',
+    name: 'complaint_request',
+    component:() =>import('../views/help/MyRequest/Complaint'),
+};
+const success_request =  {
+    path: 'success_request',
+    name: 'success_request',
+    component:() =>import('../views/help/MyRequest/Success'),
+};
+const failed_request =  {
+    path: 'failed_request',
+    name: 'failed_request',
+    component:() =>import('../views/help/MyRequest/Failed'),
+};
+const createRequest =  {
+    path: 'createRequest',
+    name: 'createRequest',
+    component:() =>import('../views/help/MyRequest/CreateRequest'),
 };
 const myRequest =  {
     path: 'myRequest',
     name: 'myRequest',
-    component:() =>import('../views/help/MyRequest'),
+    component:() =>import('../views/help/MyRequest/MyRequest'),
+    children: [
+        all_request,
+        TobeHelp,
+        TobeConfirmed_request,
+        complaint_request,
+        success_request,
+        failed_request,
+        createRequest
+    ]
 };
 const helpTips =  {
     path: 'helpTips',
