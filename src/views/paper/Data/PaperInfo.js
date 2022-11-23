@@ -24,6 +24,7 @@ export default {
         doi: 'f8894i08439f',
         isbn: '8g0h4hf0',
         n_citation: 114514,
+        starred: false,
         references: [
             {
                 title: '当代网络文学的发展脉络',

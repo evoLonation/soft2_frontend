@@ -7,7 +7,12 @@
     <div style="display: flex">
       <el-row class="op">
         <el-tooltip class="item" effect="light" content="收藏" placement="top">
-          <el-button circle @click="this.star" class="button" size="large"><el-icon><Star /></el-icon></el-button>
+          <el-button circle v-if="!this.starred" @click="this.star" class="button" size="large">
+            <el-icon ><Star /></el-icon>
+          </el-button>
+          <el-button circle v-else @click="this.deStar" class="button" size="large">
+            <el-icon ><StarFilled /></el-icon>
+          </el-button>
         </el-tooltip>
       </el-row>
       <el-row class="op">
@@ -54,7 +59,7 @@
 </template>
 
 <script>
-import {Help, Link, Share, Star, Tools, DocumentCopy} from "@element-plus/icons";
+import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
 import {useStore} from "@/store";
 
@@ -62,19 +67,23 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Operation",
   props: [],
-  components: {Help, Share, Tools, Star, Link, DocumentCopy},
+  components: {StarFilled, Help, Share, Tools, Star, Link, DocumentCopy},
   setup(){
     return{
       store: useStore()
     }
   },
-  mounted() {// 从state获取Id用于操作的接口，urls用于提供原文链接
-    this.getUrls()
+  mounted() {// 从state获取信息
+    this.getInfo()
   },
   data(){
     return{
       showCite: false,
+      title: "",
+      author: [],
+      magazine: "",
       urls: null,
+      starred: false,
       citations: {
         gb: "gb", //GB/T 7714格式
         mla: "mla",//MLA格式
@@ -86,8 +95,15 @@ export default {
     }
   },
   methods: {
-    getUrls(){
+    getInfo(){
       this.urls = this.store.paperInfo.urls
+      this.starred = this.store.paperInfo.starred
+      this.title = this.store.paperInfo.title
+      const authors = this.store.paperInfo.authors
+      authors.forEach((au)=>{
+        this.author.push(au.name)
+      })
+      this.magazine = this.store.paperInfo.publisher
     },
     cite(){
       this.showCite = true;
@@ -118,16 +134,40 @@ export default {
       ElMessage("已复制")
     },
     star(){
-      //TODO: star the paper (or cancel)?
       this.axios.post('paper/star', {
         'id': this.store.paperId
       }).then(res=>{
         const code = res.code
         console.log(code)
+        if (code === '0'){
+          ElMessage('收藏成功')
+        }else {
+          ElMessage('请先登录')
+        }
       })
     },
-    help(){
-      //TODO: 路由跳转到互助界面，带参数？
+    deStar(){
+      this.axios.post('paper/star/cancel', {
+        'id': this.store.paperId
+      }).then(res=>{
+        const code = res.code
+        console.log(code)
+        if (code === '0'){
+          ElMessage('取消了')
+        }else {
+          ElMessage('请先登录')
+        }
+      })
+    },
+    help(){ //跳转到互助
+      this.$router.push({
+        name: 'createRequest',
+        params: {
+          title: this.title,
+          author: this.author,
+          magazine: this.magazine
+        }
+      })
     },
   }
 }

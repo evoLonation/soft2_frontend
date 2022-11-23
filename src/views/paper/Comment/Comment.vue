@@ -9,11 +9,11 @@
     <el-card shadow="never" v-if="this.comment !== null">
       <el-row class="user-info">
         <el-col :span="2">{{this.comment.userName}}:</el-col>
-        <el-col :span="1" :offset="17">
-          <el-button circle v-if="this.comment.liked" @click="dislike(this.comment.id)" style="cursor: pointer">
+        <el-col :span="0.5" :offset="17">
+          <el-button circle size="small" v-if="this.comment.liked" @click="dislike(this.comment.id)" style="cursor: pointer">
             <el-icon ><StarFilled /></el-icon>
           </el-button>
-          <el-button circle v-else @click="this.like(this.comment.id)" style="cursor: pointer">
+          <el-button circle size="small" v-else @click="this.like(this.comment.id)" style="cursor: pointer">
             <el-icon ><Star /></el-icon>
           </el-button>
         </el-col>
@@ -36,14 +36,14 @@
         <el-input type="textarea" :rows="2" placeholder="请输入评论" v-model="commentText" style="width: 420px"/>
       </el-col>
       <el-col :span="1">
-        <el-button circle size="large" @click="this.publishComment"><el-icon><Promotion /></el-icon></el-button>
+        <el-button circle size="large" @click="this.publish"><el-icon><Promotion /></el-icon></el-button>
       </el-col>
     </el-row>
     <el-row style="height: 20px"></el-row>
     <el-card v-for="cmt in this.comments" :key="cmt" shadow="hover" custom-class="card" >
       <el-row class="user-info">
         <el-col :span="3">{{cmt.userName}}:</el-col>
-        <el-col :span="2" style="float:right;" :offset="12">
+        <el-col :span="1.5" style="float:right;" :offset="10">
           <el-button circle size="small" v-if="cmt.liked" @click="dislike(cmt.id)" style="cursor: pointer">
             <el-icon ><StarFilled /></el-icon>
           </el-button>
@@ -52,7 +52,12 @@
           </el-button>
         </el-col>
         <el-col :span="2" class="likes">{{cmt.likes}}</el-col>
-        <el-col :span="2" class="date">{{cmt.date}}</el-col>
+        <el-col :span="4" class="date">{{cmt.date}}</el-col>
+        <el-col :span="1" class="delete" v-if="cmt.userId === this.store.userId">
+          <el-button circle size="small" @click="this.del(cmt.id)">
+            <el-icon><DeleteFilled/></el-icon>
+          </el-button>
+        </el-col>
       </el-row>
       <el-row class="content">
         <el-col>{{cmt.content}}</el-col>
@@ -62,7 +67,7 @@
 </template>
 
 <script>
-import {DArrowRight, Promotion, Star, StarFilled} from "@element-plus/icons";
+import {DArrowRight, DeleteFilled, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {useStore} from "@/store";
@@ -71,7 +76,7 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PaperComment",
   props:[],
-  components: {Promotion, DArrowRight, Star, StarFilled},
+  components: {DeleteFilled, Promotion, DArrowRight, Star, StarFilled},
   setup(){
     return {
       commentText: ref(''),
@@ -99,9 +104,24 @@ export default {
     }
   },
   methods: {
-    getComments(){
+    getComments(){ //这个地方是从store拿，更新后从接口拿
       this.comments = this.store.paperInfo.comments
       this.comment = this.comments[0]
+    },
+    getCommentsAPI(){
+      let got = false
+      this.axios.post('paper/comment/get', {
+        "id": this.store.paperInfo.id
+      }).then(res=>{
+        this.comments = res.data.comments
+        got = true
+        //store的comments也要更新：
+        this.store.paperInfo.comments = this.comments
+      })
+      if (!got){
+        console.log('评论更新失败，从本地获取')
+        this.getComments()
+      }
     },
     like(id){
       this.axios.post('paper/comment/like', {
@@ -131,7 +151,7 @@ export default {
         })
       })
     },
-    publishComment(){
+    publish(){
       if (this.commentText.length === 0){
         ElMessage('评论不能为空')
         return
@@ -142,9 +162,29 @@ export default {
       }).then(res=>{
         const code = res.code
         console.log(code)
+        setTimeout(()=>{
+          this.getCommentsAPI()
+        },500)
       })
-    }
+    },
+    del(id){
+      this.axios.post('paper/comment/delete', {
+        'id': id
+      }).then(res=>{
+        const code = res.code
+        console.log(code)
+        if (code === '0'){
+          ElMessage("删除成功")
+          setTimeout(()=>{
+            this.getCommentsAPI()
+          },500)
+        }else {
+          ElMessage("请先登录")
+        }
+      })
+    },
   },
+
 }
 </script>
 
