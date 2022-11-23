@@ -96,7 +96,7 @@ export default {
     },
     showInfo(info) { //显示详细信息
       const limit = 800;
-      if(info.abstract.length !== undefined && info.abstract.length > limit){
+      if(info.abstract.length > limit){
         info.abstract = info.abstract.substring(0, limit) + "......";
       }
       this.info = info

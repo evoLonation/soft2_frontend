@@ -5,14 +5,16 @@
 */
 <template>
   <div class="paper_skeleton" v-if="type==0">
-    <div class="paper_name">{{this.paperName}}</div>
+    <div class="paper_name">
+        {{this.paperName}}
+    </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
     <div class="paper_author">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
   </div>
   <div class="paper_skeleton" v-else>
     <div class="inf_divide" style="width: 600px; height: 167px">
-      <div class="paper_name" style="margin-top: 38px;width: 600px;" >{{this.paperName}}</div>
-      <div class="paper_author" style="margin-top: 30px;width: 600px;">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
+      <div class="paper_name" style="top:25%" >{{this.paperName}}</div>
+      <div class="paper_author" style="top:55%">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
     </div>
     <div class="inf_divide" style="width: 375px; height: 167px">
       <el-button class="button_type" type="primary" v-if="type==1">申请认领</el-button>
@@ -56,31 +58,33 @@ export default {
 
 .button_type{
   margin-left: 200px;
-  margin-top: 68px;
+  margin-top: 60px;
 }
 
 .paper_skeleton{
-  border: 2px #777755 solid;
-  border-radius: 3px;
-  box-shadow: 1px 1px 3px #888888;
+  border: 0.001px ghostwhite solid;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   width: 975px;
-  height: 167px;
+  height: 150px;
+  position: relative;
 }
 
 .paper_name{
-  /*border: 2px red solid;*/
+  position: absolute;
   margin-left: 48px;
-  margin-top: 20px;
+  top:20%;
   font-size: 20px;
+  height: 25%;
   text-decoration: underline;
   color: #007dfa;
 }
 
 .paper_abstract_1{
+  position: absolute;
   /*border: 2px blue solid;*/
   margin-left: 48px;
-  margin-top: 20px;
-  height: 30px;
+  bottom:32%;
   margin-right: 48px;
   font-size: 16px;
   color: #b0b2b3;
@@ -88,9 +92,10 @@ export default {
 
 
 .paper_author{
-  /*border: 2px green solid;*/
   margin-left: 48px;
-  margin-top: 18px;
+  position: absolute;
+  top: 70%;
+  height: 22%;
   font-size: 16px;
   color: #b0b2b3;
 }

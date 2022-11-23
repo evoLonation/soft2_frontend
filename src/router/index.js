@@ -82,6 +82,11 @@ const routes = [
         name: "scholar",
         component: () => import('../views/scholar/ScholarHome')
     },
+    {
+        path: '/field',
+        name: "field",
+        component: () => import('../views/field/FieldPage')
+    },
     // {
     //     path: '/scholar/testChart',
     //     name: "chart",
@@ -101,6 +106,16 @@ const routes = [
         path: '/test',
         name: "test",
         component: () => import('../test')
+    },
+    {
+        path:'/paperSearch',
+        name: "paperSearch",
+        component: () => import('../views/search/PaperSearch')
+    },
+    {
+        path:'/scholarSearch',
+        name: "scholarSearch",
+        component: () => import('../views/search/ScholarSearch')
     },
     {
         path: '/netTest', //开发测试，以后会删

@@ -3,10 +3,13 @@
               :paper-name="paperName" :abstract="this.abstract"
                 :author="this.author" :org="org"  :num="num" :type="type"
   ></paper-show>
+  <el-button @click="JumpToSearch">test</el-button>
 </template>
 
 <script>
 import PaperShow from "@/components/paperShow";
+import searchType from "@/assets/searchType.json";
+import qs from "qs";
 export default {
   name: "testSearch",
   components: {PaperShow},
@@ -18,6 +21,11 @@ export default {
       org:"北航",
       num:12,
       type:0,
+    }
+  },
+  methods:{
+    JumpToSearch(){
+      this.$router.push({path:'/paperSearch',query:{searchType: qs.stringify(searchType.searchType[3]),content:"dname"}});
     }
   }
 }

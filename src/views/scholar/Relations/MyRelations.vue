@@ -13,7 +13,14 @@
             :fit="'cover'"
             style="margin: auto 15px auto 32px"
         />
-        <p>{{item.name}}</p>
+        <div class="name-insti">
+          <div class="name">
+            <p>{{item.name}}</p>
+          </div>
+          <div class="insti">
+            <p>{{item.institution}}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,6 +76,7 @@ export default {
 }
 
 .rel_item {
+  cursor: pointer;
   margin-top: 20px;
   width: 100%;
   height: 70px;
@@ -79,5 +87,27 @@ export default {
 
 .rel_item:hover {
   background: radial-gradient(white,  #ecf5ff);
+}
+
+.name-insti {
+  width: 70%;
+  height: 100%;
+  display: inline-block;
+}
+
+.name {
+  width: 100%;
+  height: 25%;
+  font-size: 15px;
+  color: rgba(0,0,0,0.70);
+  line-height: 15px;
+}
+
+.insti {
+  width: 100%;
+  height: 30%;
+  font-size: 13px;
+  color: rgba(0,0,0,0.40);
+  line-height: 13px;
 }
 </style>
