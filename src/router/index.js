@@ -62,7 +62,7 @@ const routes = [
     {
         path: "/admin",
         name: 'Admin',
-        component: () => import('../views/User'),
+        component: () => import('../views/Admin'),
         children : [
             {
                 path: 'apply-list',
@@ -72,61 +72,6 @@ const routes = [
         ],
     },
 
-    {
-        path: '/paper/:paperId',
-        name: "paper",
-        component: () => import('../views/paper/Paper.vue')
-    },
-    {
-        path: '/scholar',
-        name: "scholar",
-        component: () => import('../views/scholar/ScholarHome')
-    },
-    {
-        path: '/field',
-        name: "field",
-        component: () => import('../views/field/FieldPage')
-    },
-    // {
-    //     path: '/scholar/testChart',
-    //     name: "chart",
-    //     component: () => import('../views/scholar/TestNewEchart')
-    // },
-    {
-        path: '/scholar/testPie',
-        name: "pie",
-        component: () => import('../views/scholar/Pie/TestNewPie')
-    },
-    // {
-    //     path: '/scholar/testChart',
-    //     name: "chart",
-    //     component: () => import('../views/scholar/TestNewEchart')
-    // },
-    {
-        path: '/test',
-        name: "test",
-        component: () => import('../test')
-    },
-    {
-        path:'/paperSearch',
-        name: "paperSearch",
-        component: () => import('../views/search/PaperSearch')
-    },
-    {
-        path:'/scholarSearch',
-        name: "scholarSearch",
-        component: () => import('../views/search/ScholarSearch')
-    },
-    {
-        path: '/netTest', //开发测试，以后会删
-        name: 'net',
-        component: () => import('../views/scholar/RelationNet/testNet')
-    },
-    {
-        path:'/testSearch',
-        name: 'search',
-        component: () => import('../views/search/testSearch')
-    }
 ];
 const allRoutes = routes.concat(zzyRoutes).concat(wyfRoutes).concat(gytRoutes).concat(lyhRoutes).concat(jxrRoutes).concat(thrRoutes);
 console.log(allRoutes);
