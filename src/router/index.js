@@ -37,10 +37,6 @@ const routes = [
                 component: () => import('../views/search/ScholarSearch')
             },
             {
-                path: '',
-                name: '',
-            },
-            {
                 path: '/paper/:paperId',
                 name: 'Paper',
                 component: ()=> import('../views/paper/Paper')
@@ -51,14 +47,8 @@ const routes = [
                 component: ()=> import('../views/message/Message')
             },
             {
-                path: ''
-            },
-            {
                 path: '/field',
                 name: 'Field',
-            },
-            {
-
             },
         ],
     },
@@ -73,52 +63,6 @@ const routes = [
             },
 
         ],
-    },
-
-    {
-        path: '/paper/:paperId',
-        name: "paper",
-        component: () => import('../views/paper/Paper.vue')
-    },
-    {
-        path: '/scholar',
-        name: "scholar",
-        component: () => import('../views/scholar/ScholarHome')
-    },
-    {
-        path: '/field',
-        name: "field",
-        component: () => import('../views/field/FieldPage')
-    },
-    // {
-    //     path: '/scholar/testChart',
-    //     name: "chart",
-    //     component: () => import('../views/scholar/TestNewEchart')
-    // },
-    {
-        path: '/scholar/testPie',
-        name: "pie",
-        component: () => import('../views/scholar/Pie/TestNewPie')
-    },
-    // {
-    //     path: '/scholar/testChart',
-    //     name: "chart",
-    //     component: () => import('../views/scholar/TestNewEchart')
-    // },
-    {
-        path: '/test',
-        name: "test",
-        component: () => import('../test')
-    },
-    {
-        path:'/paperSearch',
-        name: "paperSearch",
-        component: () => import('../views/search/PaperSearch')
-    },
-    {
-        path:'/scholarSearch',
-        name: "scholarSearch",
-        component: () => import('../views/search/ScholarSearch')
     },
 ];
 const allRoutes = routes.concat(zzyRoutes).concat(wyfRoutes).concat(gytRoutes).concat(lyhRoutes).concat(jxrRoutes).concat(thrRoutes);
