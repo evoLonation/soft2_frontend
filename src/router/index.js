@@ -8,27 +8,27 @@ import thrRoutes from "@/router/test/thr";
 
 const helpCenter = {
     path: "help-center",
-    name: "helpCenter",
+    name: "HelpCenter",
     component: () => import('../views/help/HelpCenter'),
 }
 const myHelp = {
     path: "my-help",
-    name: "myHelp",
+    name: "MyHelp",
     component: () => import('../views/help/MyHelp/MyHelp'),
 }
 const myRequest = {
     path: "my-request",
-    name: "myRequest",
+    name: "MyRequest",
     component: () => import('../views/help/MyRequest/MyRequest'),
 }
 const createRequest = {
     path: "create-request",
-    name: "createRequest",
+    name: "CreateRequest",
     component: () => import('../views/help/MyRequest/CreateRequest'),
 }
 const helpTips = {
     path: "help-tips",
-    name: "helpTips",
+    name: "HelpTips",
     component: () => import('../views/help/HelpTips'),
 }
 
@@ -99,7 +99,10 @@ const routes = [
             {
                 path: 'apply-list',
                 name: 'ApplyList',
-            },
+            },{
+                path: 'complain-list',
+                name: 'ComplainList'
+            }
 
         ],
     },
