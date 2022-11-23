@@ -25,6 +25,11 @@
           <el-button circle @click="this.help" class="button" size="large"><el-icon><Help /></el-icon></el-button>
         </el-tooltip>
       </el-row>
+      <el-row class="op">
+        <el-tooltip class="item" effect="light" content="认领" placement="top">
+          <el-button circle @click="this.help" class="button" size="large"><el-icon><Help /></el-icon></el-button>
+        </el-tooltip>
+      </el-row>
     </div>
     <el-row class="op"><el-col>原文链接
         <el-icon class="icon"><Link /></el-icon>

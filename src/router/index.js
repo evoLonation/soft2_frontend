@@ -42,10 +42,12 @@ const routes = [
             {
                 path: '/paper/:paperId',
                 name: 'Paper',
+                component: ()=> import('../views/paper/Paper')
             },
             {
                 path: '/message',
                 name: 'Message',
+                component: ()=> import('../views/message/Message')
             },
             {
                 path: ''
@@ -62,7 +64,7 @@ const routes = [
     {
         path: "/admin",
         name: 'Admin',
-        component: () => import('../views/User'),
+        component: () => import('../views/Admin'),
         children : [
             {
                 path: 'apply-list',
@@ -116,11 +118,6 @@ const routes = [
         path:'/scholarSearch',
         name: "scholarSearch",
         component: () => import('../views/search/ScholarSearch')
-    },
-    {
-        path: '/netTest', //开发测试，以后会删
-        name: 'net',
-        component: () => import('../views/scholar/RelationNet/testNet')
     },
     {
         path:'/testSearch',
