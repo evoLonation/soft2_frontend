@@ -5,7 +5,9 @@
   </div>
   <div class="main_body">
     <div class="main_left">
-
+        <div class="left_inform">
+          
+        </div>
     </div>
     <div class="main_right">
 
@@ -43,6 +45,7 @@ export default {
   vertical-align: top;
   border: 3px mediumpurple solid;
   margin-left: 50px;
+  margin-top: 50px;
   width: 60%;
   height: 1000px;
 }

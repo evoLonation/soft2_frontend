@@ -49,7 +49,7 @@ const routes = [
     {
         path:'/userHome',
         name:"userHome",
-        component :() => import('../views/user/UserHome')
+        component :() => import('../views/user/UserInform')
     },
     {
         path: '/netTest', //开发测试，以后会删
