@@ -47,6 +47,11 @@ const routes = [
         component: () => import('../views/search/ScholarSearch')
     },
     {
+        path:'/userHome',
+        name:"userHome",
+        component :() => import('../views/user/UserHome')
+    },
+    {
         path: '/netTest', //开发测试，以后会删
         name: 'net',
         component: () => import('../views/scholar/RelationNet/testNet')
