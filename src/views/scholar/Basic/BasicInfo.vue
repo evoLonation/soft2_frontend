@@ -79,6 +79,8 @@ export default {
 
 <style scoped>
 .basic-info {
+  min-width: 1000px;
+  max-width: 1000px;
   width: 1000px;
   height: 200px;
   display: flex;
