@@ -42,10 +42,12 @@ const routes = [
             {
                 path: '/paper/:paperId',
                 name: 'Paper',
+                component: ()=> import('../views/paper/Paper')
             },
             {
                 path: '/message',
                 name: 'Message',
+                component: ()=> import('../views/message/Message')
             },
             {
                 path: ''
@@ -72,6 +74,56 @@ const routes = [
         ],
     },
 
+    {
+        path: '/paper/:paperId',
+        name: "paper",
+        component: () => import('../views/paper/Paper.vue')
+    },
+    {
+        path: '/scholar',
+        name: "scholar",
+        component: () => import('../views/scholar/ScholarHome')
+    },
+    {
+        path: '/field',
+        name: "field",
+        component: () => import('../views/field/FieldPage')
+    },
+    // {
+    //     path: '/scholar/testChart',
+    //     name: "chart",
+    //     component: () => import('../views/scholar/TestNewEchart')
+    // },
+    {
+        path: '/scholar/testPie',
+        name: "pie",
+        component: () => import('../views/scholar/Pie/TestNewPie')
+    },
+    // {
+    //     path: '/scholar/testChart',
+    //     name: "chart",
+    //     component: () => import('../views/scholar/TestNewEchart')
+    // },
+    {
+        path: '/test',
+        name: "test",
+        component: () => import('../test')
+    },
+    {
+        path:'/paperSearch',
+        name: "paperSearch",
+        component: () => import('../views/search/PaperSearch')
+    },
+    {
+        path:'/scholarSearch',
+        name: "scholarSearch",
+        component: () => import('../views/search/ScholarSearch')
+    },
+    {
+        path:'/testSearch',
+        name: 'search',
+        component: () => import('../views/search/testSearch')
+    }
 ];
 const allRoutes = routes.concat(zzyRoutes).concat(wyfRoutes).concat(gytRoutes).concat(lyhRoutes).concat(jxrRoutes).concat(thrRoutes);
 console.log(allRoutes);
