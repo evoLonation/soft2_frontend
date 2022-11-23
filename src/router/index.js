@@ -6,6 +6,33 @@ import lyhRoutes from "@/router/test/lyh";
 import jxrRoutes from "@/router/test/jxr";
 import thrRoutes from "@/router/test/thr";
 
+const helpCenter = {
+    path: "help-center",
+    name: "helpCenter",
+    component: () => import('../views/help/HelpCenter'),
+}
+const myHelp = {
+    path: "my-help",
+    name: "myHelp",
+    component: () => import('../views/help/MyHelp/MyHelp'),
+}
+const myRequest = {
+    path: "my-request",
+    name: "myRequest",
+    component: () => import('../views/help/MyRequest/MyRequest'),
+}
+const createRequest = {
+    path: "create-request",
+    name: "createRequest",
+    component: () => import('../views/help/MyRequest/CreateRequest'),
+}
+const helpTips = {
+    path: "help-tips",
+    name: "helpTips",
+    component: () => import('../views/help/HelpTips'),
+}
+
+
 const routes = [
     {
         path: "/",
@@ -48,6 +75,18 @@ const routes = [
             {
                 path: '/field',
                 name: 'Field',
+            },
+            {
+                path: '/help',
+                name: 'Help',
+                component: ()=> import('../views/help/Help'),
+                children: [
+                    helpCenter,
+                    myHelp,
+                    myRequest,
+                    createRequest,
+                    helpTips,
+                ]
             },
         ],
     },

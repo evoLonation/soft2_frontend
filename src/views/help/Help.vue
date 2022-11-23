@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #F2F2F2;
+  <div style="
     height: 100%;
     padding-bottom: 30px;
     padding-top: 30px">
@@ -22,6 +22,7 @@
           <el-tab-pane label="互助中心" name="helpCenter"/>
           <el-tab-pane label="我的求助" name="myRequest"/>
           <el-tab-pane label="我的应助" name="myHelp"/>
+          <el-tab-pane label="发布求助" name="createRequest"/>
           <el-tab-pane label="帮助中心" name="helpTips"/>
 
         </el-tabs>

@@ -10,7 +10,6 @@
       <el-tab-pane label="投诉中" name="complaint_request"/>
       <el-tab-pane label="应助成功" name="success_request"/>
       <el-tab-pane label="应助失败" name="failed_request"/>
-      <el-tab-pane label="发布求助" name="createRequest"/>
     </el-tabs>
 
     <router-view/>
