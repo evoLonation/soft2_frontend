@@ -1,7 +1,7 @@
 <template>
   <!--  顶部栏-->
-  <div style="height: 56px">
-
+  <div style="height: 56px;text-align: center;background-color: #007dfa">
+      顶部栏
   </div>
   <div class="main_skeleton">
     <p class="main_title">
@@ -19,9 +19,10 @@
       <el-icon size="40" style="margin-left: 50px;vertical-align: top"><Search/></el-icon>
     </div>
     <div class="main_result">
-        <div style="border: 3px mediumpurple solid;margin-top: 10px;margin-left: 5%"><span style="font-size: 20px">为您检索到{{ this.num }}条结果：</span></div>
+        <div style="margin-top: 10px;margin-left: 5%"><span style="font-size: 20px">为您检索到{{ this.num }}条结果：</span></div>
         <div class="scholar_searched">
-            <div v-for="(item,index) in scholars" :key="index" style=" height: 150px; width: 400px;
+            <div v-for="(item,index) in scholars.slice(0,6)" :key="index"
+                 style=" height: 150px; width: 400px;
                     display: inline-block;  margin-left: 40px;margin-top: 20px; border: 3px white solid;
                                 border-radius: 10px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
                     <el-avatar :size="100" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" style="margin-top: 25px;margin-left: 20px"/>
@@ -32,6 +33,8 @@
               </div>
             </div>
         </div>
+        <el-pagination background layout="prev, pager, next, jumper" :total="this.num" page-size="6" v-model:current-page="nowPage" @current-change="handleCurrentChange()"
+                        />
     </div>
   </div>
 </template>
@@ -43,7 +46,8 @@ export default {
     return{
       inputOrg:'',
       inputName:'',
-      num:0,
+      num:120,
+      nowPage:1,
       scholars:[
         {
           "id":"",
@@ -75,7 +79,31 @@ export default {
           "institution":"质疑",
           "paper_num":111,
         },
+        {
+          "id":"",
+          "name":"桑杰",
+          "institution":"质疑",
+          "paper_num":111,
+        },
+        {
+          "id":"",
+          "name":"桑杰",
+          "institution":"质疑",
+          "paper_num":111,
+        },
+        {
+          "id":"",
+          "name":"桑杰",
+          "institution":"质疑",
+          "paper_num":111,
+        },
       ]
+    }
+  },
+  methods:{
+    handleCurrentChange(){
+      //todo:axios
+      console.log(this.nowPage);
     }
   }
 }
@@ -83,12 +111,12 @@ export default {
 
 <style scoped>
 .main_skeleton{
-  border: 3px mediumpurple solid;
-  height: 800px;
+  /*border: 3px mediumpurple solid;*/
+  /*height: 800px;*/
 }
 
 .main_title{
-  border: 3px red solid;
+  /*border: 3px red solid;*/
   margin-top: 47px;
   margin-bottom: 26px;
   height: 32.24px;
@@ -97,20 +125,23 @@ export default {
 }
 
 .main_search{
-  border: 3px blue solid;
+  /*border: 3px blue solid;*/
 }
 
 .main_result{
-  border: 3px green solid;
+  /*border: 3px green solid;*/
   margin-top: 20px;
-  height: 500px;
+  /*height: 500px;*/
 }
 
 .scholar_searched{
-  border: 3px yellow solid;
+  /*border: 3px yellow solid;*/
   margin-left: 5%;
   margin-right: 5%;
-  height: 300px;
+  /*height: 300px;*/
 }
-
+ .el-pagination {
+  margin:50px auto 10px;
+   width: 40%;
+}
 </style>

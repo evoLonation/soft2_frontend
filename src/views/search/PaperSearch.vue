@@ -127,8 +127,8 @@
                       :paper-name="item.title" :type="type" :num="item.n_citation"
                       style="margin-left: 50px;margin-top: 20px" v-if="index-(nowPage-1)*10<=10&&index>(nowPage-1)*10"></paper-show>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
-                style="margin-left: 40%;margin-right: 40%;margin-top: 50px;margin-bottom: 30px"/>
+        <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
+                />
       </div>
     </div>
 
@@ -501,6 +501,11 @@ export default {
 
 .example-pagination-block{
   margin-top: 30px;
+}
+
+.el-pagination {
+  margin:50px auto 10px;
+  width: 40%;
 }
 
 </style>
