@@ -43,7 +43,7 @@
     </el-col>
     </el-row>
     <el-row class="op" v-for="url in this.urls" :key="url">
-      <el-image></el-image>
+      <el-link :href="url" type="primary" style="font-size: large">{{"原文链接" + (this.urls.indexOf(url)+1)}}</el-link>
     </el-row>
   </div>
 

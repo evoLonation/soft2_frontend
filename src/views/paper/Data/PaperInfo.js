@@ -28,6 +28,7 @@ export default {
         isbn: '8g0h4hf0',
         n_citation: 114514,
         starred: false,
+        urls: ["https://www.baidu.com", "https://www.bilibili.com", "https://www.pornhub.com"],
         references: [
             {
                 title: '当代网络文学的发展脉络',

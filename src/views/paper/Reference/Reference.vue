@@ -31,7 +31,7 @@ export default {
     openPaper(row){
       const id = row.id
       console.log(id)
-      this.$router.push({path: `/paper/${id}`})
+      this.$router.push({name: 'Paper', params:{paperId: id}})
     }
   }
 }
