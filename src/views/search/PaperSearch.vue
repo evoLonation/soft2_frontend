@@ -122,12 +122,12 @@
         </el-select>
       </div>
       <div class="example-pagination-block">
-        <div v-for="item in papers" :key="item">
+        <div v-for="(item,index) in papers" :key="item">
           <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
                       :paper-name="item.title" :type="type" :num="item.n_citation"
-                      style="margin-left: 50px;margin-top: 20px"></paper-show>
+                      style="margin-left: 50px;margin-top: 20px" v-if="index-(nowPage-1)*10<=10&&index>(nowPage-1)*10"></paper-show>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="this.paperNum" page-size="10"
+        <el-pagination background layout="prev, pager, next" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
                 style="margin-left: 40%;margin-right: 40%;margin-top: 50px;margin-bottom: 30px"/>
       </div>
     </div>
@@ -144,6 +144,7 @@ export default {
   components: {PaperShow},
   data(){
     return{
+      nowPage:1,
       type:0,
       searchType:false,
       value:['标题','标题','标题'],
@@ -230,7 +231,87 @@ export default {
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
-        }
+        },
+        {
+          "title": "test2",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test3",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test4",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test5",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test6",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test7",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test8",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test9",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test10",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
+        {
+          "title": "test11",
+          "abstract": "111",
+          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "year": 123, //发布年份
+          "n_citation": 123, //被引量
+          "publisher": "aaa", //期刊
+        },
       ],
       beginYear:0,
       endYear:0,
@@ -298,6 +379,10 @@ export default {
         }
         resolve(data);
       }, 500);
+    },
+    handleCurrentChange(){
+      //todo:axios
+      console.log(this.nowPage);
     }
   },
   created() {

@@ -38,8 +38,13 @@ const routes = [
     },
     {
         path:'/paperSearch',
-        name: "search",
+        name: "paperSearch",
         component: () => import('../views/search/PaperSearch')
+    },
+    {
+        path:'/scholarSearch',
+        name: "scholarSearch",
+        component: () => import('../views/search/ScholarSearch')
     },
     {
         path: '/netTest', //开发测试，以后会删
