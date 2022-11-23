@@ -14,7 +14,7 @@
   </div>
   <div class="show">
 
-    <div class="paper" id="paper" @mousewheel="scrollFn1">
+    <div class="paper" id="paper" >
       <div v-for="(item, index) in PaperList" :key="index">
         <div>
           <list
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="scholar" id="scholar" @mousewheel="scrollFn2">
+    <div class="scholar" id="scholar">
       <h1 style="text-align: center">领域杰出学者</h1>
       <el-divider />
       <div v-for="(item, index) in ScholarList" :key="index">
@@ -82,7 +82,6 @@ export default {
       loading2: true,
       count1: 3,
       count2: 5,
-      flag1: false,
       PaperList: [
         {
           type: "0",
@@ -108,42 +107,32 @@ export default {
           n_citation: 20,
           weight: '70%'
         },
-        {
-          name: 'Ameame',
-          n_paper: 8,
-          n_citation: 20,
-          weight: '70%'
-        },
-        {
-          name: 'Ameame',
-          n_paper: 8,
-          n_citation: 20,
-          weight: '70%'
-        },
+
       ]
     }
   },
   methods: {
-    scrollFn1() {
+    scrollFn() {
       console.log('1滚动')
-      // let winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-      // let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      // let docHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      let st = document.getElementById("paper").scrollTop;
-      let docHeight = document.getElementById("paper").scrollHeight;
-      let winHeight = document.getElementById("paper").offsetHeight
-      console.log('1', winHeight, st, docHeight)
-      document.getElementById("paper").style.height = docHeight + "px"
-      if(winHeight + st >= docHeight) {
+      // let st1 = document.getElementById("paper").scrollTop;
+      let docHeight1 = document.getElementById("paper").scrollHeight;
+      let winHeight1 = document.getElementById("paper").offsetHeight
+      // let st2 = document.getElementById("scholar").scrollTop;
+      let docHeight2 = document.getElementById("scholar").scrollHeight;
+      let winHeight2 = document.getElementById("scholar").offsetHeight
+      let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      document.getElementById("paper").style.height = docHeight1 + "px"
+      document.getElementById("scholar").style.height = docHeight2 + "px"
+
+      if(winHeight1 + st >= docHeight1) {
         //TODO: 调用加载函数
         console.log('1触底了')
-        if(this.PaperList.length >= 20) {
+        console.log('1st', st)
+        if(this.PaperList.length >= 14) {
+          console.log('1需要固定')
           this.loading1 = false
-          if(!this.flag1) {
-            document.getElementById("paper").style.position = "sticky"
-            document.getElementById("paper").style.bottom = "0"
-            this.flag1 = true
-          }
+          document.getElementById("paper").style.position = "sticky"
+          document.getElementById("paper").style.bottom = "0"
         }
         else {
           this.count1++
@@ -157,28 +146,20 @@ export default {
                 paperName: "历史风云（3）————蓝色妖姬与她的黄金切尔西",
               }
           )
+
+          docHeight1 = document.getElementById("paper").scrollHeight;
+          document.getElementById("paper").style.height = docHeight1 + "px"
         }
       }
-    },
-    scrollFn2() {
-      console.log('2滚动')
-      // let winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-      // let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      // let docHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      let st = document.getElementById("scholar").scrollTop;
-      let docHeight = document.getElementById("scholar").scrollHeight;
-      let winHeight = document.getElementById("scholar").offsetHeight
-      console.log('2', winHeight, st, docHeight)
-      document.getElementById("scholar").style.height = docHeight + "px"
-      if(winHeight + st >= docHeight) {
+      if(winHeight2 + st >= docHeight2) {
         console.log('2触底了')
-        if(this.ScholarList.length >= 12) {
+        console.log('2st', st)
+        if(this.ScholarList.length >= 20) {
           this.loading2 = false
-
+          console.log('2需要固定')
+          // document.getElementById("scholar").setAttribute('vertical-align', 'bottom')
           document.getElementById("scholar").style.position = "sticky"
           document.getElementById("scholar").style.bottom = "0"
-          // document.getElementById("scholar").style.left= "600px"
-          // document.getElementById("scholar").style.top= "-" + st + "px"
         }
         else {
           //TODO: 调用加载函数
@@ -189,16 +170,18 @@ export default {
             n_citation: 1,
             weight: '2%'
           })
+          docHeight2 = document.getElementById("scholar").scrollHeight;
+          document.getElementById("scholar").style.height = docHeight2 + "px"
         }
       }
-    }
+    },
   },
-  // mounted() {
-  //   window.addEventListener("mousewheel", this.scrollFn, true);
-  // },
-  // beforeUnmount() {
-  //   window.removeEventListener("scroll", this.scrollFn);
-  // }
+  mounted() {
+    window.addEventListener("mousewheel", this.scrollFn);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.scrollFn);
+  }
 }
 
 </script>
@@ -223,21 +206,22 @@ export default {
 
 .show {
   margin-top: 50px;
-  display: flex;
 }
 
 .paper {
   width: 50%;
   margin-left: 10%;
-  top: 0;
+  display: inline-block;
+  /*vertical-align: ;*/
+  /*float: left;*/
 }
 
 .scholar {
   width: 20%;
-  /*height: 1000px;*/
-  margin-left: 100px;
-  top: 0;
-  /*bottom: 0;*/
+  /*vertical-align: top;*/
+  display: inline-block;
+  /*float: left;*/
+  padding-left: 200px;
 }
 
 .show_scholar {
