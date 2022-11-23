@@ -10,7 +10,7 @@
       <el-col :span="2" class="keyword" v-for="keyword in this.info.keywords" :key="keyword">{{keyword}}</el-col>
     </el-row>
     <el-row>
-      <el-col :span="2" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author.id)">{{author.name}}</el-col>
+      <el-col :span="2" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
     </el-row>
     <el-row>
       <el-col  class="org">{{this.info.org}}</el-col>
@@ -30,6 +30,8 @@
 
 <script>
 import {useStore} from "@/store"
+import searchType from "@/assets/searchType"
+import qs from "qs";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -51,9 +53,17 @@ export default {
       const store = useStore()
       this.info = store.paperInfo
     },
-    openAuthor(id){
-      //push 到学者主页
-      console.log(id)
+    openAuthor(author){
+      if (author.hasId){
+        //TODO: push到学者主页， 未完
+        this.$router.push({name:'UserInfo'});
+      }else {
+        this.$router.push({
+          name:'PaperSearch',  //跳转路由
+          query:{
+            searchType: qs.stringify(searchType.searchType[1]), //json类型先转码，num代表的类型可以在searchType.josn中查看
+            content:author.name}});  //搜索内容
+      }
     },
   },
 }

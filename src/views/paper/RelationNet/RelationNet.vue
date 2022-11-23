@@ -6,7 +6,7 @@
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
       </el-row>
       <el-row style="display: flex">
-        <el-col :span="5" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author.id)">{{author.name}}</el-col>
+        <el-col :span="5" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
       </el-row>
       <el-row>
         <el-col :span="30" class="year">{{this.info.year}}</el-col>
@@ -22,6 +22,8 @@
 import {Graph} from "@/views/paper/RelationNet/Graph";
 import Data from "@/views/paper/RelationNet/Data";
 import {useStore} from "@/store";
+import qs from "qs";
+import searchType from "@/assets/searchType.json";
 
 export default {
   name: "RelationNet",
@@ -105,9 +107,17 @@ export default {
       console.log(id)
       this.$router.push({path: `/paper/${id}`})
     },
-    openAuthor(id){
-      //TODO: push到学者主页
-      console.log(id)
+    openAuthor(author){
+      if (author.hasId){
+        //TODO: push到学者主页， 未完
+        this.$router.push({name:'UserInfo'});
+      }else {
+        this.$router.push({
+          name:'PaperSearch',  //跳转路由
+          query:{
+            searchType: qs.stringify(searchType.searchType[1]), //json类型先转码，num代表的类型可以在searchType.josn中查看
+            content:author.name}});  //搜索内容
+      }
     },
   }
 }

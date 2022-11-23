@@ -127,7 +127,7 @@ export default {
       this.axios.post('paper/comment/like', {
         'id': this.comment.id
       }).then(res=>{
-        const code = res.code
+        const code = res.data.code
         console.log(code)
         this.comments.forEach((cmt)=>{
           if (cmt.id === id){
@@ -160,7 +160,7 @@ export default {
         'id': this.comment.id,
         'content': this.commentText
       }).then(res=>{
-        const code = res.code
+        const code = res.data.code
         console.log(code)
         setTimeout(()=>{
           this.getCommentsAPI()
@@ -171,7 +171,7 @@ export default {
       this.axios.post('paper/comment/delete', {
         'id': id
       }).then(res=>{
-        const code = res.code
+        const code = res.data.code
         console.log(code)
         if (code === '0'){
           ElMessage("删除成功")

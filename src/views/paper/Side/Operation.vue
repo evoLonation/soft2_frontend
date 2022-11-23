@@ -26,9 +26,16 @@
         </el-tooltip>
       </el-row>
       <el-row class="op">
-        <el-tooltip class="item" effect="light" content="认领" placement="top">
-          <el-button circle @click="this.help" class="button" size="large"><el-icon><Help /></el-icon></el-button>
-        </el-tooltip>
+        <el-popconfirm
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            icon-color="#626AEF"
+            title="确认认领？"
+            @confirm="this.adopt">
+          <template #reference>
+            <el-button circle class="button" size="large"><el-icon><Avatar /></el-icon></el-button>
+          </template>
+        </el-popconfirm>
       </el-row>
     </div>
     <el-row class="op"><el-col>原文链接
@@ -61,18 +68,28 @@
       <el-button style="float: right; margin-right: 20px;" @click="this.copyCitation()" circle size="large"><el-icon><DocumentCopy /></el-icon></el-button>
     </template>
   </el-dialog>
+<!--  是否申诉对话框-->
+  <el-dialog v-model="this.showGrievance" custom-class="dialog" title="发起申诉" center style="max-width: 500px">
+    文献的同名作者已经被关联到其他学者，是否发起申诉？
+    <template #footer>
+      <el-button round @click="this.showGrievance=false">取消</el-button>
+      <el-button round @click="this.grievance">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
+
 <script>
-import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled} from "@element-plus/icons";
+import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
 import {useStore} from "@/store";
+
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Operation",
   props: [],
-  components: {StarFilled, Help, Share, Tools, Star, Link, DocumentCopy},
+  components: {StarFilled, Help, Share, Tools, Star, Link, DocumentCopy, Avatar},
   setup(){
     return{
       store: useStore()
@@ -97,6 +114,7 @@ export default {
         caj_cd: "caj_cd",//CAJ-CD格式
       },
       citation: '',
+      showGrievance: false,
     }
   },
   methods: {
@@ -142,7 +160,7 @@ export default {
       this.axios.post('paper/star', {
         'id': this.store.paperId
       }).then(res=>{
-        const code = res.code
+        const code = res.data.code
         console.log(code)
         if (code === '0'){
           ElMessage('收藏成功')
@@ -155,7 +173,7 @@ export default {
       this.axios.post('paper/star/cancel', {
         'id': this.store.paperId
       }).then(res=>{
-        const code = res.code
+        const code = res.data.code
         console.log(code)
         if (code === '0'){
           ElMessage('取消了')
@@ -174,6 +192,35 @@ export default {
         }
       })
     },
+    adopt(){
+      // this.showGrievance = true //for test
+      this.axios.post('paper/adopt', {
+        "id": this.store.paperId
+      }).then(res=>{
+        const code = res.data.code
+        if (code === '0'){
+          ElMessage('认领成功')
+        }else if (code === '1'){
+          ElMessage('请先登录')
+        }else if (code === '2'){
+          ElMessage('无同名作者，请联系管理员')
+        }else {
+          this.showGrievance = true
+        }
+      })
+    },
+    grievance(){
+      this.axios.post('paper/grievance',{
+        "id": this.store.paperId
+      }).then(res=>{
+        const code = res.data.code
+        if (code === '0'){
+          ElMessage('发起成功')
+        }else {
+          ElMessage('发起失败')
+        }
+      })
+    }
   }
 }
 </script>
