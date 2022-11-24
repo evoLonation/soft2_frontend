@@ -74,6 +74,16 @@ const routes = [
                 component: ()=> import('../views/message/Message')
             },
             {
+                path: '/scholar',
+                name: "Scholar",
+                component: () => import('../views/scholar/ScholarHome')
+            },
+            {
+                path: '/identify',
+                name: "Identify",
+                comopent: () => import('../views/scholar/Identify/MyIdentify')
+            },
+            {
                 path: '/field',
                 name: 'Field',
             },

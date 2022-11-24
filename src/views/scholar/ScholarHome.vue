@@ -7,35 +7,39 @@
         >
           <el-menu-item index="0">
             <el-icon><HomeFilled /></el-icon>
-            <template #title>详情</template>
+            <template #title>基本信息</template>
           </el-menu-item>
           <el-menu-item index="1">
-            <el-icon><Reading /></el-icon>
-            <template #title>参考文献</template>
+            <el-icon><TrendCharts /></el-icon>
+            <template #title>成果统计</template>
           </el-menu-item>
           <el-menu-item index="2">
-            <el-icon><Opportunity /></el-icon>
-            <template #title>关系网</template>
+            <el-icon><Aim /></el-icon>
+            <template #title>学者关系</template>
           </el-menu-item>
           <el-menu-item index="3">
-            <el-icon><Comment /></el-icon>
-            <template #title>评论</template>
+            <el-icon><Reading /></el-icon>
+            <template #title>论文列表</template>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <el-icon><Histogram /></el-icon>
+            <template #title>领域贡献</template>
           </el-menu-item>
         </el-menu>
     </el-aside>
 
     <el-main class="wrap-paper" @scroll="this.handleScroll">
       <div class="style_need">
-        <InfoView style="margin-top: 10px"/>
+        <InfoView name="part" style="margin-top: 10px"/>
         <OpView style="margin-top: 10px"/>
       </div>
       <div class="style_need">
-        <ChartView style="margin-top: 40px"/>
-        <RelView style="margin-top: 40px"/>
+        <ChartView name="part" style="margin-top: 40px"/>
+        <RelView name="part" style="margin-top: 40px"/>
       </div>
       <div class="style_need">
-        <PaperView style="margin-top: 40px"/>
-        <PieView style="margin-top: 40px"/>
+        <PaperView name="part" style="margin-top: 40px"/>
+        <PieView name="part" style="margin-top: 40px"/>
       </div>
     </el-main>
   </el-container>
@@ -48,16 +52,21 @@ import OpView from "./Operator/MyOperator"
 import RelView from "./Relations/MyRelations"
 import PieView from "./Pie/MyContribution"
 import PaperView from "./Paper/PaperList"
+import {Reading, TrendCharts, Aim, Histogram} from "@element-plus/icons";
 
 export default {
   name: "ScholarHome",
   components: {
+    Histogram,
+    Reading,
+    TrendCharts,
     ChartView,
     InfoView,
     OpView,
     RelView,
     PieView,
-    PaperView
+    PaperView,
+    Aim
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll, true)
@@ -69,23 +78,23 @@ export default {
     }
   },
   methods: {
-    // handleScroll(){
-    //   let ele =  document.getElementsByName("part")
-    //   for( let i = ele.length - 1; i >= 0 ; i-- ) {
-    //     if(window.pageYOffset >= ele[i].offsetTop-50) {
-    //       this.activeName = i
-    //       break
-    //     }
-    //   }
-    // },
-    // navigate(index){
-    //   this.activeName = index
-    //   let ele =  document.getElementsByName("part")[index]
-    //   ele.scrollIntoView({
-    //     behavior:"smooth",
-    //     block: "start"
-    //   })
-    // },
+    handleScroll(){
+      let ele =  document.getElementsByName("part")
+      for( let i = ele.length - 1; i >= 0 ; i-- ) {
+        if(window.pageYOffset >= ele[i].offsetTop-50) {
+          this.activeName = i
+          break
+        }
+      }
+    },
+    navigate(index){
+      this.activeName = index
+      let ele =  document.getElementsByName("part")[index]
+      ele.scrollIntoView({
+        behavior:"smooth",
+        block: "start"
+      })
+    },
   }
 }
 </script>
@@ -98,7 +107,7 @@ export default {
 .navigation{
   position: fixed;
   z-index: 100;
-  width: 120px;
+  width: 130px;
   margin-left: 30px;
   margin-top: 30px;
   border-radius: 10px;
