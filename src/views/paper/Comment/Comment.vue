@@ -70,7 +70,7 @@
 import {DArrowRight, DeleteFilled, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -80,7 +80,7 @@ export default {
   setup(){
     return {
       commentText: ref(''),
-      store: useStore()
+      store: paperStore()
     }
   },
   mounted() {

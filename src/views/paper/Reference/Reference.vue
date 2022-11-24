@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     getRefs(){
-      const store = useStore()
+      const store = paperStore()
       this.references = store.paperInfo.references
     },
     openPaper(row){

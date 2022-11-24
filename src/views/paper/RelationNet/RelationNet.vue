@@ -21,7 +21,7 @@
 <script>
 import {Graph} from "@/views/paper/RelationNet/Graph";
 import Data from "@/views/paper/RelationNet/Data";
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 import qs from "qs";
 import searchType from "@/assets/searchType.json";
 
@@ -35,7 +35,7 @@ export default {
      })
   },
   setup(){
-    const store = useStore()
+    const store = paperStore()
     return{
       store
     }

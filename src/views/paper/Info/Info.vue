@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {useStore} from "@/store"
+import {paperStore} from "@/store"
 import searchType from "@/assets/searchType"
 import qs from "qs";
 
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     getInfo(){ // 从state获取文献信息
-      const store = useStore()
+      const store = paperStore()
       this.info = store.paperInfo
     },
     openAuthor(author){

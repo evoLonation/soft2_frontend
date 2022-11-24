@@ -82,7 +82,7 @@
 <script>
 import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 
 
 export default {
@@ -92,7 +92,7 @@ export default {
   components: {StarFilled, Help, Share, Tools, Star, Link, DocumentCopy, Avatar},
   setup(){
     return{
-      store: useStore()
+      store: paperStore()
     }
   },
   mounted() {// 从state获取信息

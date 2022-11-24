@@ -42,7 +42,7 @@ import PaperComment from "@/views/paper/Comment/Comment";
 import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
 import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 import { getCurrentInstance, onBeforeMount} from "vue";
 
 export default {
@@ -53,7 +53,7 @@ export default {
   setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
     let { proxy } = getCurrentInstance();
     const router = useRoute();
-    const store = useStore();
+    const store = paperStore();
     onBeforeMount(()=>{
       const paperId = router.params.paperId;
       let gotInfo = false

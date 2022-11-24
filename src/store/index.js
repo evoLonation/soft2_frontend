@@ -7,11 +7,18 @@ export const useStore = defineStore('main', {
             userId: 0,
             nickname: '',
             token: "",
+        }
+    },
+})
+
+export const paperStore = defineStore('paper', {
+    state: () => {
+        return {
             paperId: '',
             paperInfo: null,
             paperRelationNet: null,
             scholarCoNet: null,
             scholarCiNet: null,
         }
-    },
+    }
 })
