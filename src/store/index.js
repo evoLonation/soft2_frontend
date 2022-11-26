@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
-
+import {createPinia} from "pinia/dist/pinia";
+import piniaPersist from "pinia-plugin-persist";
+const pinia = createPinia();
+pinia.use(piniaPersist);
 export const loginStore = defineStore('main', {
     state: () => {
         return {
@@ -48,4 +51,6 @@ export const paperStore = defineStore('paper', {
             scholarCiNet: null,
         }
     }
-})
+});
+export default pinia;
+

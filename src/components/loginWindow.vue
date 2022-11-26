@@ -85,9 +85,11 @@
 
 <script>
 import {ref} from "vue";
-import axios from "axios"
+// import axios from "axios"
 import {loginStore} from "@/store"
 import {ElMessage} from "element-plus";
+import {setHeaderAuth, testAxios} from "@/axios";
+// import {setHeaderAuth} from "@/axios";
 export default {
   name: "loginWindow",
 
@@ -101,7 +103,7 @@ export default {
     const password = ref("");
     const login = () => {
       console.log("我应该点击登陆了啊");
-      axios.post("get-jwt", {
+      testAxios.post("get-jwt", {
         user_id : account.value,
         password : password.value
       }).then((res) => {
@@ -111,7 +113,6 @@ export default {
           store.nickname = res.data.nickname;
           store.displayLoginWindow = false;
           store.isLogin = true;
-          axios.defaults.headers.common['Authorization'] = loginStore().token;
         }else if(res.data.code === 1){
           ElMessage({message: "用户名/邮箱不存在", type : "warning"});
         }else if(res.data.code === 2){
@@ -119,6 +120,11 @@ export default {
         }
       });
     };
+    store.$subscribe((mutation, state) => {
+      setHeaderAuth(state.token);
+      console.log(state.token);
+    });
+
 
 
     const userId = ref("");
@@ -129,7 +135,7 @@ export default {
       if(password1.value !== password2.value){
         ElMessage({message: "两次输入密码不一致", type : "warning"});
       }else{
-        axios.post("register", {
+        testAxios.post("register", {
           "userId" : userId.value,
           "nickname" : nickname.value,
           "password" : password.value
@@ -140,7 +146,6 @@ export default {
             store.nickname = res.data.nickname;
             store.displayLoginWindow = false;
             store.isLogin = true;
-            axios.defaults.headers.common['Authorization'] = loginStore().token;
           }else if(res.data.code === 1){
             ElMessage({message: "用户名已存在", type : "warning"});
           }

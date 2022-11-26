@@ -9,6 +9,7 @@
 <script>
 import {loginStore} from "@/store";
 import axios from "axios";
+import {testAxios} from "@/axios";
 
 export default {
   name: "TestLogin",
@@ -20,7 +21,7 @@ export default {
       axios.defaults.headers.common['Authorization'] = loginStore().token;
     }
     const checkJwt = () => {
-      axios.post('check-jwt').then((res) => {
+      testAxios.post('check-jwt').then((res) => {
         console.log(res);
         console.log("检查成功");
       });
