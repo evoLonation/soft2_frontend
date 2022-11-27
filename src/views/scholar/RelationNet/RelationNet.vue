@@ -1,9 +1,10 @@
 <template>
   <el-button class="more" round @click="this.initGraph()">more>></el-button>
-  <el-dialog v-model="this.showNet" center id="dialog">
-    <template #header>
+  <el-dialog v-model="this.showNet" center id="dialog" custom-class="dialog">
+    <template #header>{{this.value}}
       <el-tooltip :content="this.value" placement="top" effect="light">
         <el-switch
+            style="margin-left: 20px"
             v-model="this.value"
             active-color="#13ce66"
             inactive-color="#ff4949"
@@ -23,6 +24,7 @@ import {Graph} from "@/views/scholar/RelationNet/Graph";
 import Data from "@/views/scholar/RelationNet/Data"
 export default {
   name: "testNet",
+  components: {},
   beforeUnmount () {
     window.removeEventListener('message', (e) => {
       this.openAuthor(e.data)
@@ -43,7 +45,9 @@ export default {
   },
   methods: {
     openAuthor(id){
-      console.log('学者id：'+id)
+      //TODO: push到学者主页
+      this.$router.push({name: "Scholar", params:{id: id
+        }})
     },
     initGraph(){
       this.showNet = true
@@ -55,7 +59,7 @@ export default {
     initCo(){
       const co_net_data = Data.co_net
       this.co_net = new Graph(
-          630,
+          450,
           400,
           document.getElementById("co_net")
       );
@@ -87,5 +91,12 @@ export default {
 
 .more:hover {
   background: white;
+}
+</style>
+<style>
+.dialog{
+  border-radius: 10px;
+  height: 500px;
+  width: 500px;
 }
 </style>
