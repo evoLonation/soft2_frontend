@@ -82,7 +82,7 @@ export default {
     getData(){
       let gotData = false
       let data = null
-      this.axios.post('paper/relationNet', {
+      this.axios.post('paper/relation-net', {
         'id': this.store.paperId
       }).then(res=>{
         data = res.data

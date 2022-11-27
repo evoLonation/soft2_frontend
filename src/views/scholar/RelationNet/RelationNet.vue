@@ -25,12 +25,14 @@ import Data from "@/views/scholar/RelationNet/Data"
 export default {
   name: "testNet",
   components: {},
+  props:["id"],
   beforeUnmount () {
     window.removeEventListener('message', (e) => {
       this.openAuthor(e.data)
     })
   },
   mounted() {
+    this.initData()
     window.addEventListener('message', (e) => {
       this.openAuthor(e.data)
     })
@@ -38,7 +40,9 @@ export default {
   data(){
     return{
       co_net: null,
+      co_net_data: null,
       ci_net: null,
+      ci_net_data: null,
       value: '合作关系',
       showNet: false,
     }
@@ -49,6 +53,21 @@ export default {
       this.$router.push({name: "Scholar", params:{id: id
         }})
     },
+    initData(){
+      let got = false;
+      this.axios.post('scholar/relation-net', {
+        "scholar_id": this.id
+      }).then(res=>{
+        this.co_net_data = res.data.co_net;
+        this.ci_net_data = res.data.ci_net;
+        got = true
+      })
+      if (!got){
+        console.log("未获取到关系网，使用本地数据")
+        this.co_net_data = Data.co_net
+        this.ci_net_data = Data.ci_net
+      }
+    },
     initGraph(){
       this.showNet = true
       setTimeout(()=>{
@@ -57,24 +76,22 @@ export default {
       },100)
     },
     initCo(){
-      const co_net_data = Data.co_net
       this.co_net = new Graph(
           450,
           400,
           document.getElementById("co_net")
       );
-      this.co_net.loadData(co_net_data)
+      this.co_net.loadData(this.co_net_data)
       this.co_net.render()
       this.co_net.initListener()
     },
     initCi(){
-      const ci_net_data = Data.ci_net
       this.ci_net = new Graph(
           630,
           400,
           document.getElementById("ci_net")
       );
-      this.ci_net.loadData(ci_net_data)
+      this.ci_net.loadData(this.ci_net_data)
       this.ci_net.render()
       this.ci_net.initListener()
     }
