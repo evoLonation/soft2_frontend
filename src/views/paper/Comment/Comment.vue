@@ -191,7 +191,7 @@ export default {
 <style scoped>
 .wrap-comment{
   margin-top: 30px;
-  width: 1265px;
+  width: 100%;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   padding-top: 2px;

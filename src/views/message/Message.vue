@@ -16,9 +16,9 @@
     </el-menu>
     <el-table
       :data="this.curMessages" table-layout="fixed">
-      <el-table-column prop="content" label="内容" width="600"></el-table-column>
-      <el-table-column prop="date" label="日期" width="150"></el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column prop="content" label="内容" width="600" resizable></el-table-column>
+      <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>
+      <el-table-column fixed="right" label="操作" resizable>
         <template #default="scope">
           <el-row>
             <el-col :span="8" v-if="!scope.row.read">
@@ -32,6 +32,9 @@
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='4'">
               <el-button link type="primary" @click="this.openAuthor(scope.row.uid)">申诉者</el-button>
+            </el-col>
+            <el-col :span="5" v-if="scope.row.type==='1' || scope.row.type==='2' || scope.row.type==='3'">
+              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)">学者页</el-button>
             </el-col>
             <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
               <el-button link type="primary" @click="this.openHelp(scope.row.rid)">打开互助</el-button>

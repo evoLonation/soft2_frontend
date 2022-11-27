@@ -10,7 +10,7 @@
       <el-col :span="2" class="keyword" v-for="keyword in this.info.keywords" :key="keyword">{{keyword}}</el-col>
     </el-row>
     <el-row>
-      <el-col :span="2" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
+      <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
     </el-row>
     <el-row>
       <el-col  class="org">{{this.info.org}}</el-col>
@@ -110,10 +110,9 @@ export default {
   color: dimgrey;
 }
 .wrap-info {
-  width: 900px;
+  width: 76%;
   min-height: 300px;
   max-height: 800px;
-  margin-top: 30px;
   padding: 10px 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);

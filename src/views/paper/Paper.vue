@@ -97,14 +97,21 @@ export default {
         block: "start"
       })
     },
-
+  },
+  watch: {
+    '$route' () {
+      // 路由发生变化页面刷新
+      this.$router.go(0);
+    }
   },
 }
 </script>
 
 <style scoped>
 .wrap-paper {
-  margin-left: 200px;
+  margin-top: 2%;
+  margin-left: 13%;
+  margin-right: 13%;
 }
 .navigation{
   position: fixed;

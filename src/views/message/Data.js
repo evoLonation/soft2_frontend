@@ -11,6 +11,7 @@ export default {
             id: '1',
             type: '1',
             pid: '1',
+            uid: '1',
             content: '赵正阳评论了你的文献“深度分析鲁迅《论他妈的》的中文学风骨”',
             read: false,
             date: '2022年11月4日'
@@ -19,6 +20,7 @@ export default {
             id: '2',
             type: '2',
             pid: '1',
+            uid: '1',
             content: '赵正阳赞了你在“深度分析鲁迅《论他妈的》的中文学风骨”的评论',
             read: false,
             date: '2022年11月4日'

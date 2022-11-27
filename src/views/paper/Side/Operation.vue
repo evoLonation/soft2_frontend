@@ -14,18 +14,12 @@
             <el-icon ><StarFilled /></el-icon>
           </el-button>
         </el-tooltip>
-      </el-row>
-      <el-row class="op">
         <el-tooltip class="item" effect="light" content="引用" placement="top">
           <el-button circle @click="this.cite" class="button" size="large"><el-icon><Share/></el-icon></el-button>
         </el-tooltip>
-      </el-row>
-      <el-row class="op">
         <el-tooltip class="item" effect="light" content="发起互助" placement="top">
           <el-button circle @click="this.help" class="button" size="large"><el-icon><Help /></el-icon></el-button>
         </el-tooltip>
-      </el-row>
-      <el-row class="op">
         <el-popconfirm
             confirm-button-text="确定"
             cancel-button-text="取消"
@@ -227,21 +221,19 @@ export default {
 
 <style scoped>
 .wrap-op {
-  margin-left: 30px;
-  margin-top: 30px;
-  width: 290px;
+  padding: 10px 20px 15px 15px;
   max-height: 500px;
+  margin-left: 2%;
+  width: auto;
   border-radius: 3%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
 }
 .op {
   margin-top: 10px;
-  margin-left: 15px;
 }
 .icon {
   float: right;
   margin-top: 4px;
-  margin-right: 20px;
 }
 .el-menu-demo{
   height: 30px;
