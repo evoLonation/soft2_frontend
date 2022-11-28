@@ -43,7 +43,7 @@ import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
 import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
 import {paperStore} from "@/store";
-import { getCurrentInstance, onBeforeMount} from "vue";
+import {getCurrentInstance, onBeforeMount} from "vue";
 import {paperScholarAxios} from "@/axios";
 
 export default {

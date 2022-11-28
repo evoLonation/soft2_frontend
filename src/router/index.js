@@ -91,6 +91,7 @@ const routes = [
             {
                 path: '/field',
                 name: 'Field',
+                component: () => import('../views/field/FieldPage')
             },
             {
                 path: '/help',
@@ -114,6 +115,7 @@ const routes = [
             {
                 path: 'apply-list',
                 name: 'ApplyList',
+                component: ()=> import('../views/admin/ApplyList')
             },{
                 path: 'complain-list',
                 name: 'ComplainList'
