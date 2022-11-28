@@ -22,6 +22,8 @@
 <script>
 import {Graph} from "@/views/scholar/RelationNet/Graph";
 import Data from "@/views/scholar/RelationNet/Data"
+import {paperScholarAxios} from "@/axios";
+
 export default {
   name: "testNet",
   components: {},
@@ -55,7 +57,7 @@ export default {
     },
     initData(){
       let got = false;
-      this.axios.post('scholar/relation-net', {
+      paperScholarAxios.post('scholar/relation-net', {
         "scholar_id": this.id
       }).then(res=>{
         this.co_net_data = res.data.co_net;
@@ -87,7 +89,7 @@ export default {
     },
     initCi(){
       this.ci_net = new Graph(
-          630,
+          450,
           400,
           document.getElementById("ci_net")
       );

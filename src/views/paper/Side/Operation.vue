@@ -77,7 +77,8 @@
 import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
-
+import {userAxios} from "@/axios";
+import {paperScholarAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -86,7 +87,7 @@ export default {
   components: {StarFilled, Help, Share, Tools, Star, Link, DocumentCopy, Avatar},
   setup(){
     return{
-      store: paperStore()
+      store: paperStore(),
     }
   },
   mounted() {// 从state获取信息
@@ -124,7 +125,7 @@ export default {
     },
     cite(){
       this.showCite = true;
-      this.axios.post('paper/cite',{
+      paperScholarAxios.post('paper/cite',{
         'id': this.store.paperId
       }).then(res=>{
         this.citations = res.data
@@ -151,7 +152,7 @@ export default {
       ElMessage("已复制")
     },
     star(){
-      this.axios.post('paper/star', {
+      userAxios.post('paper/star', {
         'id': this.store.paperId
       }).then(res=>{
         const code = res.data.code
@@ -164,7 +165,7 @@ export default {
       })
     },
     deStar(){
-      this.axios.post('paper/star/cancel', {
+      userAxios.post('paper/star/cancel', {
         'id': this.store.paperId
       }).then(res=>{
         const code = res.data.code
@@ -188,7 +189,7 @@ export default {
     },
     adopt(){
       // this.showGrievance = true //for test
-      this.axios.post('paper/adopt', {
+      userAxios.post('paper/adopt', {
         "id": this.store.paperId
       }).then(res=>{
         const code = res.data.code
@@ -204,7 +205,7 @@ export default {
       })
     },
     grievance(){
-      this.axios.post('paper/grievance',{
+      userAxios.post('paper/grievance',{
         "id": this.store.paperId
       }).then(res=>{
         const code = res.data.code

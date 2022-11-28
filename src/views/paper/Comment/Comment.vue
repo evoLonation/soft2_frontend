@@ -71,6 +71,7 @@ import {DArrowRight, DeleteFilled, Promotion, Star, StarFilled} from "@element-p
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
+import {userAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -110,7 +111,7 @@ export default {
     },
     getCommentsAPI(){
       let got = false
-      this.axios.post('paper/comment/get', {
+      userAxios.post('paper/comment/get', {
         "id": this.store.paperInfo.id
       }).then(res=>{
         this.comments = res.data.comments
@@ -124,7 +125,7 @@ export default {
       }
     },
     like(id){
-      this.axios.post('paper/comment/like', {
+      userAxios.post('paper/comment/like', {
         'id': this.comment.id
       }).then(res=>{
         const code = res.data.code
@@ -138,7 +139,7 @@ export default {
       })
     },
     dislike(id){
-      this.axios.post('paper/comment/dislike', {
+      userAxios.post('paper/comment/dislike', {
         'id': this.comment.id
       }).then(res=>{
         const code = res.data.code
@@ -156,7 +157,7 @@ export default {
         ElMessage('评论不能为空')
         return
       }
-      this.axios.post('paper/comment/', {
+      userAxios.post('paper/comment/', {
         'id': this.comment.id,
         'content': this.commentText
       }).then(res=>{
@@ -168,7 +169,7 @@ export default {
       })
     },
     del(id){
-      this.axios.post('paper/comment/delete', {
+      userAxios.post('paper/comment/delete', {
         'id': id
       }).then(res=>{
         const code = res.data.code

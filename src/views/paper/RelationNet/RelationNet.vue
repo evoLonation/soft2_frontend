@@ -24,6 +24,7 @@ import Data from "@/views/paper/RelationNet/Data";
 import {paperStore} from "@/store";
 import qs from "qs";
 import searchType from "@/assets/searchType.json";
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "RelationNet",
@@ -82,7 +83,7 @@ export default {
     getData(){
       let gotData = false
       let data = null
-      this.axios.post('paper/relation-net', {
+      paperScholarAxios.post('paper/relation-net', {
         'id': this.store.paperId
       }).then(res=>{
         data = res.data

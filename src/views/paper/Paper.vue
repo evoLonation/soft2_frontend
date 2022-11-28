@@ -44,6 +44,7 @@ import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
 import {paperStore} from "@/store";
 import { getCurrentInstance, onBeforeMount} from "vue";
+import {paperScholarAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -58,7 +59,7 @@ export default {
       const paperId = router.params.paperId;
       let gotInfo = false
       store.paperId = paperId
-      proxy.$http.post('paper/', {
+      paperScholarAxios.post('paper/', {
         "id": paperId,
       }).then((res) => {
         store.paperInfo = res.data
