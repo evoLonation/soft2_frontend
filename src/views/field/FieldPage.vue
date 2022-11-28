@@ -1,8 +1,5 @@
 <template>
 
-  <div class="header">
-    <h1 style="text-align: center; padding: 25px">导航栏</h1>
-  </div>
   <div class="field" style="position: relative">
     <h1 style="text-align: center; padding: 10px">{{ field_name }}</h1>
     <el-input
@@ -193,12 +190,6 @@ export default {
 }
 
 .field {
-  width: 100%;
-  height: 150px;
-  border: 1px solid;
-}
-
-.header {
   width: 100%;
   height: 150px;
   border: 1px solid;
