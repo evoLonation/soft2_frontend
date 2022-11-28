@@ -86,7 +86,7 @@ const routes = [
             {
                 path: '/mv-paper',
                 name: "MovePaper",
-
+                component: () => import('../views/move/MvPaper')
             },
             {
                 path: '/field',

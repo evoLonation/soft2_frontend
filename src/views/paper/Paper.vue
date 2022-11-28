@@ -52,6 +52,7 @@ export default {
   components: {Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RelationNet, Info, PaperComment},
   props: [],
   setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
+    // eslint-disable-next-line no-unused-vars
     let { proxy } = getCurrentInstance();
     const router = useRoute();
     const store = paperStore();
