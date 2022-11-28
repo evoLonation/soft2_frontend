@@ -81,7 +81,12 @@ const routes = [
             {
                 path: '/identify',
                 name: "Identify",
-                comopent: () => import('../views/scholar/Identify/MyIdentify')
+                component: () => import('../views/scholar/Identify/MyIdentify')
+            },
+            {
+                path: '/mv-paper',
+                name: "MovePaper",
+
             },
             {
                 path: '/field',
