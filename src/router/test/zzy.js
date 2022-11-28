@@ -1,8 +1,8 @@
 
 const zzyRoutes = [
-    // {
-    //     path: "/zzy/testxxx",
-    //     component: () => import('../views/scholar/RelationNet/testNet'),
-    // },
+    {
+        path: "/zzy/test-login",
+        component: () => import('../../views/TestLogin'),
+    },
 ];
 export default zzyRoutes

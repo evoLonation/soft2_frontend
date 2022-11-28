@@ -30,10 +30,16 @@ export class Graph {
                 type: 'can-running',
             },
             layout: {
-                type: 'force2',
-                preventOverlap: true,
-                nodeSize: 100,
-                linkDistance: 150,
+                type: 'concentric',
+                linkDistance: 30,         // 可选，边长
+                preventOverlap: true,     // 可选，必须配合 nodeSize
+                nodeSize: 70,             // 可选
+                sweep: 10,                // 可选
+                equidistant: false,       // 可选
+                startAngle: 0,            // 可选
+                clockwise: false,         // 可选
+                maxLevelDiff: 10,         // 可选
+                sortBy: 'size',          // 可选
             },
             modes: {
                 default: [
@@ -58,7 +64,10 @@ export class Graph {
 
     async setLayout() {
         this.graph.updateLayout({
-            type: 'force'
+            type: 'concentric',
+            linkDistance: 50,
+            sortBy: 'size',
+            minNodeSpacing: 60,
         })
     }
 

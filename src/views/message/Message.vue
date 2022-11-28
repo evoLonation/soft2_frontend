@@ -16,9 +16,9 @@
     </el-menu>
     <el-table
       :data="this.curMessages" table-layout="fixed">
-      <el-table-column prop="content" label="内容" width="600"></el-table-column>
-      <el-table-column prop="date" label="日期" width="150"></el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column prop="content" label="内容" width="600" resizable></el-table-column>
+      <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>
+      <el-table-column fixed="right" label="操作" resizable>
         <template #default="scope">
           <el-row>
             <el-col :span="8" v-if="!scope.row.read">
@@ -32,6 +32,9 @@
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='4'">
               <el-button link type="primary" @click="this.openAuthor(scope.row.uid)">申诉者</el-button>
+            </el-col>
+            <el-col :span="5" v-if="scope.row.type==='1' || scope.row.type==='2' || scope.row.type==='3'">
+              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)">学者页</el-button>
             </el-col>
             <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
               <el-button link type="primary" @click="this.openHelp(scope.row.rid)">打开互助</el-button>
@@ -64,6 +67,7 @@
 import {Checked, Delete, DeleteFilled} from "@element-plus/icons";
 import Messages from "@/views/message/Data";
 import {ElMessage} from "element-plus";
+import {messageAxios, userAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -82,7 +86,7 @@ export default {
   methods:{
     getMessages(){
       let got = false
-      this.axios.post('message/get-all-messages',{
+      messageAxios.post('message/get-all-messages',{
 
       }).then(res=>{
         const code = res.data.code
@@ -140,7 +144,7 @@ export default {
       }
     },
     read(id){
-      this.axios.post('message/read', {
+      messageAxios.post('message/read', {
         "id": id
       }).then(res=>{
         const code = res.data.code
@@ -177,7 +181,7 @@ export default {
       console.log(id)
     },
     del(id){
-      this.axios.post('message/delete',{
+      messageAxios.post('message/delete',{
         "id": id
       }).then(res=>{
         const code = res.data.code
@@ -203,7 +207,7 @@ export default {
       })
     },
     accept(id){
-      this.axios.post('grievance/accept', {
+      userAxios.post('grievance/accept', {
         "id": id
       }).then(res=>{
         const code = res.data.code
@@ -215,7 +219,7 @@ export default {
       })
     },
     refuse(id){
-      this.axios.post('grievance/refuse', {
+      userAxios.post('grievance/refuse', {
         "id": id
       }).then(res=>{
         const code = res.data.code

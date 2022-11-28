@@ -5,8 +5,8 @@
       <el-row>
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
       </el-row>
-      <el-row style="display: flex">
-        <el-col :span="5" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
+      <el-row style="display: flex" gutter="5">
+        <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
       </el-row>
       <el-row>
         <el-col :span="30" class="year">{{this.info.year}}</el-col>
@@ -21,9 +21,10 @@
 <script>
 import {Graph} from "@/views/paper/RelationNet/Graph";
 import Data from "@/views/paper/RelationNet/Data";
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 import qs from "qs";
 import searchType from "@/assets/searchType.json";
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "RelationNet",
@@ -35,16 +36,14 @@ export default {
      })
   },
   setup(){
-    const store = useStore()
+    const store = paperStore()
     return{
       store
     }
   },
   mounted() {
-    setTimeout(()=>{
-      this.initGraph()
-      this.loading = false
-    },5000) //模拟等待时间
+    this.initGraph()
+    this.loading = false
     this.info = this.store.paperInfo
     this.paperId = this.store.paperId
     window.addEventListener('message', (e) => {
@@ -84,7 +83,7 @@ export default {
     getData(){
       let gotData = false
       let data = null
-      this.axios.post('paper/relationNet', {
+      paperScholarAxios.post('paper/relation-net', {
         'id': this.store.paperId
       }).then(res=>{
         data = res.data
@@ -156,15 +155,14 @@ export default {
   line-height: 1.5;
 }
 .g6-graph {
-  width: 700px;
+  width: 60%;
   height: 500px;
   margin-right: 0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   border-radius: 3%;
 }
 .info {
-  float: left;
-  width: 500px;
+  float: right;
   padding: 10px 15px;
   max-height: 500px;
   margin-left: 2%;

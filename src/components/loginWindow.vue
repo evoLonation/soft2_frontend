@@ -1,10 +1,10 @@
 <template>
-  <el-button text @click="dialogVisible = true">
-    click to open the login dialog
-  </el-button>
+<!--  <el-button text @click="dialogVisible = true">-->
+<!--    click to open the login dialog-->
+<!--  </el-button>-->
 
   <el-dialog
-      v-model="dialogVisible"
+      v-model="store.displayLoginWindow"
       title="Tips"
       width="30%"
   >
@@ -85,55 +85,46 @@
 
 <script>
 import {ref} from "vue";
-import axios from "axios"
-import {useStore} from "@/store"
+// import axios from "axios"
+import {loginStore} from "@/store"
 import {ElMessage} from "element-plus";
+import {setHeaderAuth, testAxios} from "@/axios";
+// import {setHeaderAuth} from "@/axios";
 export default {
   name: "loginWindow",
 
   setup(){
-    const dialogVisible = ref(false);
 
-    // 添加响应拦截器
-    axios.interceptors.response.use(null, function (error) {
-      // 超出 2xx 范围的状态码都会触发该函数。
-      const response = error.response;
-      if(response.status === 401 && response.data.needLogin === true){
-        dialogVisible.value = true;
-      }else{
-        if(response.data.msg !== undefined){
-          ElMessage({message: response.data.msg, type : "warning"});
-        }else{
-          ElMessage({message: "其他未知错误", type : "warning"});
-        }
-      }
-    });
-    // 添加默认请求配置
-    axios.defaults.headers.common['HTTP2_HEADER_AUTHORIZATION'] = "";
-
-    const store = useStore();
+    const store = loginStore();
     // true为登录，false为注册
     const viewType = ref(true);
 
     const account = ref("");
     const password = ref("");
     const login = () => {
-      axios.post("login", {
-        "account" : account.value,
-        "password" : password.value
+      console.log("我应该点击登陆了啊");
+      testAxios.post("get-jwt", {
+        user_id : account.value,
+        password : password.value
       }).then((res) => {
         if(res.data.code === 0){
-          store.token = res.headers['HTTP2_HEADER_AUTHORIZATION'];
-          store.userId = res.data.userId;
+          store.token = res.data.token;
+          store.userId = res.data.user_id;
           store.nickname = res.data.nickname;
-          dialogVisible.value = false;
+          store.displayLoginWindow = false;
+          store.isLogin = true;
         }else if(res.data.code === 1){
           ElMessage({message: "用户名/邮箱不存在", type : "warning"});
         }else if(res.data.code === 2){
           ElMessage({message: "密码错误", type : "warning"});
         }
-      })
+      });
     };
+    store.$subscribe((mutation, state) => {
+      setHeaderAuth(state.token);
+      console.log(state.token);
+    });
+
 
 
     const userId = ref("");
@@ -144,16 +135,17 @@ export default {
       if(password1.value !== password2.value){
         ElMessage({message: "两次输入密码不一致", type : "warning"});
       }else{
-        axios.post("register", {
+        testAxios.post("register", {
           "userId" : userId.value,
           "nickname" : nickname.value,
           "password" : password.value
         }).then((res) => {
           if(res.data.code === 0){
-            store.token = res.headers['HTTP2_HEADER_AUTHORIZATION'];
-            store.userId = res.data.userId;
+            store.token = res.data.token;
+            store.userId = res.data.user_id;
             store.nickname = res.data.nickname;
-            dialogVisible.value = false;
+            store.displayLoginWindow = false;
+            store.isLogin = true;
           }else if(res.data.code === 1){
             ElMessage({message: "用户名已存在", type : "warning"});
           }
@@ -162,7 +154,6 @@ export default {
     };
 
     return {
-      dialogVisible,
       account,
       password,
       userId,
@@ -171,7 +162,8 @@ export default {
       password2,
       login,
       register,
-      viewType
+      viewType,
+      store,
     }
   }
 }

@@ -1,9 +1,10 @@
 <template>
   <el-button class="more" round @click="this.initGraph()">more>></el-button>
-  <el-dialog v-model="this.showNet" center id="dialog">
-    <template #header>
+  <el-dialog v-model="this.showNet" center id="dialog" custom-class="dialog">
+    <template #header>{{this.value}}
       <el-tooltip :content="this.value" placement="top" effect="light">
         <el-switch
+            style="margin-left: 20px"
             v-model="this.value"
             active-color="#13ce66"
             inactive-color="#ff4949"
@@ -21,14 +22,19 @@
 <script>
 import {Graph} from "@/views/scholar/RelationNet/Graph";
 import Data from "@/views/scholar/RelationNet/Data"
+import {paperScholarAxios} from "@/axios";
+
 export default {
   name: "testNet",
+  components: {},
+  props:["id"],
   beforeUnmount () {
     window.removeEventListener('message', (e) => {
       this.openAuthor(e.data)
     })
   },
   mounted() {
+    this.initData()
     window.addEventListener('message', (e) => {
       this.openAuthor(e.data)
     })
@@ -36,14 +42,33 @@ export default {
   data(){
     return{
       co_net: null,
+      co_net_data: null,
       ci_net: null,
+      ci_net_data: null,
       value: '合作关系',
       showNet: false,
     }
   },
   methods: {
     openAuthor(id){
-      console.log('学者id：'+id)
+      //TODO: push到学者主页
+      this.$router.push({name: "Scholar", params:{id: id
+        }})
+    },
+    initData(){
+      let got = false;
+      paperScholarAxios.post('scholar/relation-net', {
+        "scholar_id": this.id
+      }).then(res=>{
+        this.co_net_data = res.data.co_net;
+        this.ci_net_data = res.data.ci_net;
+        got = true
+      })
+      if (!got){
+        console.log("未获取到关系网，使用本地数据")
+        this.co_net_data = Data.co_net
+        this.ci_net_data = Data.ci_net
+      }
     },
     initGraph(){
       this.showNet = true
@@ -53,24 +78,22 @@ export default {
       },100)
     },
     initCo(){
-      const co_net_data = Data.co_net
       this.co_net = new Graph(
-          630,
+          450,
           400,
           document.getElementById("co_net")
       );
-      this.co_net.loadData(co_net_data)
+      this.co_net.loadData(this.co_net_data)
       this.co_net.render()
       this.co_net.initListener()
     },
     initCi(){
-      const ci_net_data = Data.ci_net
       this.ci_net = new Graph(
-          630,
+          450,
           400,
           document.getElementById("ci_net")
       );
-      this.ci_net.loadData(ci_net_data)
+      this.ci_net.loadData(this.ci_net_data)
       this.ci_net.render()
       this.ci_net.initListener()
     }
@@ -87,5 +110,12 @@ export default {
 
 .more:hover {
   background: white;
+}
+</style>
+<style>
+.dialog{
+  border-radius: 10px;
+  height: 500px;
+  width: 500px;
 }
 </style>

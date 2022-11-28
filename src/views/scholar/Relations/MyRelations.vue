@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import NetView from "../RelationNet/testNet"
+import NetView from "../RelationNet/RelationNet"
 
 export default {
   name: "MyRelations",

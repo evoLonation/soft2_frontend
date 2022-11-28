@@ -42,8 +42,9 @@ import PaperComment from "@/views/paper/Comment/Comment";
 import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
 import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
-import {useStore} from "@/store";
+import {paperStore} from "@/store";
 import { getCurrentInstance, onBeforeMount} from "vue";
+import {paperScholarAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -53,12 +54,12 @@ export default {
   setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
     let { proxy } = getCurrentInstance();
     const router = useRoute();
-    const store = useStore();
+    const store = paperStore();
     onBeforeMount(()=>{
       const paperId = router.params.paperId;
       let gotInfo = false
       store.paperId = paperId
-      proxy.$http.post('paper/', {
+      paperScholarAxios.post('paper/', {
         "id": paperId,
       }).then((res) => {
         store.paperInfo = res.data
@@ -97,14 +98,21 @@ export default {
         block: "start"
       })
     },
-
+  },
+  watch: {
+    '$route' () {
+      // 路由发生变化页面刷新
+      this.$router.go(0);
+    }
   },
 }
 </script>
 
 <style scoped>
 .wrap-paper {
-  margin-left: 200px;
+  margin-top: 2%;
+  margin-left: 13%;
+  margin-right: 13%;
 }
 .navigation{
   position: fixed;

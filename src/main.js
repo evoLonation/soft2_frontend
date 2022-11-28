@@ -13,11 +13,7 @@ import VueAxios from 'vue-axios'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import { createPinia } from 'pinia'
-
-axios.defaults.headers.common['HTTP2_HEADER_AUTHORIZATION'] = "";
-axios.defaults.baseURL = '/api/';
-
+import pinia from "@/store";
 
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -25,8 +21,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app
     .use(ElementPlus)
-    // .use(store)
     .use(router)
     .use(VueAxios,axios,Request)
-    .use(createPinia())
+    .use(pinia)
     .mount('#app')
+
