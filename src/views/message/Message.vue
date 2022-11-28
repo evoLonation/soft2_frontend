@@ -67,6 +67,7 @@
 import {Checked, Delete, DeleteFilled} from "@element-plus/icons";
 import Messages from "@/views/message/Data";
 import {ElMessage} from "element-plus";
+import {messageAxios, userAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -85,7 +86,7 @@ export default {
   methods:{
     getMessages(){
       let got = false
-      this.axios.post('message/get-all-messages',{
+      messageAxios.post('message/get-all-messages',{
 
       }).then(res=>{
         const code = res.data.code
@@ -143,7 +144,7 @@ export default {
       }
     },
     read(id){
-      this.axios.post('message/read', {
+      messageAxios.post('message/read', {
         "id": id
       }).then(res=>{
         const code = res.data.code
@@ -180,7 +181,7 @@ export default {
       console.log(id)
     },
     del(id){
-      this.axios.post('message/delete',{
+      messageAxios.post('message/delete',{
         "id": id
       }).then(res=>{
         const code = res.data.code
@@ -206,7 +207,7 @@ export default {
       })
     },
     accept(id){
-      this.axios.post('grievance/accept', {
+      userAxios.post('grievance/accept', {
         "id": id
       }).then(res=>{
         const code = res.data.code
@@ -218,7 +219,7 @@ export default {
       })
     },
     refuse(id){
-      this.axios.post('grievance/refuse', {
+      userAxios.post('grievance/refuse', {
         "id": id
       }).then(res=>{
         const code = res.data.code
