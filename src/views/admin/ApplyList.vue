@@ -35,8 +35,8 @@
           </el-dialog>
         </td>
         <td v-else style="text-align: center">{{item.email}}</td>
-        <td style="text-align: center"><el-button type="success" round>同意</el-button>
-            <el-button type="danger" round>拒绝</el-button>
+        <td style="text-align: center"><el-button type="success" round @click="agree(item.apply_id)">同意</el-button>
+            <el-button type="danger" round @click="disagree(item.apply_id)">拒绝</el-button>
         </td>
         <el-divider />
       </tr>
@@ -47,6 +47,7 @@
 
 <script>
 import Records from './Data'
+import {applyAxios} from "@/axios";
 export default {
   name: "ApplyList",
   data() {
@@ -58,7 +59,7 @@ export default {
   methods: {
     getList() {
       let got = false
-      this.axios.get('admin/get-scholar-apply', {
+      applyAxios.get('admin/get-scholar-apply', {
 
       }).then(res=>{
         this.records = res.data.records
@@ -69,6 +70,18 @@ export default {
         this.records = Records.Records
       }
     },
+    agree(id) {
+      applyAxios.post('admin/deal-scholar-apply', {
+        "apply_id": id,
+        "is_agree": true
+      })
+    },
+    disagree(id) {
+      applyAxios.post('admin/deal-scholar-apply', {
+        "apply_id": id,
+        "is_agree": false
+      })
+    }
   },
   mounted() {
     this.getList()
