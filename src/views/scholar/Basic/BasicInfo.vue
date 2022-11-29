@@ -84,7 +84,7 @@ export default {
   width: 1000px;
   height: 200px;
   display: flex;
-  margin: auto auto auto 50px;
+  margin: auto 0 auto 50px;
   align-items: center;
   font-family: '微软雅黑',sans-serif;
   border-radius: 10px;

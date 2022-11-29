@@ -208,7 +208,7 @@ export class ChartView {
   width: 1000px;
   display: flex;
   padding: 2% 0 2% 0;
-  margin: auto auto auto 50px;
+  margin: auto 0 auto 50px;
   height: 410px;
   border-radius: 10px;
   box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);

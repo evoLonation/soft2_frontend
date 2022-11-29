@@ -53,7 +53,7 @@ export default {
   height: 200px;
   border-radius: 10px;
   box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
-  margin-right: 40px;
+  margin-left: 60px;
   display: inline-block;
 }
 
