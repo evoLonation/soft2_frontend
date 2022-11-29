@@ -76,9 +76,9 @@ export default {
   },
   created() {
     console.log("create!");
-    this.$router.push({
-      name : 'HelpCenter'
-    })
+    if (this.$route.query === undefined){
+      this.$router.push({name: "helpCenter"});
+    }
   }
 
 

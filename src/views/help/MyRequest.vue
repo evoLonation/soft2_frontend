@@ -18,16 +18,31 @@
       <el-table-column prop="time" label="求助时间" width="180" />
       <el-table-column prop="title" label="标题" width="300" />
       <el-table-column prop="res" label="结果" width="90" />
+
+
       <el-table-column>
-        <el-button>
-          操作
-        </el-button>
-        <el-button>
-          操作
-        </el-button>
-        <el-button>
-          操作
-        </el-button>
+
+        <template #default="scope">
+
+          <div v-if="showOp('3', scope.row.status)">
+            <el-button>
+              下载文件
+            </el-button>
+            <el-button>
+              确认文献正确
+            </el-button>
+            <el-button>
+              文件错误，投诉
+            </el-button>
+          </div>
+
+          <div v-if="showOp('6', scope.row.status)">
+            <el-button>
+              再次求助
+            </el-button>
+          </div>
+        </template>
+
       </el-table-column>
     </el-table>
 
@@ -45,19 +60,19 @@ export default {
       listFilter: '1',
       helpList: [
         {
-          status: '1',
+          status: '2',
           time: "2022-11-09 14:18",
           title: "劳动伦理的基本内涵及其当代形态1",
           res: 1
         },
         {
-          status: '2',
+          status: '3',
           time: "2022-11-09 14:18",
           title: "劳动伦理的基本内涵及其当代形态2",
           res: 1
         },
         {
-          status: '3',
+          status: '4',
           time: "2022-11-09 14:18",
           title: "劳动伦理的基本内涵及其当代形态3",
           res: 1
@@ -74,18 +89,27 @@ export default {
           title: "劳动伦理的基本内涵及其当代形态5",
           res: 1
         },
+        {
+          status: '6',
+          time: "2022-11-09 14:18",
+          title: "劳动伦理的基本内涵及其当代形态5",
+          res: 1
+        },
       ],
     }
   },
 
   computed : {
     showList(){
-      return this.helpList.filter(item => item.status === this.listFilter)
-    }
+      return this.helpList.filter(item => item.status === this.listFilter || this.listFilter === '1')
+    },
+
   },
 
   methods: {
-
+    showOp(type, status){
+      return status === type;
+    }
   }
 }
 </script>
