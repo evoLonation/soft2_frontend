@@ -19,11 +19,11 @@
             class="demo-tabs"
             @tab-change="handleClick"
         >
-          <el-tab-pane label="互助中心" name="helpCenter"/>
-          <el-tab-pane label="我的求助" name="myRequest"/>
-          <el-tab-pane label="我的应助" name="myHelp"/>
-          <el-tab-pane label="发布求助" name="createRequest"/>
-          <el-tab-pane label="帮助中心" name="helpTips"/>
+          <el-tab-pane label="互助中心" name="HelpCenter"/>
+          <el-tab-pane label="我的求助" name="MyRequest"/>
+          <el-tab-pane label="我的应助" name="MyHelp"/>
+          <el-tab-pane label="发布求助" name="CreateRequest"/>
+          <el-tab-pane label="帮助中心" name="HelpTips"/>
 
         </el-tabs>
       </div>
@@ -66,13 +66,18 @@ export default {
     handleClick(name) {
       this.$router.push({
         name: name,
-
       })
     },
     gotoCreateRequest() {
       this.$router.push({
-       path: '/help/myRequest/createRequest'
+       name: 'HelpCenter'
       })
+    }
+  },
+  created() {
+    console.log("create!");
+    if (this.$route.query === undefined){
+      this.$router.push({name: "helpCenter"});
     }
   }
 

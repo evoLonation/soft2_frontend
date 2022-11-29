@@ -66,6 +66,7 @@
 
 <script>
 import list from "../../components/paperShow"
+import {paperScholarAxios} from "@/axios";
 export default {
   name: 'FieldPage',
   components: {
@@ -73,12 +74,16 @@ export default {
   },
   data() {
     return {
+      paper_num: 0, //领域总文献数
+      scholar_num: 0,
       field_name: "机器学习",
       input: "",
+      start1: 0,
+      end1: 9,
+      start2: 0,
+      end2: 9,
       loading1: true,
       loading2: true,
-      count1: 3,
-      count2: 5,
       PaperList: [
         {
           type: "0",
@@ -109,6 +114,30 @@ export default {
     }
   },
   methods: {
+    getPaperList() {
+      paperScholarAxios.get('field/paper', {
+        "field": this.field_name,
+        "start": this.start1,
+        "end": this.end1,
+      }).then(res=>{
+        this.paper_num = res.data.paper_num
+        this.PaperList = res.data.papers
+        this.start1 = this.start1 + 9
+        this.end1 = this.end1 + 9
+      })
+    },
+    getScholarList() {
+      paperScholarAxios.get('field/scholar', {
+        "field": this.field_name,
+        "start": this.start2,
+        "end": this.end2,
+      }).then(res=>{
+        this.scholar_num = res.data.scholar_num
+        this.ScholarList = res.data.scholars
+        this.start2 = this.start2 + 9
+        this.end2 = this.end2 + 9
+      })
+    },
     scrollFn() {
       console.log('1滚动')
       // let st1 = document.getElementById("paper").scrollTop;
@@ -122,7 +151,6 @@ export default {
       document.getElementById("scholar").style.height = docHeight2 + "px"
 
       if(winHeight1 + st >= docHeight1) {
-        //TODO: 调用加载函数
         console.log('1触底了')
         console.log('1st', st)
         if(this.PaperList.length >= 14) {
@@ -132,7 +160,8 @@ export default {
           document.getElementById("paper").style.bottom = "0"
         }
         else {
-          this.count1++
+          //TODO: 调用加载函数
+          this.getPaperList()
           this.PaperList.push(
               {
                 type: "0",
@@ -160,7 +189,7 @@ export default {
         }
         else {
           //TODO: 调用加载函数
-          this.count2++
+          this.getScholarList()
           this.ScholarList.push({
             name: '赵正阳',
             n_paper: 0,
@@ -175,9 +204,11 @@ export default {
   },
   mounted() {
     window.addEventListener("mousewheel", this.scrollFn);
+    this.getPaperList()
   },
   beforeUnmount() {
-    window.removeEventListener("scroll", this.scrollFn);
+    window.removeEventListener("mousewheel", this.scrollFn);
+    this.getScholarList()
   }
 }
 

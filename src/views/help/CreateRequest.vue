@@ -10,7 +10,7 @@
       <el-input v-model="formData.title" />
     </el-form-item>
     <el-form-item label="作者">
-      <el-input v-model="formData.author" />
+      <el-input v-model="formData.authorNames" />
     </el-form-item>
     <el-form-item label="杂志与期刊">
       <el-input v-model="formData.magazine" />
@@ -48,7 +48,8 @@ export default {
     return {
       formData: {
         title: "",
-        author: "",
+        author: [],
+        authorNames: "",
         magazine: "",
         link: "",
         notes: "",
@@ -62,9 +63,17 @@ export default {
   //   },
   // },
 
+
   created() {
     console.log("create");
-    console.log(this.$route.params);
+    console.log(this.$route.query);
+    this.formData.title = this.$route.query.title;
+    this.formData.author = this.$route.query.author;
+    this.formData.magazine = this.$route.query.magazine;
+    this.formData.authorNames = "";
+    for (let i = 0; i < this.formData.author.length; i++) {
+      this.formData.authorNames += (this.formData.author[i] + " ");
+    }
   }
 }
 </script>

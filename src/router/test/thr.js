@@ -1,8 +1,8 @@
 
 const thrRoutes = [
-    // {
-    //     path: "/thr/testxxx",
-    //     component: () => import('../views/scholar/RelationNet/testNet'),
-    // },
+    {
+        path: "/thr/testAdmin",
+        component: () => import('../../views/admin/THRtest'),
+    },
 ];
 export default thrRoutes
