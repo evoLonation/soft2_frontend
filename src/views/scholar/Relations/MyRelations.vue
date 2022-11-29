@@ -55,6 +55,8 @@ export default {
 
 <style scoped>
 .relations {
+  min-width: 350px;
+  max-width: 350px;
   width: 350px;
   height: 470px;
   margin-left: 60px;

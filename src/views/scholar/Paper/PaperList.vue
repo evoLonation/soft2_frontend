@@ -149,6 +149,8 @@ export default {
 <style scoped>
 .Paper {
   width: 1000px;
+  min-width: 1000px;
+  max-width: 1000px;
   margin: auto 0 auto 50px;
   horiz-align: center;
 }
