@@ -14,17 +14,17 @@ const helpCenter = {
 const myHelp = {
     path: "my-help",
     name: "MyHelp",
-    component: () => import('../views/help/MyHelp/MyHelp'),
+    component: () => import('../views/help/MyHelp'),
 }
 const myRequest = {
     path: "my-request",
     name: "MyRequest",
-    component: () => import('../views/help/MyRequest/MyRequest'),
+    component: () => import('../views/help/MyRequest'),
 }
 const createRequest = {
     path: "create-request",
     name: "CreateRequest",
-    component: () => import('../views/help/MyRequest/CreateRequest'),
+    component: () => import('../views/help/CreateRequest'),
 }
 const helpTips = {
     path: "help-tips",
