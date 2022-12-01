@@ -3,7 +3,7 @@
     <el-row class="part-cmt">
       <el-col :span="3">热门评论</el-col>
       <el-col :span="3" :offset="18">
-        <el-button round @click="this.showComment=true" class="more">更多<el-icon><DArrowRight /></el-icon></el-button>
+        <el-button round @click="this.showComment=true" class="more" color="#66b1ff">更多<el-icon><DArrowRight /></el-icon></el-button>
       </el-col>
     </el-row>
     <el-card shadow="never" v-if="this.comment !== null">
@@ -11,10 +11,10 @@
         <el-col :span="2">{{this.comment.userName}}:</el-col>
         <el-col :span="0.5" :offset="17">
           <el-button circle size="small" v-if="this.comment.liked" @click="dislike(this.comment.id)" style="cursor: pointer">
-            <el-icon ><StarFilled /></el-icon>
+            <el-icon color=" #66b1ff"><StarFilled /></el-icon>
           </el-button>
           <el-button circle size="small" v-else @click="this.like(this.comment.id)" style="cursor: pointer">
-            <el-icon ><Star /></el-icon>
+            <el-icon color=" #66b1ff"><Star /></el-icon>
           </el-button>
         </el-col>
         <el-col :span="1" class="likes1">{{this.comment.likes}}</el-col>
@@ -36,7 +36,7 @@
         <el-input type="textarea" :rows="2" placeholder="请输入评论" v-model="commentText" style="width: 420px"/>
       </el-col>
       <el-col :span="1">
-        <el-button circle size="large" @click="this.publish"><el-icon><Promotion /></el-icon></el-button>
+        <el-button circle size="large" @click="this.publish" color=" #66b1ff"><el-icon color="#ffffff"><Promotion /></el-icon></el-button>
       </el-col>
     </el-row>
     <el-row style="height: 20px"></el-row>
@@ -44,18 +44,18 @@
       <el-row class="user-info">
         <el-col :span="3">{{cmt.userName}}:</el-col>
         <el-col :span="1.5" style="float:right;" :offset="10">
-          <el-button circle size="small" v-if="cmt.liked" @click="dislike(cmt.id)" style="cursor: pointer">
-            <el-icon ><StarFilled /></el-icon>
+          <el-button circle size="small" v-if="cmt.liked===0" @click="dislike(cmt.id)" style="cursor: pointer">
+            <el-icon color=" #66b1ff"><StarFilled /></el-icon>
           </el-button>
           <el-button circle size="small" v-else @click="this.like(cmt.id)" style="cursor: pointer">
-            <el-icon ><Star /></el-icon>
+            <el-icon color=" #66b1ff"><Star /></el-icon>
           </el-button>
         </el-col>
         <el-col :span="2" class="likes">{{cmt.likes}}</el-col>
         <el-col :span="4" class="date">{{cmt.date}}</el-col>
         <el-col :span="1" class="delete" v-if="cmt.userId === this.store.userId">
           <el-button circle size="small" @click="this.del(cmt.id)">
-            <el-icon><DeleteFilled/></el-icon>
+            <el-icon color=" #b25252"><DeleteFilled/></el-icon>
           </el-button>
         </el-col>
       </el-row>
@@ -71,7 +71,7 @@ import {DArrowRight, DeleteFilled, Promotion, Star, StarFilled} from "@element-p
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
-import {userAxios} from "@/axios";
+import {paperScholarAxios, userAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -86,6 +86,7 @@ export default {
   },
   mounted() {
     this.getComments();
+    this.getLiked();
   },
   data(){
     return {
@@ -97,7 +98,7 @@ export default {
           content: '',
           likes: '',
           date: '',
-          liked: Boolean,
+          liked: Number,
         },
       ],
       comment: null,
@@ -110,46 +111,60 @@ export default {
       this.comment = this.comments[0]
     },
     getCommentsAPI(){
-      let got = false
-      userAxios.post('paper/comment/get', {
-        "id": this.store.paperInfo.id
+      paperScholarAxios.post('paper/comment/get-comment', {
+        "paper_id": this.store.paperInfo.id
       }).then(res=>{
         this.comments = res.data.comments
-        got = true
         //store的comments也要更新：
         this.store.paperInfo.comments = this.comments
-      })
-      if (!got){
+      }).catch(()=>{
         console.log('评论更新失败，从本地获取')
         this.getComments()
-      }
+      })
     },
+    getLiked(){
+      userAxios.post('paper/comment-liked', {
+        "paper_id": this.store.paperId
+      }).then(res=>{
+        const comment_liked = res.data.comment_liked
+        for (let i = 0; i < this.comments.length; i++) {
+          this.comments[i].liked = comment_liked[i].is_liked
+        }
+      }).catch(()=>{
+        console.log('未获取，默认全false')
+        this.comments.forEach(cmt=>{
+          cmt.liked = 1
+        })
+      })
+      },
     like(id){
       userAxios.post('paper/comment/like', {
-        'id': this.comment.id
-      }).then(res=>{
-        const code = res.data.code
-        console.log(code)
+        'comment_id': this.comment.id
+      }).then(()=>{
         this.comments.forEach((cmt)=>{
           if (cmt.id === id){
             cmt.likes++
             cmt.liked = true
           }
         })
+      }).catch(e=>{
+        ElMessage('操作失败')
+        console.log(e)
       })
     },
     dislike(id){
       userAxios.post('paper/comment/dislike', {
-        'id': this.comment.id
-      }).then(res=>{
-        const code = res.data.code
-        console.log(code)
+        'comment_id': this.comment.id
+      }).then(()=>{
         this.comments.forEach((cmt)=>{
           if (cmt.id === id){
             cmt.likes--
             cmt.liked = false
           }
         })
+      }).catch(e=>{
+        ElMessage('操作失败')
+        console.log(e)
       })
     },
     publish(){
@@ -157,35 +172,32 @@ export default {
         ElMessage('评论不能为空')
         return
       }
-      userAxios.post('paper/comment/', {
-        'id': this.comment.id,
+      userAxios.post('paper/comment', {
+        'paper_id': this.comment.id,
         'content': this.commentText
-      }).then(res=>{
-        const code = res.data.code
-        console.log(code)
+      }).then(()=>{
         setTimeout(()=>{
           this.getCommentsAPI()
         },500)
+      }).catch(e=>{
+        console.log(e)
+        ElMessage('操作失败')
       })
     },
     del(id){
       userAxios.post('paper/comment/delete', {
-        'id': id
-      }).then(res=>{
-        const code = res.data.code
-        console.log(code)
-        if (code === '0'){
-          ElMessage("删除成功")
-          setTimeout(()=>{
-            this.getCommentsAPI()
-          },500)
-        }else {
-          ElMessage("请先登录")
-        }
+        'comment_id': id
+      }).then(()=>{
+        ElMessage("删除成功")
+        setTimeout(()=>{
+          this.getCommentsAPI()
+        },500)
+      }).catch(e=>{
+        console.log(e)
+        ElMessage('操作失败')
       })
     },
-  },
-
+  }
 }
 </script>
 
@@ -226,6 +238,7 @@ export default {
 .more{
   font-size: 15px;
   margin-bottom: 10px;
+  color: #ecf5ff;
 }
 .likes{
    margin-top: 1.5%;

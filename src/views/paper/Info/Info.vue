@@ -56,7 +56,7 @@ export default {
     openAuthor(author){
       if (author.hasId){
         //TODO: push到学者主页， 未完
-        this.$router.push({name:'UserInfo'});
+        // this.$router.push({name:'UserInfo'});
       }else {
         this.$router.push({
           name:'PaperSearch',  //跳转路由
@@ -77,7 +77,7 @@ export default {
   font-weight: bold;
 }
 .author{
-  color: steelblue;
+  color: #3375b9;
   cursor: pointer;
   line-height:2;
   font-size: 14px;

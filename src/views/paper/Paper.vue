@@ -43,8 +43,8 @@ import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
 import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
 import {paperStore} from "@/store";
-import {getCurrentInstance, onBeforeMount} from "vue";
-import {paperScholarAxios} from "@/axios";
+import {onBeforeMount} from "vue";
+import {paperScholarAxios, userAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -53,22 +53,32 @@ export default {
   props: [],
   setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
     // eslint-disable-next-line no-unused-vars
-    let { proxy } = getCurrentInstance();
     const router = useRoute();
     const store = paperStore();
     onBeforeMount(()=>{
       const paperId = router.params.paperId;
-      let gotInfo = false
       store.paperId = paperId
+      let got = false
       paperScholarAxios.post('paper/', {
         "id": paperId,
       }).then((res) => {
         store.paperInfo = res.data
-        gotInfo = true
+        got = true
       })
-      if (!gotInfo){
+      if (!got){
         store.paperInfo = PaperInfo.info
         console.log('未获取到详情，使用本地测试数据')
+      }
+      got = false
+      userAxios.post('paper/is-star', {
+        "paper_id": paperId
+      }).then(res=>{
+        got = true
+        store.paperInfo.starred = res.data.is_star
+      })
+      if (!got){
+        console.log('未获取或未登录，默认没有收藏过')
+        store.paperInfo.starred = 1
       }
     })
   },

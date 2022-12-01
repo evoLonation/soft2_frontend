@@ -6,7 +6,8 @@
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
       </el-row>
       <el-row style="display: flex" gutter="5">
-        <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
+        <el-col :span="6" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
+<!--        <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>-->
       </el-row>
       <el-row>
         <el-col :span="30" class="year">{{this.info.year}}</el-col>
@@ -139,7 +140,7 @@ export default {
   text-decoration: underline;
 }
 .author{
-  color: darkgrey;
+  color:  #3375b9;
   cursor: pointer;
   line-height:2;
   font-size: 12px;
