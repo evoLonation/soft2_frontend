@@ -6,7 +6,7 @@
 
     <div style="
       background-color: white;
-      width: 90%;
+      width: 80%;
       height: 40px;
       margin: 0 auto;
       position: relative;
@@ -38,9 +38,7 @@
 
 
     <div style="
-      background-color: #F2F2F2;
-
-      width: 90%;
+      width: 80%;
       margin: 30px auto;
     ">
       <router-view/>
@@ -62,6 +60,7 @@ export default {
 
     }
   },
+
   methods: {
     handleClick(name) {
       this.$router.push({
@@ -70,14 +69,15 @@ export default {
     },
     gotoCreateRequest() {
       this.$router.push({
-       name: 'HelpCenter'
+       name: 'CreateRequest'
       })
     }
   },
   created() {
     console.log("create!");
-    if (this.$route.query === undefined){
-      this.$router.push({name: "helpCenter"});
+    console.log(this.$route.query.title);
+    if (this.$route.query.title === undefined){
+      this.$router.push({name: "HelpCenter"});
     }
   }
 

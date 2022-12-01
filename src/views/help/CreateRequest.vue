@@ -31,7 +31,8 @@
           float: left;
       "/>
       <el-button type="success"
-        style="float: right;margin: 0 auto"
+                 @click="createRequest"
+                 style="float: right;margin: 0 auto"
       >
         发布求助
       </el-button>
@@ -42,6 +43,9 @@
 </template>
 
 <script>
+import qs from 'qs'
+import { ElMessage } from 'element-plus'
+
 export default {
   name: "CreateRequest",
   data(){
@@ -57,22 +61,23 @@ export default {
       },
     }
   },
-  // methods :{
-  //   init(){
-  //     console.log(this.$route.params);
-  //   },
-  // },
 
+  methods :{
+    createRequest(){
+      ElMessage({
+        message: '创建成功',
+        type: 'warning',
+      })
+    },
+  },
 
   created() {
     console.log("create");
     console.log(this.$route.query);
-    this.formData.title = this.$route.query.title;
-    this.formData.author = this.$route.query.author;
-    this.formData.magazine = this.$route.query.magazine;
-    this.formData.authorNames = "";
-    for (let i = 0; i < this.formData.author.length; i++) {
-      this.formData.authorNames += (this.formData.author[i] + " ");
+    if (!(this.$route.query.title === undefined)){
+      this.formData.title = this.$route.query.title;
+      this.formData.magazine = this.$route.query.magazine;
+      this.formData.author = qs.parse(this.$route.query.author)
     }
   }
 }

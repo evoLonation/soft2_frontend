@@ -118,9 +118,9 @@ const routes = [
                 component: ()=> import('../views/admin/ApplyList')
             },{
                 path: 'complain-list',
-                name: 'ComplainList'
+                name: 'ComplainList',
+                component: () => import('../views/admin/ComplainList')
             }
-
         ],
     },
 ];

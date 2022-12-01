@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: "THRtest",
+  name: "ComplainList",
   data(){
     return {
       complaintList: [
