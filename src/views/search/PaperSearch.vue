@@ -1,7 +1,7 @@
 <template>
   <div class="top_search">
     <div class="top_search_img">
-      <img src="../../assets/logo.png" width="100" height="100"/>
+<!--      可能的logo-->
     </div>
     <div class="top_search_mid" >
         <div style="width: 40% ;margin-left: 30%;margin-top: 70px">
@@ -14,10 +14,10 @@
         </div>
     </div>
     <div class="top_search_right">
-      <el-avatar
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          style="margin-left: 30%;margin-top: 10%"
-      />
+<!--      <el-avatar-->
+<!--          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"-->
+<!--          style="margin-left: 30%;margin-top: 10%"-->
+<!--      />-->
     </div>
   </div>
   <div class="search_main">
@@ -30,13 +30,19 @@
               :value="item.value"
           />
         </el-select>
-        <el-input v-model="inputValue[0]" placeholder="Please input" clearable style="width: 450px; margin-left: 30px;margin-top: 30px"/>
-        <el-icon size="30px" style="margin-left: 40px;vertical-align: top;margin-top: 31px;margin-bottom: 25px"><Search/></el-icon>
+        <el-input v-model="inputValue[0]" placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px"/>
+        <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00">
+          <template #icon>
+            <el-icon size="15px" ><Search/></el-icon>
+          </template>
+          搜索
+        </el-button>
+
       </div>
 
       <div class="advance_search" v-else>
         <div v-for="index in searchNum" :key="index">
-          <el-select v-if="index==1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-top: 30px;margin-left: 30px">
+          <el-select v-if="index==1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-top: 30px;margin-left: 110px">
             <el-option
                 v-for="item in ANoptions"
                 :key="item.value"
@@ -44,7 +50,7 @@
                 :value="item.value"
             />
           </el-select>
-          <el-select v-else v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-top: 30px;margin-left: 30px">
+          <el-select v-else v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-top: 30px;margin-left: 110px">
             <el-option
                 v-for="item in ANoptions"
                 :key="item.value"
@@ -60,11 +66,11 @@
                 :value="item.value"
             />
           </el-select>
-          <el-input v-model="inputValue[index-1]" placeholder="Please input" clearable style="width: 450px; margin-left: 30px;margin-top: 30px"/>
+          <el-input v-model="inputValue[index-1]" placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px"/>
           <el-icon v-if="index>2" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="decreaseNum(index)"><Minus /></el-icon>
           <el-icon v-if="index===searchNum" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="addNum"><Plus /></el-icon>
         </div>
-        <div style="display: inline-block;margin-left: 30px;margin-top: 40px">年份范围</div>
+        <div style="display: inline-block;margin-left: 216px;margin-top: 40px;">年份范围</div>
         <el-date-picker
             v-model="beginYear"
             type="year"
@@ -77,41 +83,23 @@
             placeholder="Pick a year"
             style="width: 130px; margin-left: 5px"
         />
-        <el-icon size="30px" style="margin-left: 400px;vertical-align: top;margin-top: 50px;margin-bottom: 10px"><Search/></el-icon>
+        <el-button style="margin-left: 200px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00">
+          <template #icon>
+            <el-icon size="15px" ><Search/></el-icon>
+          </template>
+          搜索
+        </el-button>
       </div>
   </div>
   <div class="paper_main">
-    <div class="paper_main_left">
-      <el-collapse style="margin-left: 10px;margin-right: 10px">
-        <el-collapse-item>
-          <template #title >
-            <span style="margin-left: 40%;font-size: 25px">主题</span>
-          </template>
-          <div v-for="index in themes.length" :key="index">
-            <el-checkbox v-model="themesCheck[index-1]" style="margin-left: 40%">{{ this.themes[index-1].name }}</el-checkbox>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item>
-          <template #title >
-            <span style="margin-left: 40%;font-size: 25px">领域</span>
-          </template>
-          <div v-for="index in fields.length" :key="index">
-            <el-checkbox v-model="fieldsCheck[index-1]" style="margin-left: 40%">{{ this.fields[index-1].name }}</el-checkbox>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item>
-          <template #title >
-            <span style="margin-left: 40%;font-size: 25px">年份</span>
-          </template>
-          <div v-for="index in years.length" :key="index">
-            <el-checkbox v-model="yearsCheck[index-1]" style="margin-left: 40%">{{ this.years[index-1].name }}</el-checkbox>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-    <div class="paper_main_right">
-      <div style="margin-left: 30px;margin-top: 20px;display: inline-block;width: 80%"><span style="font-family: 幼圆; font-size: 20px;">一共为您找到{{this.paperNum}}条数据:</span></div>
-      <div style="display: inline-block;width: 15%;">
+    <div class="paper_main_top">
+      <div style="display: inline-block;">
+        <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3">筛选</span>
+      </div>
+      <div style="display:inline-block;margin-left: 21%">
+        <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.paperNum}}条数据:</span>
+      </div>
+      <div style="display: inline-block;width: 15%;margin-left: 53.2%;vertical-align: top">
         <el-select v-model="sortType" placeholder="按相关性降序" style="width: 80%;border-radius: 10px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
           <el-option
               v-for="item in sorts"
@@ -121,11 +109,41 @@
           </el-option>
         </el-select>
       </div>
+    </div>
+    <div class="paper_main_left">
+      <el-collapse style="margin-left: 30px;margin-right: 20px" v-model="activeNames">
+        <el-collapse-item name="1">
+          <template #title >
+            <span style="font-size: 15px">主题</span>
+          </template>
+          <div v-for="index in themes.length" :key="index">
+            <el-checkbox v-model="themesCheck[index-1]" style="margin-left: 10px;font-size: 13px">{{ this.themes[index-1].name }}</el-checkbox>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item name="2">
+          <template #title >
+            <span style="font-size: 15px">领域</span>
+          </template>
+          <div v-for="index in fields.length" :key="index">
+            <el-checkbox v-model="fieldsCheck[index-1]" style="margin-left: 10px;font-size: 13px">{{ this.fields[index-1].name }}</el-checkbox>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item name="3">
+          <template #title >
+            <span style="font-size: 15px">年份</span>
+          </template>
+          <div v-for="index in years.length" :key="index">
+            <el-checkbox v-model="yearsCheck[index-1]" style="margin-left: 10px;font-size: 13px">{{ this.years[index-1].name }}</el-checkbox>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+    <div class="paper_main_right">
       <div class="example-pagination-block">
         <div v-for="(item,index) in papers" :key="item">
           <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                      :paper-name="item.title" :type="type" :num="item.n_citation"
-                      style="margin-left: 50px;margin-top: 20px" v-if="index-(nowPage-1)*10<=10&&index>(nowPage-1)*10"></paper-show>
+                      :paper-name="item.title" :type="type" :num="item.n_citation" :id="1"
+                      style="margin-left: 50px;margin-top: 10px;vertical-align: top" v-if="index-(nowPage-1)*10<=10&&index>(nowPage-1)*10"></paper-show>
         </div>
         <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
                 />
@@ -144,6 +162,7 @@ export default {
   components: {PaperShow},
   data(){
     return{
+      activeNames:['1','2','3'],
       nowPage:1,
       type:0,
       searchType:false,
@@ -246,7 +265,7 @@ export default {
         },
         {
           "title": "test4",
-          "abstract": "111",
+          "abstract": "顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶电得到的撒大大撒旦但是打赏大撒到撒打的啊收到阿松大阿松大撒旦昂啥打赏打赏打但是打大大撒旦阿松大阿达",
           "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
@@ -409,7 +428,7 @@ export default {
 <style scoped>
 
 .top_search{
-  background-color: lavender;
+  /*background-color: lavender;*/
 }
 
 .top_search_img{
@@ -466,53 +485,65 @@ export default {
 }
 
 .normal_search{
-  border: 1px #777755 solid;
-  box-shadow: 1px 1px 3px #888888;
-  border-radius: 20px;
+  border: 1px white solid;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 1px 1px 3px #888888;*/
+  border-radius: 10px;
   /*height: 300px;*/
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 10%;
+  margin-right: 10%;
   /*margin-bottom: 20px;*/
 }
 
 .advance_search{
-  border: 1px #777755 solid;
-  box-shadow: 1px 1px 3px #888888;
-  border-radius: 20px;
+  border: 1px white solid;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 1px 1px 3px #888888;*/
+  border-radius: 10px;
   /*height: 300px;*/
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 10%;
+  margin-right: 10%;
   /*margin-bottom: 20px;*/
 }
 
 .paper_main{
   /*border: 3px red solid;*/
+  margin-left: 4%;
+  margin-right: 4%;
   margin-top: 30px;
   height: 900px;
 }
 
+.paper_main_top{
+  width: 100%;
+  border: 3px white solid;
+}
+
+
 .paper_main_left{
-  border: 1px #777755 solid;
-  border-radius: 10px;
+  border: 1px white solid;
+  border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   vertical-align: top;
   display: inline-block;
+  margin-top: 10px;
   width: 20%;
   height: 100%;
 }
 
 .paper_main_right{
-  border: 1px #777755 solid;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*border: 1px white solid;*/
+  /*border-radius: 10px;*/
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   vertical-align: top;
-  margin-left: 3%;
+  /*margin-left: 3%;*/
+  /*margin-top: 10px;*/
   display: inline-block;
-  width: 76%;
+  width: 77%;
 }
 
 .example-pagination-block{
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .el-pagination {

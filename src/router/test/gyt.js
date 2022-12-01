@@ -1,8 +1,8 @@
 
 const gytRoutes = [
-    // {
-    //     path: "/gyt/testxxx",
-    //     component: () => import('../views/scholar/RelationNet/testNet'),
-    // },
+    {
+        path: "/gyt/test",
+        component: () => import('../../views/search/testSearch'),
+    },
 ];
 export default gytRoutes
