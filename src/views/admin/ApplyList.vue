@@ -1,47 +1,51 @@
 <template>
   <div class="list">
-    <h2 style="text-align: center">学者认证列表</h2>
-    <table >
-      <thead>
-        <tr>
-          <th style="width: 200px">姓名</th>
-          <th style="width: 200px">申请方式</th>
-          <th style="width: 200px">申请机构</th>
-          <th style="width: 250px">详情</th>
-          <th>操作</th>
-        </tr>
-      <tr v-for="(item, index) in records" :key="index">
-        <td style="text-align: center">{{item.scholar_name}}</td>
-        <td style="text-align: center">{{item.apply_type === 1 ? "邮箱认证" : "图片认证"}}</td>
-        <td style="text-align: center">{{item.institution}}</td>
-        <td v-if="item.apply_type === 2" style="text-align: center">
-          <el-button round @click="dialogVisible = true" style="align-items: center">
-            查看图片
-          </el-button>
-          <el-dialog
-              v-model="dialogVisible"
-              title="图片详情"
-              width="25%"
-              :before-close="handleClose"
-          >
-            <img :src="item.url"/>
-            <template #footer>
-                <span class="dialog-footer">
-                  <el-button type="primary" @click="dialogVisible = false">
-                    关闭
-                  </el-button>
-                </span>
-            </template>
-          </el-dialog>
-        </td>
-        <td v-else style="text-align: center">{{item.email}}</td>
-        <td style="text-align: center"><el-button type="success" round @click="agree(item.apply_id)">同意</el-button>
-            <el-button type="danger" round @click="disagree(item.apply_id)">拒绝</el-button>
-        </td>
-        <el-divider />
-      </tr>
-      </thead>
-    </table>
+    <h1 style="text-align: center; padding-bottom: 30px">学者认证列表</h1>
+    <el-table  :data="records" style="width: 100%" height="380">
+      <el-table-column fixed align="center" prop="scholar_name" label="姓名" width="160"/>
+      <el-table-column align="center"  label="申请方式" width="160" >
+        <template #default="scope">
+          {{scope.row.apply_type === 1 ? "邮箱认证" : "图片认证"}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="institution" label="申请机构" width="160"/>
+
+      <el-table-column  align="center" label="查看详情" width="250">
+        <template #default="scope">
+          <div v-if="scope.row.apply_type === 2">
+            <el-button round @click="download(scope.row.url)" style="align-items: center">
+              下载图片
+            </el-button>
+<!--            <el-dialog-->
+<!--                v-model="dialogVisible"-->
+<!--                title="图片详情"-->
+<!--                width="50%"-->
+<!--                :before-close="handleClose"-->
+<!--            >-->
+<!--              <img :src="scope.row.url"/>-->
+<!--              <template #footer>-->
+<!--                <span class="dialog-footer">-->
+<!--                  <el-button type="primary" @click="dialogVisible = false">-->
+<!--                    关闭-->
+<!--                  </el-button>-->
+<!--                </span>-->
+<!--              </template>-->
+<!--            </el-dialog>-->
+          </div>
+
+          <div v-else style="text-align: center">{{scope.row.email}}</div>
+        </template>
+
+      </el-table-column>
+      <el-table-column align="center" fixed="right" label="操作" width="200">
+        <template #default="scope">
+          <el-button type="success" round @click="agree(scope.row.apply_id)">同意</el-button>
+          <el-button type="danger" round @click="disagree(scope.row.apply_id)">拒绝</el-button>
+        </template>
+
+      </el-table-column>
+    </el-table>
+
   </div>
 </template>
 
@@ -69,6 +73,15 @@ export default {
         console.log('未能获取，使用本地数据')
         this.records = Records.Records
       }
+    },
+    download(url) {
+      let fileURL = window.URL.createObjectURL(new Blob([url], {type: 'image/png'}));
+      let fileLink = document.createElement('a');
+      fileLink.href = fileURL;
+      fileLink.setAttribute('download', '图片认证' );
+      document.body.appendChild(fileLink);
+      console.log();
+      fileLink.click();
     },
     agree(id) {
       applyAxios.post('admin/deal-scholar-apply', {
