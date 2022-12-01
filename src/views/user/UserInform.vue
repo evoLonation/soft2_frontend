@@ -3,13 +3,13 @@
   <div class="main_body">
     <div class="main_left">
         <div class="left_inform" id="inform" @click="clickInform">
-          <el-icon size="25" style="margin-right: 5px;vertical-align: bottom"><User /></el-icon>个人信息
+          <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><User /></el-icon>个人信息
         </div>
         <div class="left_scholar" id="scholar" @click="clickScholar">
-          <el-icon size="25" style="margin-right: 5px;vertical-align: bottom"><View /></el-icon>关注学者
+          <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><View /></el-icon>关注学者
         </div>
         <div class="left_paper" id="paper" @click="clickPaper">
-          <el-icon size="25" style="margin-right: 5px;vertical-align: bottom"><Star /></el-icon>收藏论文
+          <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><Star /></el-icon>收藏论文
         </div>
     </div>
     <div class="main_right">
@@ -22,23 +22,63 @@
               <el-avatar :size="160" :src="userPhoto" />
             </div>
             <div class="main_right_inform_right">
-                  <div class="main_right_inform_right_box"><span class="span_box">昵称:</span>{{userinfo.nickName}}</div>
-                  <div class="main_right_inform_right_box"><span class="span_box">email:</span>{{userinfo.email}}</div>
-                  <div class="main_right_inform_right_box"><span class="span_box">求助次数:</span>{{userinfo.n_request}}</div>
-                  <div class="main_right_inform_right_box"><span class="span_box">应助次数:</span>{{userinfo.n_help}}</div>
-                  <div class="main_right_inform_right_box"><span class="span_box">关注学者数量:</span>{{userinfo.follows}}</div>
-                  <div class="main_right_inform_right_box"><span class="span_box">投诉次数:</span>{{userinfo.complaints}}</div>
-                  <div class="main_right_inform_right_box"><span class="span_box">财富值:</span>{{userinfo.wealth}}</div>
+              <el-form :model="form" label-width="120px">
+                <el-form-item label="昵称:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.nickName}}
+                  </span>
+                </el-form-item>
+                <el-form-item label="email:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.email}}
+                  </span>
+                </el-form-item>
+                <el-form-item label="求助次数:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.n_request}}
+                  </span>
+                </el-form-item>
+                <el-form-item label="应助次数:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.n_help}}
+                  </span>
+                </el-form-item>
+                <el-form-item label="关注学者数:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.follows}}
+                  </span>
+                </el-form-item>
+                <el-form-item label="投诉次数:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.complaints}}
+                  </span>
+                </el-form-item>
+                <el-form-item label="财富值:">
+                  <span style="margin-left: 30px">
+                    {{userinfo.wealth}}
+                  </span>
+                </el-form-item>
+              </el-form>
             </div>
         </div>
         <div v-if="pageType===1" style="margin-bottom: 30px">
+          <div style="margin-top: 20px">
+            <span style="margin-left: 30px;font-size: 15px;color: #73767a">
+              关注的学者:
+            </span>
+          </div>
           <div v-for="(item,index) in scholars" :key="index"
                style=" height: 150px; width: 410px;
-                    display: inline-block;  margin-left: 5px;margin-top: 20px;">
+                    display: inline-block;  margin-left: 30px;margin-top: 20px;">
             <scholar-list :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
           </div>
         </div>
         <div v-if="pageType===2" style="margin-bottom: 30px">
+          <div style="margin-top: 20px">
+            <span style="margin-left: 30px;font-size: 15px;color: #73767a">
+              收藏的论文:
+            </span>
+          </div>
           <div v-for="(item,index) in papers" :key="index">
             <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
                         :paper-name="item.title" :type="type" :num="item.n_citation"
@@ -55,6 +95,7 @@ export default {
   name: "UserHome",
   data(){
     return{
+      form:[],
       pageType:0,//0-个人信息，1-关注学者，2-收藏论文,
       userPhoto:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       userinfo: {
@@ -254,7 +295,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   margin-left: 50px;
   margin-top: 50px;
-  width: 20%;
+  width: 15%;
   height: 170px;
 }
 
@@ -274,7 +315,7 @@ export default {
 .left_inform{
   margin-top: 20px;
   /*border: 3px saddlebrown solid;*/
-  font-size: 20px;
+  font-size: 15px;
   text-align: center;
   height: 50px;
   transition: 0.2s;
@@ -283,7 +324,7 @@ export default {
 .left_inform:hover{
   margin-top: 20px;
   /*border: 3px saddlebrown solid;*/
-  font-size: 22px;
+  font-size: 17px;
   color: #007dfa;
   cursor: pointer;
   text-align: center;
@@ -305,15 +346,16 @@ export default {
 
 .left_paper{
   /*border: 3px seagreen solid;*/
-  font-size: 20px;
+  font-size: 15px;
   text-align: center;
   height: 50px;
   transition: 0.2s;
+  color: #333333;
 }
 
 .left_paper:hover{
   /*border: 3px saddlebrown solid;*/
-  font-size: 22px;
+  font-size: 17px;
   color: #007dfa;
   cursor: pointer;
   text-align: center;
@@ -323,15 +365,16 @@ export default {
 
 .left_scholar{
   /*border: 3px skyblue solid;*/
-  font-size: 20px;
+  font-size: 15px;
   text-align: center;
   height: 50px;
   transition: 0.2s;
+  color: #333333;
 }
 
 .left_scholar:hover{
   /*border: 3px saddlebrown solid;*/
-  font-size: 22px;
+  font-size: 17px;
   color: #007dfa;
   cursor: pointer;
   text-align: center;
@@ -368,11 +411,15 @@ export default {
 .main_right_inform_right_box{
   font-size: 20px;
   margin-top: 30px;
-  font-family: 幼圆;
+  /*font-family: 幼圆;*/
+  color: #333333;
 }
 
 .span_box{
+  text-align: right;
   font-family: '微软雅黑', sans-serif;
   margin-right: 20px;
+  width: 100px;
+  color: #333333;
 }
 </style>

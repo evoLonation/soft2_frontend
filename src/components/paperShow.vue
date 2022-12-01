@@ -5,18 +5,18 @@
 */
 <template>
   <div class="paper_skeleton" v-if="type==0">
-    <div class="paper_name">
+    <div class="paper_name" @click="gotoPaper">
         {{this.paperName}}
     </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
-    <div class="paper_author">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
+    <div class="paper_author" style="margin-bottom: 10px">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
   </div>
-  <div class="paper_skeleton" v-else>
-    <div class="inf_divide" style="width: 600px; height: 167px">
-      <div class="paper_name" style="top:25%" >{{this.paperName}}</div>
-      <div class="paper_author" style="top:55%">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
+  <div class="paper_skeleton_2" v-else>
+    <div class="inf_divide" style="width: 80%; height: 100%">
+      <div class="paper_name" style="margin-top: 3%" >{{this.paperName}}</div>
+      <div class="paper_author" style="margin-top: 10px">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
     </div>
-    <div class="inf_divide" style="width: 375px; height: 167px">
+    <div class="inf_divide" style="width: 20%; height: 100%">
       <el-button class="button_type" type="primary" v-if="type==1">申请认领</el-button>
       <el-button class="button_type" type="success" v-if="type==2">已经认领</el-button>
       <el-button class="button_type" type="danger" v-if="type==3">论文申诉</el-button>
@@ -28,8 +28,17 @@
 export default {
   name: "paperShow",
   props:[
-      'paperName','abstract','author','org','num','type'
+      'paperName','abstract','author','org','num','type','id'
   ],
+  setup(prop){
+    const gotoPaper = () => {
+      console.log(prop.id)
+
+    }
+    return {
+      gotoPaper
+    }
+  },
   data(){
     return{
 
@@ -57,7 +66,7 @@ export default {
 }
 
 .button_type{
-  margin-left: 200px;
+  margin-right: 50px;
   margin-top: 60px;
 }
 
@@ -65,23 +74,45 @@ export default {
   border: 0.001px ghostwhite solid;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
-  width: 975px;
-  height: 150px;
-  position: relative;
+  min-width: 600px;
+  padding-bottom: 20px;
+  /*min-height: 150px;*/
+  /*position: relative;*/
 }
 
 .paper_skeleton:hover{
   border-radius: 10px;
   border: 1px #777755 solid;
   box-shadow:  1px 3px 5px lightgray;
-  width: 975px;
-  height: 150px;
-  position: relative;
+  min-width: 600px;
+  padding-bottom: 20px;
+  /*min-height: 150px;*/
+  /*position: relative;*/
+}
+
+.paper_skeleton_2{
+  border: 0.001px ghostwhite solid;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  min-width: 600px;
+  padding-bottom: 35px;
+  /*min-height: 150px;*/
+  /*position: relative;*/
+}
+
+.paper_skeleton_2:hover{
+  border-radius: 10px;
+  border: 1px #777755 solid;
+  box-shadow:  1px 3px 5px lightgray;
+  min-width: 600px;
+  padding-bottom: 35px;
+  /*min-height: 150px;*/
+  /*position: relative;*/
 }
 .paper_name{
-  position: absolute;
+  position: relative;
   margin-left: 48px;
-  top:20%;
+  margin-top: 30px;
   font-size: 20px;
   height: 25%;
   text-decoration: underline;
@@ -89,10 +120,10 @@ export default {
 }
 
 .paper_abstract_1{
-  position: absolute;
+  position: relative;
   /*border: 2px blue solid;*/
   margin-left: 48px;
-  bottom:32%;
+  margin-top: 12px;
   margin-right: 48px;
   font-size: 16px;
   color: #b0b2b3;
@@ -101,9 +132,8 @@ export default {
 
 .paper_author{
   margin-left: 48px;
-  position: absolute;
-  top: 70%;
-  height: 22%;
+  position: relative;
+  margin-top: 10px;
   font-size: 16px;
   color: #b0b2b3;
 }
