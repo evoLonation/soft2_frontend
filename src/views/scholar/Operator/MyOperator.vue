@@ -11,6 +11,7 @@
           style="margin: auto auto auto 60px"
           type="primary"
           v-if="isMe === false"
+          @click="this.$router.push({name: 'Identify'})"
       >
         学者认证
       </el-button>

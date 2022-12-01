@@ -4,7 +4,7 @@
     <h1 style="text-align: center; padding: 10px">{{ field_name }}</h1>
     <el-input
         v-model="input"
-        style="width: 400px; margin-left: 400px"
+        style="width: 400px; margin-left: 800px; padding-top: 20px"
         placeholder="请输入搜索领域"
         :prefix-icon="Search"
     />
@@ -109,7 +109,12 @@ export default {
           n_citation: 20,
           weight: '70%'
         },
-
+        {
+          name: 'Ameame',
+          n_paper: 8,
+          n_citation: 20,
+          weight: '70%'
+        },
       ]
     }
   },
@@ -231,7 +236,7 @@ export default {
 }
 
 .paper {
-  width: 50%;
+  width: 45%;
   margin-left: 10%;
   display: inline-block;
   /*vertical-align: ;*/

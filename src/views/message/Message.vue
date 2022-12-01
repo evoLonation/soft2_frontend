@@ -85,22 +85,18 @@ export default {
   },
   methods:{
     getMessages(){
-      let got = false
       messageAxios.post('message/get-all-messages',{
-
       }).then(res=>{
         const code = res.data.code
         if (code === '1'){
           ElMessage('请先登录')
         }else {
           this.messages = this.curMessages = res.data.messages
-          got = true
         }
-      })
-      if (!got){
+      }).catch(()=>{
         console.log('未能获取，使用本地数据')
         this.messages = this.curMessages = Messages.Messages
-      }
+      })
     },
     changeType(key){
       let tmp = [];
@@ -146,22 +142,17 @@ export default {
     read(id){
       messageAxios.post('message/read', {
         "id": id
-      }).then(res=>{
-        const code = res.data.code
-        if (code === '1'){
-          ElMessage('已读失败')
-        }else {
-          this.messages.forEach((m)=>{
-            if (m.id === id){
-              m.read = true
-            }
-          })
-          this.curMessages.forEach((m)=>{
-            if (m.id === id){
-              m.read = true
-            }
-          })
-        }
+      }).then(()=>{
+        this.messages.forEach((m)=>{
+          if (m.id === id){
+            m.read = true
+          }
+        })
+        this.curMessages.forEach((m)=>{
+          if (m.id === id){
+            m.read = true
+          }
+        })
       })
     },
     allRead(){
@@ -183,22 +174,19 @@ export default {
     del(id){
       messageAxios.post('message/delete',{
         "id": id
-      }).then(res=>{
-        const code = res.data.code
-        if (code === '1'){
-          ElMessage('删除失败')
-        }else {
-          this.messages.forEach(m=>{
-            if (m.id === id){
-              this.messages.splice(this.messages.indexOf(m))
-            }
-          });
-          this.curMessages.forEach(m=>{
-            if (m.id === id){
-              this.curMessages.splice(this.curMessages.indexOf(m))
-            }
-          });
-        }
+      }).then(()=>{
+        this.messages.forEach(m=>{
+          if (m.id === id){
+            this.messages.splice(this.messages.indexOf(m))
+          }
+        });
+        this.curMessages.forEach(m=>{
+          if (m.id === id){
+            this.curMessages.splice(this.curMessages.indexOf(m))
+          }
+        })
+      }).catch(e=>{
+        console.log(e)
       })
     },
     allDel(){
@@ -209,25 +197,21 @@ export default {
     accept(id){
       userAxios.post('grievance/accept', {
         "id": id
-      }).then(res=>{
-        const code = res.data.code
-        if (code === '1'){
-          ElMessage('审批失败')
-        }else {
+      }).then(()=>{
           ElMessage('已同意')
-        }
+      }).catch(e=>{
+        ElMessage('操作失败，发生错误')
+        console.log(e)
       })
     },
     refuse(id){
       userAxios.post('grievance/refuse', {
-        "id": id
-      }).then(res=>{
-        const code = res.data.code
-        if (code === '1'){
-          ElMessage('审批失败')
-        }else {
-          ElMessage('已拒绝')
-        }
+        "grievance_id": id
+      }).then(()=>{
+        ElMessage('已拒绝')
+      }).catch(e=>{
+        ElMessage('操作失败，发生错误')
+        console.log(e)
       })
     },
   }

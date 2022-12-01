@@ -7,29 +7,22 @@
     <div style="display: flex">
       <el-row class="op">
         <el-tooltip class="item" effect="light" content="收藏" placement="top">
-          <el-button circle v-if="!this.starred" @click="this.star" class="button" size="large">
+          <el-button circle v-if="this.starred===1" @click="this.star" class="button" size="large" color=" #66b1ff">
             <el-icon ><Star /></el-icon>
           </el-button>
           <el-button circle v-else @click="this.deStar" class="button" size="large">
-            <el-icon ><StarFilled /></el-icon>
+            <el-icon color="#FFFFFF"><StarFilled /></el-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="引用" placement="top">
-          <el-button circle @click="this.cite" class="button" size="large"><el-icon><Share/></el-icon></el-button>
+          <el-button circle @click="this.cite" class="button" size="large" color=" #66b1ff"><el-icon><Share/></el-icon></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="发起互助" placement="top">
-          <el-button circle @click="this.help" class="button" size="large"><el-icon><Help /></el-icon></el-button>
+          <el-button circle @click="this.help" class="button" size="large" color=" #66b1ff"><el-icon><Help /></el-icon></el-button>
         </el-tooltip>
-        <el-popconfirm
-            confirm-button-text="确定"
-            cancel-button-text="取消"
-            icon-color="#626AEF"
-            title="确认认领？"
-            @confirm="this.adopt">
-          <template #reference>
-            <el-button circle class="button" size="large"><el-icon><Avatar /></el-icon></el-button>
-          </template>
-        </el-popconfirm>
+        <el-tooltip class="item" effect="light" content="认领" placement="top">
+          <el-button circle class="button" size="large" @click="this.showClaim=true" color=" #66b1ff"><el-icon><Avatar /></el-icon></el-button>
+        </el-tooltip>
       </el-row>
     </div>
     <el-row class="op"><el-col>原文链接
@@ -59,7 +52,16 @@
     </template>
     <div>{{this.citation}}</div>
     <template #footer>
-      <el-button style="float: right; margin-right: 20px;" @click="this.copyCitation()" circle size="large"><el-icon><DocumentCopy /></el-icon></el-button>
+      <el-button style="float: right; margin-right: 20px;" @click="this.copyCitation()" circle size="large"  color=" #66b1ff"><el-icon color="#FFFFFF"><DocumentCopy /></el-icon></el-button>
+    </template>
+  </el-dialog>
+<!--  认领文献对话框-->
+  <el-dialog v-model="this.showClaim" custom-class="dialog" style="width: 400px">
+    <template #title>请完善认领信息</template>
+    <el-input v-model="this.input" placeholder="您的学者ID"></el-input>
+    <template #footer>
+      <el-button circle @click="this.showClaim=false" style="float: left" size="large"><el-icon><Close></Close></el-icon></el-button>
+      <el-button circle @click="this.adopt;this.showClaim=false" size="large" color=" #66b1ff"><el-icon color="#FFFFFF"><Check></Check></el-icon></el-button>
     </template>
   </el-dialog>
 <!--  是否申诉对话框-->
@@ -67,27 +69,29 @@
     文献的同名作者已经被关联到其他学者，是否发起申诉？
     <template #footer>
       <el-button round @click="this.showGrievance=false">取消</el-button>
-      <el-button round @click="this.grievance">确定</el-button>
+      <el-button round @click="this.grievance" color=" #66b1ff" style="color: #ffffff">确定</el-button>
     </template>
   </el-dialog>
 </template>
 
 
 <script>
-import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar} from "@element-plus/icons";
+import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar, Close, Check} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
 import {userAxios} from "@/axios";
 import {paperScholarAxios} from "@/axios";
+import {ref} from "vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Operation",
   props: [],
-  components: {StarFilled, Help, Share, Tools, Star, Link, DocumentCopy, Avatar},
+  components: {Check, Close, StarFilled, Help, Share, Tools, Star, Link, DocumentCopy, Avatar},
   setup(){
     return{
       store: paperStore(),
+      input: ref('')
     }
   },
   mounted() {// 从state获取信息
@@ -109,6 +113,8 @@ export default {
         caj_cd: "caj_cd",//CAJ-CD格式
       },
       citation: '',
+      griScholarId: "",
+      showClaim: false,
       showGrievance: false,
     }
   },
@@ -153,14 +159,14 @@ export default {
     },
     star(){
       userAxios.post('paper/star', {
-        'id': this.store.paperId
+        'paper_id': this.store.paperId
       }).then(res=>{
         const code = res.data.code
         console.log(code)
         if (code === '0'){
           ElMessage('收藏成功')
         }else {
-          ElMessage('请先登录')
+          ElMessage('发生错误，已经收藏过')
         }
       })
     },
@@ -173,7 +179,7 @@ export default {
         if (code === '0'){
           ElMessage('取消了')
         }else {
-          ElMessage('请先登录')
+          ElMessage('发生错误，没有收藏过')
         }
       })
     },
@@ -188,33 +194,36 @@ export default {
       })
     },
     adopt(){
-      // this.showGrievance = true //for test
-      userAxios.post('paper/adopt', {
-        "id": this.store.paperId
+      userAxios.post('paper/claim', {
+        "paper_id": this.store.paperId,
+        "scholar_id": this.input,
       }).then(res=>{
-        const code = res.data.code
-        if (code === '0'){
-          ElMessage('认领成功')
-        }else if (code === '1'){
-          ElMessage('请先登录')
-        }else if (code === '2'){
-          ElMessage('无同名作者，请联系管理员')
-        }else {
-          this.showGrievance = true
+        if (!res.status === 200){
+          ElMessage('认领失败，没有您的关联信息')
+        }
+        else {
+          const code = res.data.code
+          if (code === '0'){
+            ElMessage('认领成功')
+          }else if (code === '1'){
+            this.griScholarId = res.data.scholar_id
+            this.showGrievance = true
+          }
         }
       })
     },
     grievance(){
+      let got = false
       userAxios.post('paper/grievance',{
-        "id": this.store.paperId
-      }).then(res=>{
-        const code = res.data.code
-        if (code === '0'){
-          ElMessage('发起成功')
-        }else {
-          ElMessage('发起失败')
-        }
+        "paper_id": this.store.paperId,
+        "scholar_id": this.griScholarId,
+      }).then(()=>{
+        ElMessage('发起成功')
+        got = true
       })
+      if (!got){
+        ElMessage('发起失败，发生了错误')
+      }
     }
   }
 }
@@ -240,7 +249,7 @@ export default {
   height: 30px;
 }
 .button{
-
+  color: #ecf5ff;
 }
 </style>
 <style>
