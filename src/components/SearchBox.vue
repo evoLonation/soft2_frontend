@@ -1,18 +1,17 @@
 <template>
-  <div style="margin: auto">
     <div style="display: flex;margin:auto;">
       <el-autocomplete
           v-model="input"
           class=""
-          style="width: 600px;margin-right: 12px;"
+          style="width: 600px;margin-right: 12px;margin-left: auto"
           placeholder="输入你要检索的..."
           :fetch-suggestions="querySearch"
       >
         <template #suffix>
-          <el-icon size="large" @click="normalSearch"><search /></el-icon>
+          <el-icon size="large" @click="normalSearch" ><search /></el-icon>
         </template>
         <template #prepend>
-          <el-select v-model="selectedType" key="" class="search-type" placeholder="Select" size="large">
+          <el-select v-model="selectedType" key="" placeholder="Select" size="large" style="width: 120px">
             <el-option
                 v-for="item in searchTypes"
                 :key="item.id"
@@ -21,12 +20,11 @@
           </el-select>
         </template>
       </el-autocomplete>
-      <div style="display: flex;flex-direction: column">
+      <div style="display: flex;flex-direction: column;margin-right: auto;">
         <div class="other-option" id="option1" @click="toScholarSearch">检索学者</div>
         <div class="other-option" id="option2" @click="toAdvancedSearch">高级检索</div>
       </div>
     </div>
-  </div>
 
 
 
@@ -95,10 +93,11 @@ export default {
 <style scoped>
 .other-option{
   font-size: 13px;
-  color: #b0b2b3;
+  color: #667292;
 }
 .other-option:hover{
-  color: #007dfa;
+  color: #8692b2;
+  cursor: pointer;
 }
 #option1{
   margin-top: 1px;

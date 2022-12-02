@@ -8,6 +8,7 @@
       title="Tips"
       width="30%"
   >
+    <template #header></template>
     <div v-if="viewType">
       <span class="center">登录到你的账户</span>
       <div style="height: 30px"></div>

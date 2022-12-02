@@ -12,7 +12,7 @@ export const loginStore = defineStore('main', {
             userId: 0,
             nickname: "",
             token: "",
-            displayLoginWindow: false,
+            displayLoginWindow: true,
             isLogin : false,
             // isLogin为true，说明上次登录过没有登出，但是不保证登录没有过期；isLogin为false，保证没有登录
     }),

@@ -1,12 +1,12 @@
 <template>
   <div class="navigation-bar-root" :class="{opacity: navigationState.isOpacity, 'no-opacity': !navigationState.isOpacity}">
-    <div class="left-area" @click="toHomeView">
-      <p style="font-size: 25px;line-height: 25px;margin: 0">学术成果分享平台</p>
+    <div class="left-area" @click="toHomeView" >
+      <p style="font-size: 20px;line-height: 25px;margin: 0;color:  #337ecc" v-if="navigationState.isDisplaySearchBox">金刚石学术</p>
     </div>
     <div class="mid-area">
       <search-box v-if="navigationState.isDisplaySearchBox"></search-box>
     </div>
-    <div class="right-area">
+    <div class="right-area" :class="{'opacity-text': navigationState.isOpacity}">
       <el-avatar class="avatar" :size="40"></el-avatar>
       <div @click="toUserView">
         {{nickname}}
@@ -118,13 +118,13 @@ export default {
   background-color: #ecf5ff00;
 }
 .no-opacity{
-  background-color: #ecf5ffff;
-  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
-  border-bottom: 1px solid #b0b2b3;
-
+  background-color: #ffffff;
+  box-shadow: 0 0 30px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.08);
+  /*border-bottom: 1px solid #b0b2b3;*/
 }
 .left-area{
   margin: auto auto auto 30px;
+  width: 200px;
 }
 .mid-area{
   margin: auto;
@@ -138,13 +138,16 @@ export default {
 }
 .right-area > div{
   font-size: 14px;
+  /*color: #4f3222;*/
+  color: #daebe8;
 }
 .right-area > div:hover{
-  color: #007dfa;
+  color: #daebe899;
+  cursor: pointer;
 }
-.opacity{
-  /*opacity: 100%;*/
-  /*background-color: #007dfa;*/
+.opacity-text{
+  font-weight: bold;
+  color: #ecf5ff;
 }
 
 </style>

@@ -1,11 +1,12 @@
 <template>
   <div class="home-root">
     <div class="up-area" ref="upArea">
-      <img src="@/assets/home.png" alt="123">
+<!--      <img src="@/assets/home2.jpg" alt="123">-->
       <div class="content">
         <div class="logo">
           <div>
-            <span style="font-size: 100px"> 这里是主页</span>
+            <div class="main">金刚石学术</div>
+            <div class="vice">找论文，学术分享，金刚石学术就够了！</div>
           </div>
 
         </div>
@@ -55,7 +56,7 @@
               <div class="header">热门学者</div>
               <div class="item" v-for="scholar in field.scholars" :key="scholar">
                 <div class="name clickable overflow">{{scholar.name}}</div>
-                <div class="cite">总被引量：{{scholar.ref_num}}</div>
+                <div class="cite other-info" >总被引量：{{scholar.ref_num}}</div>
               </div>
             </div>
             <div class="journal">
@@ -94,7 +95,7 @@ export default {
     setNavigationBar(true);
     const scrollListener = () => {
       console.log("scroll");
-      let top = upArea.value.getBoundingClientRect().top + 400 - 50;
+      let top = upArea.value.getBoundingClientRect().top + 700 - 50;
       if(top > 0){
         setNavigationBar(true);
         console.log("top > 0!");
@@ -157,31 +158,47 @@ export default {
   flex-direction: column;
 }
 .up-area{
-  height: 800px;
+  height: 1000px;
   display: flex;
   flex-direction: column;
   width: 100%;
   //opacity: 50%;
-  //background-image: url("@/assets/home.png");
+  background-position: center;
+  //background-image: linear-gradient(to bottom, #00000000, #f3f3f3ff), url("@/assets/home2.jpg") ;
+  background-image: url("@/assets/home2.jpg") ;
   //background-position: center;
   img{
     height: 800px;
     width: 100%;
     position: absolute;
     opacity: 70%;
+    background: -ms-linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,0.9));
     top:0;
     z-index: 0;
     object-fit: cover;
   }
   .content{
-    z-index: 2;
     .logo{
-      height: 400px;
+      //font-family: STZhongsong,serif;
+      .main{
+        font-weight: bold;
+        font-size: 60px;
+        color: #f1e3dd;
+        margin-bottom: 30px;
+      }
+      .vice{
+        font-size: 30px;
+        //text-align : right;
+        //width: 1200px;
+        color: #7a3b2e;
+      }
+      height: 300px;
       text-align: center;
-      color: #ffffff;
+
     }
     .search-box{
-      height: 80px;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
@@ -211,6 +228,8 @@ export default {
     //box-shadow: 0 0 4px #dddddd,0 0 6px rgba(0,0,0,0.07);
     //border: .5px solid #b0b2b3;
     margin-bottom: 30px;
+    box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+    //border-bottom: 1px solid #b0b2b3;
     .header{
       font-size: 30px;
       padding-bottom: 20px;
@@ -218,6 +237,8 @@ export default {
       margin-bottom: 40px;
       font-weight: bold;
       color: #87bdd8;
+      //color: #79bbff;
+
     }
     .body{
       display: flex;
@@ -231,7 +252,9 @@ export default {
         transition:  .3s ease;
       }
       .other-info{
-        color: #87bdd8;
+        color: #477da8;
+        //color: #d9ad7c;
+
       }
       .overflow{
         white-space: nowrap;
@@ -250,9 +273,9 @@ export default {
         margin-top: 0;
         .item{
           margin-top: 10px;
-          margin-bottom: 15px;
+          margin-bottom: 25px;
           .title{
-            font-size: 20px;
+            font-size: 18px;
           }
           .foot{
             display: flex;
@@ -280,14 +303,15 @@ export default {
           margin-bottom: 30px;
           .item{
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             .name{
-              font-size: 20px;
+              font-size: 17px;
               margin-left: 10px;
               max-width: 200px;
             }
             .cite{
-              font-size: 17px;
+              padding-top: 4px;
+              font-size: 13px;
               margin-right: 10px;
             }
           }
@@ -295,8 +319,8 @@ export default {
         .journal{
 
           .item{
-            margin-bottom: 20px;
-            font-size: 20px;
+            margin-bottom: 15px;
+            font-size: 18px;
           }
         }
       }
