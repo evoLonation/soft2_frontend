@@ -94,14 +94,14 @@ export default {
     }
     setNavigationBar(true);
     const scrollListener = () => {
-      console.log("scroll");
+      // console.log("scroll");
       let top = upArea.value.getBoundingClientRect().top + 700 - 50;
       if(top > 0){
         setNavigationBar(true);
-        console.log("top > 0!");
+        // console.log("top > 0!");
       }else{
         setNavigationBar(false);
-        console.log("top < 0!");
+        // console.log("top < 0!");
       }
     };
     window.addEventListener("scroll", scrollListener,true);
