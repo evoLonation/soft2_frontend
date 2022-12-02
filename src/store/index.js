@@ -12,8 +12,9 @@ export const loginStore = defineStore('main', {
             userId: 0,
             nickname: "",
             token: "",
-            displayLoginWindow: true,
+            displayLoginWindow: false,
             isLogin : false,
+            avatarUrl: "",
             // isLogin为true，说明上次登录过没有登出，但是不保证登录没有过期；isLogin为false，保证没有登录
     }),
     actions: {
@@ -32,6 +33,7 @@ export const loginStore = defineStore('main', {
                             this.userId = null;
                             this.nickname = null;
                             this.token = null;
+                            this.avatarUrl = null;
                         }else{
                             ElMessage({message: "其他错误", type: "warning"});
                         }

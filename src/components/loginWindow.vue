@@ -6,77 +6,90 @@
   <el-dialog
       v-model="store.displayLoginWindow"
       title="Tips"
-      width="30%"
+      width="450px"
+      :show-close="false"
+      :center="true"
+      style="border-radius: 15px"
   >
-    <template #header></template>
-    <div v-if="viewType">
-      <span class="center">登录到你的账户</span>
-      <div style="height: 30px"></div>
+    <template #header>
+      <div class="header">
+        <span >{{viewType?"登录到你的账户":"注册新用户"}}</span>
+      </div>
+    </template>
+    <div v-if="viewType" class="content">
       <el-input
-          class="input-box"
-          v-model="account"
+          class="input"
+          v-model="loginInput.login_id"
           size="large"
           placeholder="用户名/邮箱"
+          input-style="height: 50px;"
       >
         <template #prefix>
           <el-icon size="large"><search /></el-icon>
         </template>
       </el-input>
       <el-input
-          class="input-box"
-          v-model="password"
+          class="input"
+          v-model="loginInput.password"
           size="large"
           placeholder="密码"
+          input-style="height: 50px;"
       >
         <template #prefix>
           <el-icon size="large"><search /></el-icon>
         </template>
       </el-input>
-      <span @click="viewType=false">注册新用户</span>
-      <el-button type="primary" round style="width: 250px; height: 40px" @click="clickLogin">登录</el-button>
+      <span @click="viewType=false" class="side">注册新用户</span>
+      <el-button type="primary" round class="button" @click="clickLogin">登录</el-button>
     </div>
-    <div v-else>
-      <span>注册新用户</span>
-      <div style="height: 30px"></div>
+    <div v-else class="content">
       <el-input
-          v-model="userId"
+          v-model="registerInput.login_id"
           size="large"
           placeholder="用户名"
+          class="input"
+          input-style="height: 50px;"
       >
         <template #prefix>
           <el-icon size="large"><search /></el-icon>
         </template>
       </el-input>
-      <div style="height: 30px"></div>
       <el-input
-          v-model="password1"
+          v-model="registerInput.password1"
           size="large"
           placeholder="密码"
+          class="input"
+          input-style="height: 50px;"
       >
         <template #prefix>
           <el-icon size="large"><search /></el-icon>
         </template>
       </el-input>
       <el-input
-          v-model="password2"
+          v-model="registerInput.password2"
           size="large"
           placeholder="确认密码"
+          class="input"
+          input-style="height: 50px;"
+
       >
         <template #prefix>
           <el-icon size="large"><search /></el-icon>
         </template>
       </el-input>
       <el-input
-          v-model="nickname"
+          v-model="registerInput.nickname"
           size="large"
           placeholder="昵称"
+          class="input"
+          input-style="height: 50px;"
       >
         <template #prefix>
           <el-icon size="large"><search /></el-icon>
         </template>
       </el-input>
-      <div @click="viewType=true">已有帐户?登录</div>
-      <el-button type="primary" round style="width: 350px; height: 40px" @click="clickRegister">注册</el-button>
+      <div @click="viewType=true" class="side">已有帐户?登录</div>
+      <el-button type="primary" round  @click="clickRegister" class="button">注册</el-button>
     </div>
 
 
@@ -84,7 +97,7 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {ref, reactive} from "vue";
 import {loginStore} from "@/store"
 import {ElMessage} from "element-plus";
 import {
@@ -143,28 +156,27 @@ export default {
 
     // true为登录，false为注册
     const viewType = ref(true);
-    const account = ref("");
-    const password = ref("");
-    const login = (userId, nickname, token) => {
-      console.log("开始登陆");
-      console.log(userId);
-      console.log(nickname);
-      console.log(token);
+
+    const loginInput = reactive({
+      login_id : "",
+      password : "",
+    });
+    const login = (userId, nickname, token, url) => {
       store.isLogin = true;
       store.userId = userId;
       store.nickname = nickname;
       store.token = token;
       store.displayLoginWindow = false;
+      store.avatarUrl = url;
     }
     const clickLogin = () => {
-      console.log("发了一次")
+      console.log("发送登录请求")
       userAxios.post("user/login", {
-        login_id : account.value,
-        password : password.value
+        login_id : loginInput.login_id,
+        password : loginInput.password
       }).then((res) => {
-          console.log("收了一次")
           if(res.data.code === 0){
-            login(res.data.user_id, res.data.nick_name, res.data.token);
+            login(res.data.user_id, res.data.nick_name, res.data.token, res.data.avatar_url);
           }else if(res.data.code === 1){
             ElMessage({message: "用户名/邮箱不存在", type : "warning"});
           }else if(res.data.code === 2){
@@ -176,23 +188,24 @@ export default {
       setHeaderAuth(state.token);
       console.log(state.token);
     });
-
-    const userId = ref("");
-    const password1 = ref("");
-    const password2 = ref("");
-    const nickname = ref("");
+    const registerInput = reactive({
+      login_id : "",
+      password1 : "",
+      password2 : "",
+      nickname : "",
+    });
     const clickRegister = () => {
-      if(password1.value !== password2.value){
+      if(registerInput.password1 !== registerInput.password2){
         ElMessage({message: "两次输入密码不一致", type : "warning"});
       }else{
         testAxios.post("user/register", {
-          "login_id" : userId.value,
-          "nickname" : nickname.value,
-          "password" : password.value
+          login_id : registerInput.login_id,
+          nickname : registerInput.nickname,
+          password : registerInput.password1,
         }).then((res) => {
           if(res.data.code === 0){
             const data = res.data;
-            login(data.user_id, data.nick_name, data.token);
+            login(data.user_id, data.nick_name, data.token, data.avatar_url);
           }else if(res.data.code === 1) {
             ElMessage({message: "用户名已存在", type : "warning"});
           }
@@ -201,12 +214,8 @@ export default {
     };
 
     return {
-      account,
-      password,
-      userId,
-      nickname,
-      password1,
-      password2,
+      loginInput,
+      registerInput,
       clickLogin,
       clickRegister,
       viewType,
@@ -217,16 +226,45 @@ export default {
 </script>
 
 <style scoped>
+.header{
+  font-size: 20px;
+  margin-top: 20px;
+  /*margin-bottom: 10px;*/
+}
+.content{
+  margin: auto;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+.input{
+  width: 300px;
+  margin: 15px auto;
+}
+.button{
+  height: 50px;
+  margin: 20px auto;
+  width: 300px;
+}
+.side{
+  margin-left: auto;
+  color: #b0b2b3;
+}
+.side:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
 .container{
-
+  display: flex;
+  flex-direction: column;
+  align-content: center;
 }
 .center{
+  text-align: center;
   margin: auto;
 }
-.input-box{
-  width: 300px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.input-inside{
+  height: 60px;
 }
 
 </style>
