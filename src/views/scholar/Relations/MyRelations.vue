@@ -59,7 +59,7 @@ export default {
   max-width: 350px;
   width: 350px;
   height: 470px;
-  margin-left: 20px;
+  margin-left: 30px;
   border-radius: 5px;
   box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
   display: inline-block;

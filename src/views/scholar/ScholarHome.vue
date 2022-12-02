@@ -1,5 +1,5 @@
 <template>
-  <el-container style="margin: auto; width: 1370px;">
+  <el-container style="margin: auto; width: 1380px;">
       <el-aside class="navigation">
         <el-menu
             :default-active="this.activeName.toString()"
@@ -34,12 +34,12 @@
         <OpView style="margin-top: 10px"/>
       </div>
       <div class="style_need">
-        <ChartView name="part" style="margin-top: 20px"/>
-        <RelView name="part" style="margin-top: 20px"/>
+        <ChartView name="part" style="margin-top: 30px"/>
+        <RelView name="part" style="margin-top: 30px"/>
       </div>
       <div class="style_need">
-        <PaperView name="part" style="margin-top: 20px"/>
-        <PieView name="part" style="margin-top: 20px"/>
+        <PaperView name="part" style="margin-top: 30px"/>
+        <PieView name="part" style="margin-top: 30px"/>
       </div>
     </el-main>
   </el-container>
@@ -108,7 +108,7 @@ export default {
   position: fixed;
   z-index: 100;
   width: 130px;
-  margin-left: -75px;
+  margin-left: -85px;
   margin-top: 30px;
   border-radius: 5px;
   box-shadow: 0 0 4px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
