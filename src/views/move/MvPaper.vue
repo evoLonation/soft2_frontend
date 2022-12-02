@@ -1,7 +1,7 @@
 <template>
   <div class="MvPaper">
     <el-input v-model="id" size="large" class="id-input" placeholder="请输入文献ID" prefix-icon="Document" clearable/>
-    <el-input v-model="owner_id" size="large" class="id-input" style="margin-left: 330px" placeholder="请输入学者ID" prefix-icon="User" clearable/>
+    <el-input v-model="owner_id" size="large" class="id-input" style="margin-left: 230px" placeholder="请输入学者ID" prefix-icon="User" clearable/>
     <div style="display: flex">
       <div class="border">
         <el-empty class="no_data" v-if="tab_show === false"/>
@@ -29,7 +29,7 @@
           </el-table>
         </div>
       </div>
-      <div style="width: 450px; height: 500px; margin-right: 90px; margin-top: 30px">
+      <div style="width: 450px; height: 500px; margin-right:90px; margin-top: 30px">
         <div class="border" style="width: 450px; height: 320px;">
           <el-empty class="no_data" v-if="owner_show === false" style="margin-top: 10px"/>
           <el-table border :data="scholars" style="width: 100%;" height="320" v-loading="loading1" v-if="owner_show === true" :show-header="false" :row-style="{height: '80px'}" :cell-style="cellStyle">
@@ -185,8 +185,8 @@ export default {
 
 <style scoped>
 .MvPaper {
-  min-width: 1500px;
-  max-width: 1500px;
+  min-width: 1400px;
+  max-width: 1400px;
   min-height: 700px;
   margin: 75px auto auto auto;
   border-radius: 5px;
