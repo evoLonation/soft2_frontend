@@ -159,16 +159,18 @@ export default {
   width: 60%;
   height: 500px;
   margin-right: 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
-  border-radius: 3%;
+  background-color: white;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+  border-radius: 5px;
 }
 .info {
   float: right;
+  background-color: white;
   padding: 10px 15px;
   max-height: 500px;
   margin-left: 2%;
-  border-radius: 3%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 
 </style>

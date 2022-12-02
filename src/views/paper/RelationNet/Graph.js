@@ -54,6 +54,7 @@ export class Graph {
             },
             plugins: []
         });
+        this.graph.updateBehavior('zoom-canvas', { sensitivity: 1.0, enableOptimize: true}, 'default');
     }
 
     async setLayout() {

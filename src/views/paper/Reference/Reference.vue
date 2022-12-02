@@ -41,13 +41,15 @@ export default {
 .wrap-ref{
   margin-top: 30px;
   width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
   padding-top: 2px;
   padding-bottom: 10px;
 }
 .part-ref{
   font-weight: bold;
+  color: #87bdd8;
   line-height: 1.5;
   font-size: 20px;
   margin-left: 20px;

@@ -1,36 +1,40 @@
 <template>
-  <el-menu
-      :default-active="this.activeName.toString()"
-      class="navigation"
-      @select="this.navigate"
-  >
-    <el-menu-item index="0">
-      <el-icon><HomeFilled /></el-icon>
-      <template #title>详情</template>
-    </el-menu-item>
-    <el-menu-item index="1">
-      <el-icon><Reading /></el-icon>
-      <template #title>参考文献</template>
-    </el-menu-item>
-    <el-menu-item index="2">
-      <el-icon><Opportunity /></el-icon>
-      <template #title>关系网</template>
-    </el-menu-item>
-    <el-menu-item index="3">
-      <el-icon><Comment /></el-icon>
-      <template #title>评论</template>
-    </el-menu-item>
-  </el-menu>
+  <el-container style="margin: auto; width: 1560px">
+    <el-menu
+        :default-active="this.activeName.toString()"
+        class="navigation"
+        active-text-color="#87bdd8"
+        @select="this.navigate"
+    >
+      <el-menu-item index="0">
+        <el-icon><HomeFilled /></el-icon>
+        <template #title>详情</template>
+      </el-menu-item>
+      <el-menu-item index="1">
+        <el-icon><Reading /></el-icon>
+        <template #title>参考文献</template>
+      </el-menu-item>
+      <el-menu-item index="2">
+        <el-icon><Opportunity /></el-icon>
+        <template #title>关系网</template>
+      </el-menu-item>
+      <el-menu-item index="3">
+        <el-icon><Comment /></el-icon>
+        <template #title>评论</template>
+      </el-menu-item>
+    </el-menu>
 
-  <div class="wrap-paper" @scroll="this.handleScroll">
-    <div style="display: flex">
-      <Info name="part"></Info>
-      <Operation></Operation>
+    <div class="wrap-paper" @scroll="this.handleScroll">
+      <div style="display: flex">
+        <Info name="part"></Info>
+        <Operation></Operation>
+      </div>
+      <Reference name="part"></Reference>
+      <RelationNet name="part"></RelationNet>
+      <PaperComment name="part"></PaperComment>
     </div>
-    <Reference name="part"></Reference>
-    <RelationNet name="part"></RelationNet>
-    <PaperComment name="part"></PaperComment>
-  </div>
+  </el-container>
+
 </template>
 
 <script>
@@ -121,17 +125,15 @@ export default {
 
 <style scoped>
 .wrap-paper {
-  margin-top: 2%;
-  margin-left: 13%;
-  margin-right: 13%;
+  margin:20px auto;
+  width: 1250px;
 }
 .navigation{
   position: fixed;
   z-index: 100;
-  width: 120px;
-  margin-left: 30px;
+  width: 130px;
   margin-top: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+  border-radius: 4px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 </style>

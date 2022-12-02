@@ -7,30 +7,33 @@
     <div style="display: flex">
       <el-row class="op">
         <el-tooltip class="item" effect="light" content="收藏" placement="top">
-          <el-button circle v-if="this.starred===1" @click="this.star" class="button" size="large" color=" #66b1ff">
-            <el-icon ><Star /></el-icon>
+          <el-button circle v-if="this.starred===1" @click="this.star" class="button" size="large">
+            <el-icon class="button-icon"><Star /></el-icon>
           </el-button>
           <el-button circle v-else @click="this.deStar" class="button" size="large">
-            <el-icon color="#FFFFFF"><StarFilled /></el-icon>
+            <el-icon class="button-icon"><StarFilled /></el-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="引用" placement="top">
-          <el-button circle @click="this.cite" class="button" size="large" color=" #66b1ff"><el-icon><Share/></el-icon></el-button>
+          <el-button circle @click="this.cite" class="button" size="large">
+            <el-icon class="button-icon"><Share/></el-icon></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="发起互助" placement="top">
-          <el-button circle @click="this.help" class="button" size="large" color=" #66b1ff"><el-icon><Help /></el-icon></el-button>
+          <el-button circle @click="this.help" class="button" size="large">
+            <el-icon class="button-icon"><Help /></el-icon></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="认领" placement="top">
-          <el-button circle class="button" size="large" @click="this.showClaim=true" color=" #66b1ff"><el-icon><Avatar /></el-icon></el-button>
+          <el-button circle class="button" size="large" @click="this.showClaim=true" >
+            <el-icon class="button-icon"><Avatar /></el-icon></el-button>
         </el-tooltip>
       </el-row>
     </div>
-    <el-row class="op"><el-col>原文链接
+    <el-row class="op"><el-col >原文链接
         <el-icon class="icon"><Link /></el-icon>
     </el-col>
     </el-row>
     <el-row class="op" v-for="url in this.urls" :key="url">
-      <el-link :href="url" type="primary" style="font-size: large">{{"原文链接" + (this.urls.indexOf(url)+1)}}</el-link>
+      <el-link :href="url" type="primary" style="font-size: medium; color: #7682a2">{{"原文链接" + (this.urls.indexOf(url)+1)}}</el-link>
     </el-row>
   </div>
 
@@ -233,13 +236,17 @@ export default {
 .wrap-op {
   padding: 10px 20px 15px 15px;
   max-height: 500px;
-  margin-left: 2%;
+  background-color: white;
+  margin-left: 25px;
   width: auto;
-  border-radius: 3%;
+  border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
 }
 .op {
   margin-top: 10px;
+}
+.button{
+  border-color: #7682a2;
 }
 .icon {
   float: right;
@@ -248,14 +255,14 @@ export default {
 .el-menu-demo{
   height: 30px;
 }
-.button{
-  color: #ecf5ff;
+.button-icon{
+  color: #7682a2;
 }
 </style>
 <style>
 .dialog{
   min-height: 200px;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
 }
 </style>

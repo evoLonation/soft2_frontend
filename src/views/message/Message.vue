@@ -6,9 +6,10 @@
         :default-active="'1'"
         class="el-menu-demo"
         mode="horizontal"
+        active-text-color="#87bdd8"
         @select="this.changeType"
     >
-      <el-menu-item index="1">全部</el-menu-item>
+      <el-menu-item index="1" >全部</el-menu-item>
       <el-menu-item index="2">互动</el-menu-item>
       <el-menu-item index="3">申诉</el-menu-item>
       <el-menu-item index="4">文献互助</el-menu-item>
@@ -16,7 +17,8 @@
     </el-menu>
     <el-table
       :data="this.curMessages" table-layout="fixed">
-      <el-table-column prop="content" label="内容" width="600" resizable></el-table-column>
+      <el-table-column prop="content" label="内容" width="600" resizable>
+      </el-table-column>
       <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>
       <el-table-column fixed="right" label="操作" resizable>
         <template #default="scope">
@@ -28,16 +30,16 @@
               <div  style="margin-left: 10px; font-size: small">已读</div>
             </el-col>
             <el-col :span="6" v-if="scope.row.type==='1' || scope.row.type==='2' || scope.row.type==='4' || scope.row.type==='6'">
-              <el-button link type="primary" @click="this.openPaper(scope.row.pid)">前往文献</el-button>
+              <el-button link type="primary" @click="this.openPaper(scope.row.pid)" class="msg-op">前往文献</el-button>
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='4'">
-              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)">申诉者</el-button>
+              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)" class="msg-op">申诉者</el-button>
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='1' || scope.row.type==='2' || scope.row.type==='3'">
-              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)">学者页</el-button>
+              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)" class="msg-op">学者页</el-button>
             </el-col>
             <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
-              <el-button link type="primary" @click="this.openHelp(scope.row.rid)">打开互助</el-button>
+              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">打开互助</el-button>
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='4'">
               <el-popconfirm
@@ -220,14 +222,20 @@ export default {
 
 <style scoped>
 .wrap{
-  margin-left: 15%;
-  margin-right: 15%;
-  margin-top: 20px;
+  background-color: white;
+  margin: 20px auto;
+  width: 1250px;
   padding: 30px 30px 30px 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 .el-menu-demo{
   margin-top: 20px;
+}
+.msg-field{
+  color: #87bdd8;
+}
+.msg-op{
+  color: #7682a2;
 }
 </style>
