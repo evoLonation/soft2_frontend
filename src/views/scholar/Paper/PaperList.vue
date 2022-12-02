@@ -170,8 +170,5 @@ export default {
 
 .pagination {
   margin: 40px auto 40px auto;
-  .el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
-    background-color: #ff9800 !important;
-  }
 }
 </style>

@@ -1,14 +1,16 @@
 <template>
-  <div class="identify">
-    <el-steps :active="active" align-center style="padding-top: 50px">
-      <el-step title="选择方式" icon="Edit" @click="reset" style="cursor: pointer"/>
-      <el-step title="填写内容" icon="Upload"/>
-      <el-step title="认证完成" icon="Picture"/>
-    </el-steps>
-    <select-view @activate="branch_activate" v-show="active === 1"/>
-    <mail-view ref="mail" @activate="activate" v-if="active === 2 && branch === 1"/>
-    <id-view ref="id" @activate="activate" v-if="active === 2 && branch === 2"/>
-    <success-view v-show="active === 3"/>
+  <div style="width: 100%;">
+    <div class="identify">
+      <el-steps :active="active" align-center style="padding-top: 50px">
+        <el-step title="选择方式" icon="Edit" @click="reset" style="cursor: pointer"/>
+        <el-step title="填写内容" icon="Upload"/>
+        <el-step title="认证完成" icon="Picture"/>
+      </el-steps>
+      <select-view @activate="branch_activate" v-show="active === 1"/>
+      <mail-view ref="mail" @activate="activate" v-if="active === 2 && branch === 1"/>
+      <id-view ref="id" @activate="activate" v-if="active === 2 && branch === 2"/>
+      <success-view v-show="active === 3"/>
+    </div>
   </div>
 </template>
 
@@ -60,8 +62,9 @@ export default {
   min-width: 800px;
   max-width: 800px;
   height: 500px;
-  margin: 100px auto auto 450px;
-  border-radius: 10px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
+  margin: 100px auto auto auto;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 </style>

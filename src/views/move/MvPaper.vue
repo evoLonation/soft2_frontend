@@ -188,9 +188,10 @@ export default {
   min-width: 1500px;
   max-width: 1500px;
   min-height: 700px;
-  margin: 75px auto auto 105px;
-  border-radius: 10px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);;
+  margin: 75px auto auto auto;
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+  background-color: white;
 }
 
 .id-input {
