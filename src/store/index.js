@@ -18,6 +18,7 @@ export const loginStore = defineStore('main', {
     }),
     actions: {
         async checkLogin(){
+            checkLoginAxios.defaults.headers.common['Authorization'] = this.token;
             return await checkLoginAxios.post("user/is-login")
                 .then(()=>{
                     return true;

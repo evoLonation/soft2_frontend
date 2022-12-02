@@ -3,7 +3,7 @@
   <button @click="checkJwt">点击检查jwt</button>
   <p>{{loginState}}</p>
   <p>{{store}}</p>
-  <login-window></login-window>
+  <button style="z-index: 100;" @click="$router.push({name:'Home'})">gotohome</button>
 </template>
 
 <script>

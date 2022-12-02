@@ -1,16 +1,20 @@
 <template>
   <div class="home-root">
     <div class="up-area" ref="upArea">
-      <div class="logo">
-        <div>
-          <span style="font-size: 100px"> 这里是主页</span>
-        </div>
+      <img src="@/assets/home.png" alt="123">
+      <div class="content">
+        <div class="logo">
+          <div>
+            <span style="font-size: 100px"> 这里是主页</span>
+          </div>
 
+        </div>
+        <div class="search-box">
+          <search-box>
+          </search-box>
+        </div>
       </div>
-      <div class="search-box">
-        <search-box>
-        </search-box>
-      </div>
+
     </div>
     <div class="field-area">
       <div class="top">
@@ -40,7 +44,7 @@
             <div class="header">热门论文</div>
             <div class="item" v-for="paper in field.papers" :key="paper">
               <div class="title clickable">{{paper.name}}</div>
-              <div class="foot">
+              <div class="foot other-info">
                 <div class="authors overflow">{{paperAuthorText(paper.authors)}}</div>
                 <div class="cite">{{paper.n_citation}}次被引</div>
               </div>
@@ -73,7 +77,7 @@
 <script>
 import data from "@/assets/homedata.json";
 import {ref} from "vue";
-import {navigationStore} from "@/store";
+import {loginStore, navigationStore} from "@/store";
 import {useRouter} from "vue-router";
 export default {
   name: "HomePage",
@@ -120,7 +124,7 @@ export default {
 
 
 
-
+    const loginState = loginStore();
     return{
       upArea,
       isHomeTop,
@@ -129,6 +133,7 @@ export default {
       gotoField,
       fieldInfos,
       paperAuthorText,
+      loginState,
     }
   },
 
@@ -152,18 +157,34 @@ export default {
   flex-direction: column;
 }
 .up-area{
-  height: 600px;
+  height: 800px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-image: url("@/assets/home.png");
-  background-position: center;
-  .logo{
-    text-align: center;
+  //opacity: 50%;
+  //background-image: url("@/assets/home.png");
+  //background-position: center;
+  img{
+    height: 800px;
+    width: 100%;
+    position: absolute;
+    opacity: 70%;
+    top:0;
+    z-index: 0;
+    object-fit: cover;
   }
-  .search-box{
-    height: 80px;
+  .content{
+    z-index: 2;
+    .logo{
+      height: 400px;
+      text-align: center;
+      color: #ffffff;
+    }
+    .search-box{
+      height: 80px;
+    }
   }
+
 }
 .field-area{
   //min-width: 1000px;
@@ -196,18 +217,21 @@ export default {
       border-bottom: 2px solid #b0b2b3;
       margin-bottom: 40px;
       font-weight: bold;
-      color: #333333;
+      color: #87bdd8;
     }
     .body{
       display: flex;
       .clickable{
-        color: #3375b9;
+        color: #7682a2;
       }
       .clickable:hover{
-        color: #79bbff;
+        color: #bccad6;
         text-decoration: underline;
         cursor : pointer;
         transition:  .3s ease;
+      }
+      .other-info{
+        color: #87bdd8;
       }
       .overflow{
         white-space: nowrap;
@@ -234,7 +258,6 @@ export default {
             display: flex;
             font-size: 15px;
             margin-top: 5px;
-            color: #444;
             .authors{
               margin-left: 0;
               margin-right: auto;

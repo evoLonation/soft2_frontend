@@ -1,7 +1,4 @@
 <template>
-  <el-button @click="jump">
-    jump
-  </el-button>
   <router-view/>
 </template>
 

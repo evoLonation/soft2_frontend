@@ -38,7 +38,6 @@ export default {
     const router = useRouter();
     const toUserView = () => {
       store.checkLogin().then((res) => {
-        console.log(res);
         if(res){
           router.push({name: "UserInfo"});
         }else{

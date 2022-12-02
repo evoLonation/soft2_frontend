@@ -138,6 +138,7 @@ export default {
       fileAxios.defaults.headers.common['Authorization'] = token;
       testAxios.defaults.headers.common['Authorization'] = token;
     }
+    setHeaderAuth();
 
     // true为登录，false为注册
     const viewType = ref(true);
@@ -155,10 +156,12 @@ export default {
       store.displayLoginWindow = false;
     }
     const clickLogin = () => {
+      console.log("发了一次")
       userAxios.post("user/login", {
         login_id : account.value,
         password : password.value
       }).then((res) => {
+          console.log("收了一次")
           if(res.data.code === 0){
             login(res.data.user_id, res.data.nick_name, res.data.token);
           }else if(res.data.code === 1){
