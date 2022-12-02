@@ -3,8 +3,9 @@
     <el-carousel
         trigger="click"
         height="490px"
-        style="border-radius: 10px;
-    box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);"
+        style="border-radius: 5px;
+          box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+          background-color: white"
         :autoplay="false"
     >
       <el-carousel-item v-for="(item,index) in Areas" :key="item.name">

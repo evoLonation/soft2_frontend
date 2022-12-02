@@ -79,6 +79,7 @@ export default {
 
 <style scoped>
 .basic-info {
+  background-color: white;
   min-width: 1000px;
   max-width: 1000px;
   width: 1000px;
@@ -87,8 +88,8 @@ export default {
   margin: auto 0 auto 50px;
   align-items: center;
   font-family: '微软雅黑',sans-serif;
-  border-radius: 10px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 
 .avatar-border {

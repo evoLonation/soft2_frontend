@@ -1,48 +1,50 @@
 <template>
-  <el-container>
-      <el-aside class="navigation">
-        <el-menu
-            :default-active="this.activeName.toString()"
-            @select="this.navigate"
-        >
-          <el-menu-item index="0">
-            <el-icon><HomeFilled /></el-icon>
-            <template #title>基本信息</template>
-          </el-menu-item>
-          <el-menu-item index="1">
-            <el-icon><TrendCharts /></el-icon>
-            <template #title>成果统计</template>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <el-icon><Aim /></el-icon>
-            <template #title>学者关系</template>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <el-icon><Reading /></el-icon>
-            <template #title>论文列表</template>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <el-icon><Histogram /></el-icon>
-            <template #title>领域贡献</template>
-          </el-menu-item>
-        </el-menu>
-    </el-aside>
+  <div style="background: #f3f3f3">
+    <el-container style="margin: auto; width: 1560px">
+        <el-aside class="navigation">
+          <el-menu
+              :default-active="this.activeName.toString()"
+              @select="this.navigate"
+          >
+            <el-menu-item index="0">
+              <el-icon><HomeFilled /></el-icon>
+              <template #title>基本信息</template>
+            </el-menu-item>
+            <el-menu-item index="1">
+              <el-icon><TrendCharts /></el-icon>
+              <template #title>成果统计</template>
+            </el-menu-item>
+            <el-menu-item index="2">
+              <el-icon><Aim /></el-icon>
+              <template #title>学者关系</template>
+            </el-menu-item>
+            <el-menu-item index="3">
+              <el-icon><Reading /></el-icon>
+              <template #title>论文列表</template>
+            </el-menu-item>
+            <el-menu-item index="4">
+              <el-icon><Histogram /></el-icon>
+              <template #title>领域贡献</template>
+            </el-menu-item>
+          </el-menu>
+      </el-aside>
 
-    <el-main class="wrap-paper" @scroll="this.handleScroll">
-      <div class="style_need">
-        <InfoView name="part" style="margin-top: 10px"/>
-        <OpView style="margin-top: 10px"/>
-      </div>
-      <div class="style_need">
-        <ChartView name="part" style="margin-top: 40px"/>
-        <RelView name="part" style="margin-top: 40px"/>
-      </div>
-      <div class="style_need">
-        <PaperView name="part" style="margin-top: 40px"/>
-        <PieView name="part" style="margin-top: 40px"/>
-      </div>
-    </el-main>
-  </el-container>
+      <el-main class="wrap-paper" @scroll="this.handleScroll">
+        <div class="style_need">
+          <InfoView name="part" style="margin-top: 10px"/>
+          <OpView style="margin-top: 10px"/>
+        </div>
+        <div class="style_need">
+          <ChartView name="part" style="margin-top: 40px"/>
+          <RelView name="part" style="margin-top: 40px"/>
+        </div>
+        <div class="style_need">
+          <PaperView name="part" style="margin-top: 40px"/>
+          <PieView name="part" style="margin-top: 40px"/>
+        </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
@@ -101,17 +103,17 @@ export default {
 
 <style scoped>
 .wrap-paper {
-  margin-left: 150px;
+  /*margin-left: 150px;*/
 }
 
 .navigation{
   position: fixed;
   z-index: 100;
   width: 130px;
-  margin-left: 30px;
+  margin-left: -120px;
   margin-top: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 
 .style_need {

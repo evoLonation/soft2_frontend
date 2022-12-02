@@ -54,10 +54,11 @@ export default {
   min-width: 350px;
   max-width: 350px;
   height: 200px;
-  border-radius: 10px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.40),0 0 6px rgba(0,0,0,0.15);
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
   margin-left: 60px;
   display: inline-block;
+  background-color: white;
 }
 
 .op_title {
