@@ -1,0 +1,99 @@
+{
+  "type" : "物理科学与工程",
+  "papers": [
+    {
+      "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
+      "authors": [
+        "赵正阳",
+        "姜星如"
+      ],
+      "n_citation": 10
+    },
+    {
+      "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
+      "authors": [
+        "赵正阳",
+        "姜星如"
+      ],
+      "n_citation": 10
+    },
+    {
+      "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
+      "authors": [
+        "赵正阳",
+        "姜星如"
+      ]
+    },
+    {
+      "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
+      "authors": [
+        "赵正阳",
+        "姜星如"
+      ]
+    },
+    {
+      "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
+      "authors": [
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "赵正阳",
+        "姜星如"
+      ]
+    },
+    {
+      "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
+      "authors": [
+        "赵正阳",
+        "姜星如"
+      ]
+    }
+  ],
+  "scholars": [
+    {
+      "name" : "Current Biology",
+      "scholar_id" : "",
+      "ref_num" : 123
+    },
+    {
+      "name" : "赵正阳",
+      "scholar_id" : "",
+      "ref_num" : 123
+    },
+    {
+      "name" : "Current Biology",
+      "scholar_id" : "",
+      "ref_num" : 123
+    },
+    {
+      "name" : "赵正阳",
+      "scholar_id" : "",
+      "ref_num" : 123
+    },
+    {
+      "name" : "Current Biology",
+      "scholar_id" : "",
+      "ref_num" : 123
+    },
+    {
+      "name" : "赵正阳",
+      "scholar_id" : "",
+      "ref_num" : 123
+    }
+  ],
+  "journals" : [
+    "Advances in Engineering Software",
+    "Advances in Engineering Software",
+    "Advances in Engineering Software",
+    "Advances in Engineering Software",
+    "Advances in Engineering Software",
+    "Advances in Engineering Software"
+  ]
+}
