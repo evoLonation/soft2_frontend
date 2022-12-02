@@ -1,5 +1,5 @@
 <template>
-  <el-container style="margin: auto; width: 1380px;">
+  <el-container style="margin: auto; width: 1400px;">
       <el-aside class="navigation">
         <el-menu
             :default-active="this.activeName.toString()"
