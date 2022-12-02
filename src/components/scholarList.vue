@@ -33,7 +33,7 @@ export default {
   display: inline-block;
   margin-left: 40px;
   margin-top: 20px; border: 3px white solid;
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
 }
 
@@ -41,7 +41,7 @@ export default {
   height: 150px;
   width: 400px;
   display: inline-block;
-  border-radius: 10px;
+  border-radius: 4px;
   border: 1px lightgray solid;
   box-shadow:  3px 3px 3px lightgray;
 }

@@ -1,64 +1,29 @@
 <template>
-  <div class="top_search">
-    <div class="top_search_img">
-<!--      可能的logo-->
-    </div>
-    <div class="top_search_mid" >
-        <div style="width: 40% ;margin-left: 30%;margin-top: 70px">
-          <div class = "right-head-choose-tab" id="normal-search-btn" @click="showNormal">
-            <span class = "font-1"> 普通检索</span>
-          </div>
-          <div class = "right-head-choose-tab" id="advanced-search-btn" style="margin-left: 220px" @click="showAdvance">
-            <span class = "font-1"> 高级检索</span>
-          </div>
-        </div>
-    </div>
-    <div class="top_search_right">
-<!--      <el-avatar-->
-<!--          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"-->
-<!--          style="margin-left: 30%;margin-top: 10%"-->
-<!--      />-->
-    </div>
-  </div>
-  <div class="search_main">
-      <div class="normal_search" v-if="this.searchType===false">
-        <el-select v-model="value[0]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-top: 30px;margin-left: 110px">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-          />
-        </el-select>
-        <el-input v-model="inputValue[0]" placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px"/>
-        <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00">
-          <template #icon>
-            <el-icon size="15px" ><Search/></el-icon>
-          </template>
-          搜索
-        </el-button>
-
+  <div class="home_root">
+    <div class="top_search">
+      <div class="top_search_img">
+  <!--      可能的logo-->
       </div>
-
-      <div class="advance_search" v-else>
-        <div v-for="index in searchNum" :key="index">
-          <el-select v-if="index==1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-top: 30px;margin-left: 110px">
-            <el-option
-                v-for="item in ANoptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            />
-          </el-select>
-          <el-select v-else v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-top: 30px;margin-left: 110px">
-            <el-option
-                v-for="item in ANoptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            />
-          </el-select>
-          <el-select v-model="value[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-top: 30px;margin-left: 30px">
+      <div class="top_search_mid" >
+          <div style="width: 40% ;margin-left: 30%;margin-top: 70px">
+            <div class = "right-head-choose-tab" id="normal-search-btn" @click="showNormal">
+              <span class = "font-1"> 普通检索</span>
+            </div>
+            <div class = "right-head-choose-tab" id="advanced-search-btn" style="margin-left: 220px" @click="showAdvance">
+              <span class = "font-1"> 高级检索</span>
+            </div>
+          </div>
+      </div>
+      <div class="top_search_right">
+  <!--      <el-avatar-->
+  <!--          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"-->
+  <!--          style="margin-left: 30%;margin-top: 10%"-->
+  <!--      />-->
+      </div>
+    </div>
+    <div class="search_main">
+        <div class="normal_search" v-if="this.searchType===false">
+          <el-select v-model="value[0]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-left: 110px ">
             <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -66,90 +31,128 @@
                 :value="item.value"
             />
           </el-select>
-          <el-input v-model="inputValue[index-1]" placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px"/>
-          <el-icon v-if="index>2" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="decreaseNum(index)"><Minus /></el-icon>
-          <el-icon v-if="index===searchNum" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="addNum"><Plus /></el-icon>
-        </div>
-        <div style="display: inline-block;margin-left: 216px;margin-top: 40px;">年份范围</div>
-        <el-date-picker
-            v-model="beginYear"
-            type="year"
-            placeholder="Pick a year"
-            style="width: 130px; margin-left: 40px"
-        /> ----
-        <el-date-picker
-            v-model="endYear"
-            type="year"
-            placeholder="Pick a year"
-            style="width: 130px; margin-left: 5px"
-        />
-        <el-button style="margin-left: 200px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00">
-          <template #icon>
-            <el-icon size="15px" ><Search/></el-icon>
-          </template>
-          搜索
-        </el-button>
-      </div>
-  </div>
-  <div class="paper_main">
-    <div class="paper_main_top">
-      <div style="display: inline-block;">
-        <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3">筛选</span>
-      </div>
-      <div style="display:inline-block;margin-left: 21%">
-        <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.paperNum}}条数据:</span>
-      </div>
-      <div style="display: inline-block;width: 15%;margin-left: 53.2%;vertical-align: top">
-        <el-select v-model="sortType" placeholder="按相关性降序" style="width: 80%;border-radius: 10px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
-          <el-option
-              v-for="item in sorts"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
-    </div>
-    <div class="paper_main_left">
-      <el-collapse style="margin-left: 30px;margin-right: 20px" v-model="activeNames">
-        <el-collapse-item name="1">
-          <template #title >
-            <span style="font-size: 15px">主题</span>
-          </template>
-          <div v-for="index in themes.length" :key="index">
-            <el-checkbox v-model="themesCheck[index-1]" style="margin-left: 10px;font-size: 13px">{{ this.themes[index-1].name }}</el-checkbox>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item name="2">
-          <template #title >
-            <span style="font-size: 15px">领域</span>
-          </template>
-          <div v-for="index in fields.length" :key="index">
-            <el-checkbox v-model="fieldsCheck[index-1]" style="margin-left: 10px;font-size: 13px">{{ this.fields[index-1].name }}</el-checkbox>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item name="3">
-          <template #title >
-            <span style="font-size: 15px">年份</span>
-          </template>
-          <div v-for="index in years.length" :key="index">
-            <el-checkbox v-model="yearsCheck[index-1]" style="margin-left: 10px;font-size: 13px">{{ this.years[index-1].name }}</el-checkbox>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-    <div class="paper_main_right">
-      <div class="example-pagination-block">
-        <div v-for="(item,index) in papers" :key="item">
-          <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                      :paper-name="item.title" :type="type" :num="item.n_citation" :id="1"
-                      style="margin-left: 50px;margin-top: 10px;vertical-align: top" v-if="index-(nowPage-1)*10<=10&&index>(nowPage-1)*10"></paper-show>
-        </div>
-        <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
-                />
-      </div>
-    </div>
+          <el-autocomplete v-model="inputValue[0]" tabindex="s"
+                           placeholder="Please input" clearable :fetch-suggestions="querySearch(0)" :trigger-on-focus="false"
+                           style="width: 800px; margin-left: 30px;margin-top: 30px"/>
+          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(0)">
+            <template #icon>
+              <el-icon size="15px" ><Search/></el-icon>
+            </template>
+            搜索
+          </el-button>
 
+        </div>
+
+        <div class="advance_search" v-else>
+          <div v-for="index in searchNum" :key="index">
+            <el-select v-if="index===1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
+              <el-option
+                  v-for="item in ANoptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+            <el-select v-else v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
+              <el-option
+                  v-for="item in ANoptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+            <el-select v-model="value[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-left: 30px">
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+            <el-autocomplete v-model="inputValue[index-1]"  :fetch-suggestions="querySearch(index-1)" :trigger-on-focus="false"
+                             placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px">
+              <template #append>
+                <el-select v-model="exact[index-1]" placeholder="Select" style="width: 90px">
+                  <el-option label="精确" value="0" />
+                  <el-option label="模糊" value="1" />
+                </el-select>
+              </template>
+            </el-autocomplete>
+            <el-icon v-if="index>2" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="decreaseNum(index)"><Minus /></el-icon>
+            <el-icon v-if="index===searchNum" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="addNum"><Plus /></el-icon>
+          </div>
+          <div style="display: inline-block;margin-left: 216px;margin-top: 40px;">年份范围</div>
+          <el-date-picker
+              v-model="beginYear"
+              type="year"
+              placeholder="Pick a year"
+              style="width: 130px; margin-left: 40px"
+          /> ----
+          <el-date-picker
+              v-model="endYear"
+              type="year"
+              placeholder="Pick a year"
+              style="width: 130px; margin-left: 5px"
+          />
+          <el-button style="margin-left: 200px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch(0)">
+            <template #icon>
+              <el-icon size="15px" ><Search/></el-icon>
+            </template>
+            搜索
+          </el-button>
+        </div>
+    </div>
+    <div class="paper_main">
+      <div class="paper_main_top">
+        <div style="display: inline-block;">
+          <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3">筛选</span>
+        </div>
+        <div style="display:inline-block;margin-left: 21%">
+          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.paperNum}}条数据:</span>
+        </div>
+        <div style="display: inline-block;width: 15%;margin-left: 53%;vertical-align: top">
+          <el-select  v-model="sortType"  @change="dealSort" placeholder="按相关性降序" style="width: 80%;border-radius: 4px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
+            <el-option
+                v-for="item in sorts"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="paper_main_left">
+        <el-collapse style="margin-left: 30px;margin-right: 20px" v-model="activeNames">
+          <el-collapse-item name="1">
+            <template #title >
+              <span style="font-size: 15px">主题</span>
+            </template>
+            <div v-for="index in themes.length" :key="index">
+              <el-checkbox v-model="themesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.themes[index-1].name }}</el-checkbox>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item name="2">
+            <template #title >
+              <span style="font-size: 15px">年份</span>
+            </template>
+            <div v-for="index in years.length" :key="index">
+              <el-checkbox v-model="yearsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.years[index-1].name }}</el-checkbox>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+      <div class="paper_main_right">
+        <div class="example-pagination-block">
+          <div v-for="(item,index) in papers" :key="item">
+            <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
+                        :paper-name="item.title" :type="type" :num="item.n_citation" :paperid="item.id" :scholar-id="item.authors[0].id"
+                        style="margin-left: 50px;margin-top: 10px;vertical-align: top" v-if="index<10"></paper-show>
+          </div>
+          <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
+                  />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -157,18 +160,20 @@
 
 import PaperShow from "@/components/paperShow";
 import qs from "qs";
+import {paperScholarAxios} from "@/axios/index";
 
 export default {
   components: {PaperShow},
   data(){
     return{
+      exact:['精确','精确','精确'],
       activeNames:['1','2','3'],
       nowPage:1,
       type:0,
       searchType:false,
-      value:['标题','标题','标题'],
+      value:['标题','标题','标题','标题'],
       searchNum:3,
-      paperNum:20, //一共找到的论文数
+      paperNum:100, //一共找到的论文数
       options:[
         {
           value: '标题',
@@ -203,7 +208,7 @@ export default {
       sorts:[
         {
           label:'按相关性降序',
-          value:'按相关性降序'
+          value:'按相关性降序',
         },
         {
           label:'按被引量降序',
@@ -332,14 +337,28 @@ export default {
       endYear:0,
       themes:[{name :'theme1'},{name:"theme2"}],
       themesCheck:[false,false],
-      fields:[{name:"aa"},{name:"bb"}],
-      fieldsCheck:[false,false],
       years:[{name:"2001"},{name:"2002"}],
       yearsCheck:[false,false],
     }
   },
   methods:{
-
+    querySearch(index,queryString, cb) {
+      let toSend={
+        search_type:this.toIntSearchType(this.value[index]),
+        text:queryString,
+      };
+      paperScholarAxios({
+        method:'post',
+        url:'search/auto-complete',
+        data:JSON.stringify(toSend)
+      }).then((res) =>{
+        var toSuggest;
+        for(let i=0;i<res.data.auto_completes.length;i++){
+          toSuggest[i].value=res.data.auto_completes[i];
+        }
+        cb(toSuggest);
+      })
+    },
     showNormal() {
       this.searchType=false;
       document.getElementById("normal-search-btn").style.borderBottom = "4px solid lightblue";
@@ -354,11 +373,13 @@ export default {
       this.inputValue.splice(index-1,1);
       this.value.splice(index-1,1);
       this.ANvalue.splice(index-1,1);
+      this.exact.splice(index-1,1);
       this.searchNum--;
     },
     addNum(){
       this.value[this.searchNum]='标题';
       this.ANvalue[this.searchNum]='AND';
+      this.exact[this.searchNum]='精确';
       this.searchNum++;
     },
     handleCheckChange(data, checked, indeterminate) {
@@ -396,36 +417,199 @@ export default {
       }, 500);
     },
     handleCurrentChange(){
-      //todo:axios 页面变换
-      let toSend={
-        search_content: [{"type":0,"search_type":0,"content":"","is_exact":0}],
-        start_year:2000,
-        end_year:2020,
-        page: this.nowPage,
-        sort_type:0,
-      };
-      this.axios({
+      //todo:axios 页面变换 !
+      // console.log(this.nowPage)
+      let that=this;
+      let toSend=this.getSearchList(this.nowPage);
+      paperScholarAxios({
         method:'post',
-        url:'/api/search/paper',
+        url:"search/paper",
         data:JSON.stringify(toSend)
-      }).then((res) =>{
+      }).then((res)=>{
+        let response=res.data;
+        that.papers=response.papers;
         console.log(res.data);
-
       })
-
-      console.log(this.nowPage);
-    }
+    },
+    toIntSearchType(str){
+      switch (str){
+        case '标题':
+          return 0;
+        case '作者':
+          return 1;
+        case '关键字':
+          return 2;
+        case '摘要':
+          return 3;
+        case 'DOI':
+          return 4;
+        case '期刊':
+          return 5;
+        case '作者单位':
+          return 6;
+      }
+    },
+    toIntExact(str){
+      return (str==='精确')?0:1;
+    },
+    toIntType(str){
+      return (str==='AND')?0:1;
+    },
+    toIntSortType(str){
+      switch (str){
+        case '按相关性降序':
+          return 0;
+        case '按被引量降序':
+          return 1;
+        case '按时间降序':
+          return 2;
+      }
+    },
+    NormalSearch(page){
+      let that=this;
+      var toSend={
+        searchContent:[
+          {
+            type:this.toIntType(this.ANvalue[0]),
+            search_type:this.toIntSearchType(this.value[0]),
+            content:this.inputValue[0],
+            is_exact:this.toIntExact(this.exact[0])
+          }
+        ],
+        start_year:0,
+        end_year:0,
+        sort_type:this.toIntSortType(this.sortType),
+        start:10*page,
+        end:10*(page+1),
+      };
+      paperScholarAxios({
+        method:'post',
+        url:"search/paper",
+        data:JSON.stringify(toSend)
+      }).then((res)=>{
+        let response=res.data;
+        that.paperNum=response.paper_num;
+        that.papers=response.papers;
+        that.themes=response.themes;
+        that.years=response.years;
+        that.themesCheck=[];
+        that.yearsCheck=[];
+        that.nowPage=1;
+        console.log(res.data);
+      })
+    },
+    getSearchList(page){
+      var toSend={
+        searchContent:[],
+        start_year:this.beginYear,
+        end_year:this.end_year,
+        sort_type:this.toIntSortType(this.sortType),
+        start:10*page,
+        end:10*(page+1),
+      };
+      for(let i=0;i<this.searchNum;i++){
+        let search={
+          type:this.toIntType(this.ANvalue[i]),
+          search_type:this.toIntSearchType(this.value[i]),
+          content:this.inputValue[i],
+          is_exact:this.toIntExact(this.exact[i])
+        };
+        toSend.searchContent.push(search);
+      }
+      return toSend;
+    },
+    AdvanceSearch(page){
+      let toSend=this.getSearchList(page);
+      let that=this;
+      paperScholarAxios({
+        method:'post',
+        url:"search/paper",
+        data:JSON.stringify(toSend)
+      }).then((res)=>{
+        let response=res.data;
+        that.paperNum=response.paper_num;
+        that.papers=response.papers;
+        that.themes=response.themes;
+        that.years=response.years;
+        that.themesCheck=[];
+        that.yearsCheck=[];
+        that.nowPage=1;
+        console.log(res.data);
+      })
+    },
+    //todo:筛选
+    dealFilter(){
+      let that=this;
+        let toSend=this.getSearchList(0);
+        for(let i=0;i<this.themesCheck.length;i++){
+          if(this.themesCheck[i]===true){
+            let search={
+              type:0,
+              search_type:2,
+              content:this.themes[i].name,
+              is_exact:0
+            };
+            toSend.searchContent.push(search);
+          }
+        }
+      for(let i=0;i<this.yearsCheck.length;i++){
+        if(this.themesCheck[i]===true){
+          let search={
+            type:0,
+            search_type:7,
+            content:this.years[i].name,
+            is_exact:0
+          };
+          toSend.searchContent.push(search);
+        }
+      }
+      paperScholarAxios({
+        method:'post',
+        url:"search/paper",
+        data:JSON.stringify(toSend)
+      }).then((res)=>{
+        let response=res.data;
+        that.paperNum=response.paper_num;
+        that.papers=response.papers;
+        that.nowPage=1;
+        console.log(res.data);
+      })
+    },
+    dealSort(val){
+      let that=this;
+      let toSend=this.getSearchList(0);
+      toSend.sort_type=this.toIntSortType(val);
+      paperScholarAxios({
+        method:'post',
+        url:"search/paper",
+        data:JSON.stringify(toSend)
+      }).then((res)=>{
+        let response=res.data;
+        that.papers=response.papers;
+        that.nowPage=1;
+        console.log(res.data);
+      })
+    },
   },
   created() {
     let searchType=qs.parse(this.$route.query.searchType);
     this.inputValue[0]=this.$route.query.content;
     this.value[0]=searchType.type;
-  }
+  },
 }
 
 </script>
 
 <style scoped>
+.home_root{
+  background-color: #f3f3f3;
+  position: relative;
+  width: 100%;
+  min-width: 1500px;
+  height: 100%;
+  min-height: 2300px;
+  flex-direction: column;
+}
 
 .top_search{
   /*background-color: lavender;*/
@@ -457,11 +641,12 @@ export default {
 }
 .right-head-choose-tab:hover {
   background-color: aliceblue;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 24px;
 }
 #normal-search-btn{
+  border-bottom: 4px solid lightblue;
   transition: all 0.5s;
 }
 #advanced-search-btn{
@@ -485,10 +670,11 @@ export default {
 }
 
 .normal_search{
+  background-color: white;
   border: 1px white solid;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   /*box-shadow: 1px 1px 3px #888888;*/
-  border-radius: 10px;
+  border-radius: 4px;
   /*height: 300px;*/
   margin-left: 10%;
   margin-right: 10%;
@@ -496,10 +682,11 @@ export default {
 }
 
 .advance_search{
+  background-color: white;
   border: 1px white solid;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   /*box-shadow: 1px 1px 3px #888888;*/
-  border-radius: 10px;
+  border-radius: 4px;
   /*height: 300px;*/
   margin-left: 10%;
   margin-right: 10%;
@@ -516,11 +703,12 @@ export default {
 
 .paper_main_top{
   width: 100%;
-  border: 3px white solid;
+  border: 3px white ;
 }
 
 
 .paper_main_left{
+  background-color: white;
   border: 1px white solid;
   border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
