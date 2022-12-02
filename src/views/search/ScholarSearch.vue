@@ -1,8 +1,5 @@
 <template>
   <!--  顶部栏-->
-  <div style="height: 56px;text-align: center;background-color: #007dfa">
-      顶部栏
-  </div>
   <div class="main_skeleton">
     <p class="main_title">
         学者主页
@@ -12,11 +9,14 @@
                margin-left: 20%;">
         <template #prepend>学者名</template>
       </el-input>
-      <el-input v-model="inputOrg" placeholder="请输入该学者的机构名" size="large"  style="width: 30%;
+      <el-input v-model="inputOrg" placeholder="请输入该学者的机构名" size="large"  style="width: 35%;
                margin-left: 0px">
         <template #prepend>机构名</template>
+        <template #append>
+          <el-icon size="20" style="width: 30px;" @click="scholarSearch"><Search/></el-icon>
+        </template>
       </el-input>
-      <el-icon size="40" style="margin-left: 50px;vertical-align: top"><Search/></el-icon>
+
     </div>
     <div class="main_result">
         <div style="margin-top: 10px;margin-left: 5%"><span style="font-size: 20px">为您检索到{{ this.num }}条结果：</span></div>
@@ -27,7 +27,7 @@
                     <scholar-list  :id="item.id" :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
             </div>
         </div>
-        <el-pagination background layout="prev, pager, next, jumper" :total="this.num" page-size="6" v-model:current-page="nowPage" @current-change="handleCurrentChange()"
+        <el-pagination background layout="prev, pager, next, jumper" :total="this.num" page-size="6" v-model:current-page="nowPage" @current-change="scholarSearch"
                         />
     </div>
   </div>
@@ -35,6 +35,7 @@
 
 <script>
 import ScholarList from "@/components/scholarList";
+import {paperScholarAxios} from "@/axios/index"
 export default {
   name: "ScholarSearch",
   components: {ScholarList},
@@ -97,22 +98,26 @@ export default {
     }
   },
   methods:{
-    handleCurrentChange(){
+    scholarSearch(){
+      let that=this;
       let toSend={
-        page:this.nowPage,//一次性返回的学者条目（1page为6条）
-        name:this.inputName,//学者名
-        institution:this.inputOrg//机构名
+        name:this.inputName,
+        institution:this.inputOrg,
+        start:this.nowPage*10,
+        end:(this.nowPage+1)*10
       };
-      //todo:axios
-      this.axios({
+      paperScholarAxios({
         method:'post',
-        url:'/api/search/scholar',
-        data:JSON.stringify(toSend),
+        url:'search/scholar',
+        data:JSON.stringify(toSend)
       }).then((res)=>{
+        let response=res.data;
+        that.scholars=response.scholar;
+        that.num=response.scholar_num;
+        that.nowPage=1;
         console.log(res.data);
       })
 
-      console.log(this.nowPage);
     }
   }
 }
@@ -153,4 +158,8 @@ export default {
   margin:50px auto 10px;
    width: 40%;
 }
+
+ .search_button:hover{
+   size: 30;
+ }
 </style>
