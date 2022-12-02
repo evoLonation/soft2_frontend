@@ -1,6 +1,37 @@
 <template>
 <!--  顶部栏-->
   <div class="main_body">
+
+
+    <el-aside class="navigation">
+      <el-menu
+          :default-active="this.activeName.toString()"
+          @select="this.navigate"
+      >
+        <el-menu-item index="0">
+          <el-icon><HomeFilled /></el-icon>
+          <template #title>基本信息</template>
+        </el-menu-item>
+        <el-menu-item index="1">
+          <el-icon><TrendCharts /></el-icon>
+          <template #title>成果统计</template>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <el-icon><Aim /></el-icon>
+          <template #title>学者关系</template>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <el-icon><Reading /></el-icon>
+          <template #title>论文列表</template>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <el-icon><Histogram /></el-icon>
+          <template #title>领域贡献</template>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+
+
     <div class="main_left">
         <div class="left_inform" id="inform" @click="clickInform">
           <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><User /></el-icon>个人信息
@@ -91,6 +122,7 @@
 </template>
 
 <script>
+import {userAxios} from "@/axios/index";
 export default {
   name: "UserHome",
   data(){
@@ -276,6 +308,15 @@ export default {
       document.getElementById('scholar').style.color='#000000';
       document.getElementById('paper').style.color='#007dfa'
     }
+  },
+  created() {
+      userAxios({
+        method:"post",
+        url:'user/user-infor'
+      }).then((res)=>{
+        console.log(res.data);
+      });
+
   }
 }
 </script>
@@ -284,6 +325,17 @@ export default {
 
 .main_body{
   /*background-color: #FAF9F6;*/
+  background: #f3f3f3
+}
+
+.navigation{
+  position: fixed;
+  z-index: 100;
+  width: 130px;
+  margin-left: -120px;
+  margin-top: 30px;
+  border-radius: 4px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 
 .main_left{
