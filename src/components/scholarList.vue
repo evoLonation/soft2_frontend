@@ -28,6 +28,7 @@ export default {
 
 <style scoped>
 .scholar_skeleton{
+  background-color: white;
   height: 150px;
   width: 400px;
   display: inline-block;
@@ -38,6 +39,7 @@ export default {
 }
 
 .scholar_skeleton:hover{
+  background-color: white;
   height: 150px;
   width: 400px;
   display: inline-block;

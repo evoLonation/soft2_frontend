@@ -1,38 +1,8 @@
 <template>
 <!--  顶部栏-->
   <div class="main_body">
-
-
-    <el-aside class="navigation">
-      <el-menu
-          :default-active="this.activeName.toString()"
-          @select="this.navigate"
-      >
-        <el-menu-item index="0">
-          <el-icon><HomeFilled /></el-icon>
-          <template #title>基本信息</template>
-        </el-menu-item>
-        <el-menu-item index="1">
-          <el-icon><TrendCharts /></el-icon>
-          <template #title>成果统计</template>
-        </el-menu-item>
-        <el-menu-item index="2">
-          <el-icon><Aim /></el-icon>
-          <template #title>学者关系</template>
-        </el-menu-item>
-        <el-menu-item index="3">
-          <el-icon><Reading /></el-icon>
-          <template #title>论文列表</template>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <el-icon><Histogram /></el-icon>
-          <template #title>领域贡献</template>
-        </el-menu-item>
-      </el-menu>
-    </el-aside>
-
-
-    <div class="main_left">
+    <el-container style="margin: auto;width: 1400px">
+      <el-aside class="navigation">
         <div class="left_inform" id="inform" @click="clickInform">
           <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><User /></el-icon>个人信息
         </div>
@@ -42,87 +12,111 @@
         <div class="left_paper" id="paper" @click="clickPaper">
           <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><Star /></el-icon>收藏论文
         </div>
-    </div>
-    <div class="main_right">
-        <div v-if="pageType===0" style="margin-bottom: 30px">
-            <div class="main_right_inform_top">
-              <el-icon size="30" style="color: lightgrey;vertical-align: bottom;margin-right: 10px"><InfoFilled /></el-icon>
-              <span style="color:midnightblue;font-family: 幼圆;">个人信息</span>
+      </el-aside>
+
+<!--      <div class="main_left">-->
+
+<!--      </div>-->
+      <el-main class="main_right">
+
+          <div v-if="pageType===0" style="margin-bottom: 30px">
+              <div class="main_right_inform_top">
+                <el-icon size="30" style="color: lightgrey;vertical-align: bottom;margin-right: 10px"><InfoFilled /></el-icon>
+                <span style="color:midnightblue;font-family: 幼圆;">个人信息</span>
+              </div>
+              <div class="main_right_inform_left">
+                <el-avatar :size="160" :src="userPhoto" />
+                <div style="margin-left: 27px;margin-top: 19px;">
+                  <el-upload
+                      action="#"
+                      class="avatar-uploader"
+                      :show-file-list="false"
+                      :on-success="handleAvatarSuccess"
+                      :before-upload="beforeAvatarUpload"
+                      :http-request="upload"
+                  >
+                    <el-button type="primary" color="#D3E7FB">
+                      上传头像<el-icon class="el-icon--right"><Upload /></el-icon>
+                    </el-button>
+                  </el-upload>
+
+                </div>
+              </div>
+              <div class="main_right_inform_right">
+                <el-form :model="form" label-width="120px" >
+                  <el-form-item label="昵称:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.nickName}}
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="email:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.email}}
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="求助次数:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.n_request}}
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="应助次数:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.n_help}}
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="关注学者数:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.follows}}
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="投诉次数:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.complaints}}
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="财富值:">
+                    <span style="margin-left: 30px">
+                      {{userinfo.wealth}}
+                    </span>
+                  </el-form-item>
+                </el-form>
+              </div>
+            <div style="margin-left: 431px;margin-top: 30px;"><el-button type="danger" round>退出登录</el-button></div>
+          </div>
+
+          <div v-if="pageType===1" style="margin-bottom: 30px">
+            <div style="margin-top: 20px">
+              <span style="margin-left: 30px;font-size: 15px;color: #73767a">
+                关注的学者:
+              </span>
             </div>
-            <div class="main_right_inform_left">
-              <el-avatar :size="160" :src="userPhoto" />
+            <div v-for="(item,index) in scholars" :key="index"
+                 style=" height: 150px; width: 410px;
+                      display: inline-block;  margin-left: 20px;margin-top: 20px;">
+              <scholar-list :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
             </div>
-            <div class="main_right_inform_right">
-              <el-form :model="form" label-width="120px">
-                <el-form-item label="昵称:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.nickName}}
-                  </span>
-                </el-form-item>
-                <el-form-item label="email:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.email}}
-                  </span>
-                </el-form-item>
-                <el-form-item label="求助次数:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.n_request}}
-                  </span>
-                </el-form-item>
-                <el-form-item label="应助次数:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.n_help}}
-                  </span>
-                </el-form-item>
-                <el-form-item label="关注学者数:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.follows}}
-                  </span>
-                </el-form-item>
-                <el-form-item label="投诉次数:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.complaints}}
-                  </span>
-                </el-form-item>
-                <el-form-item label="财富值:">
-                  <span style="margin-left: 30px">
-                    {{userinfo.wealth}}
-                  </span>
-                </el-form-item>
-              </el-form>
+          </div>
+
+          <div v-if="pageType===2" style="margin-bottom: 30px">
+            <div style="margin-top: 20px">
+              <span style="margin-left: 30px;font-size: 15px;color: #73767a">
+                收藏的论文:
+              </span>
             </div>
-        </div>
-        <div v-if="pageType===1" style="margin-bottom: 30px">
-          <div style="margin-top: 20px">
-            <span style="margin-left: 30px;font-size: 15px;color: #73767a">
-              关注的学者:
-            </span>
+            <div v-for="(item,index) in papers" :key="index" style="margin-top: 20px;margin-left: 50px;margin-right: 50px">
+              <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
+                          :paper-name="item.title" :type="type" :num="item.n_citation"
+                          style="margin-left: 30px;margin-top: 20px;"></paper-show>
+            </div>
           </div>
-          <div v-for="(item,index) in scholars" :key="index"
-               style=" height: 150px; width: 410px;
-                    display: inline-block;  margin-left: 30px;margin-top: 20px;">
-            <scholar-list :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
-          </div>
-        </div>
-        <div v-if="pageType===2" style="margin-bottom: 30px">
-          <div style="margin-top: 20px">
-            <span style="margin-left: 30px;font-size: 15px;color: #73767a">
-              收藏的论文:
-            </span>
-          </div>
-          <div v-for="(item,index) in papers" :key="index">
-            <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                        :paper-name="item.title" :type="type" :num="item.n_citation"
-                        style="margin-left: 10%;margin-top: 20px;width: 80%"></paper-show>
-          </div>
-        </div>
-    </div>
+      </el-main>
+    </el-container>
   </div>
 
 </template>
 
 <script>
-import {userAxios} from "@/axios/index";
+import {userAxios,fileAxios} from "@/axios/index";
 export default {
   name: "UserHome",
   data(){
@@ -290,6 +284,14 @@ export default {
     }
   },
   methods:{
+    navigate(index){
+      this.pageType = index
+      let ele =  document.getElementsByName("part")[index]
+      ele.scrollIntoView({
+        behavior:"smooth",
+        block: "start"
+      })
+    },
     clickInform(){
       this.pageType=0;
       document.getElementById('inform').style.color='#007dfa';
@@ -307,6 +309,34 @@ export default {
       document.getElementById('inform').style.color='#000000';
       document.getElementById('scholar').style.color='#000000';
       document.getElementById('paper').style.color='#007dfa'
+    },
+    handleAvatarSuccess(res, file) {
+      console.log(res, file)
+      // this.value = URL.createObjectURL(file.raw)// 可以获取一段data:base64的字符串
+    },
+    beforeAvatarUpload(file) {
+      const isPNG = file.type === 'image/jpeg' ||
+          file.type === 'image/png' ||
+          file.type === 'image/jpg';
+      const isLt2M = file.size / 1024 / 1024 < 5
+      if (!isPNG) {
+        this.$message.error('上传头像图片只能是 PNG/jpg/jpeg 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 5MB!')
+      }
+      return isPNG && isLt2M
+    },
+    upload(res) {
+      if (res.file) {
+          fileAxios({
+            method:'post',
+            url:"user/upload-avatar",
+            data:res.file
+          }).then((res) => {
+            console.log(res);
+          })
+      }
     }
   },
   created() {
@@ -332,10 +362,11 @@ export default {
   position: fixed;
   z-index: 100;
   width: 130px;
-  margin-left: -120px;
+  margin-left: 10px;
   margin-top: 30px;
   border-radius: 4px;
   box-shadow: 0 0 4px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+  background-color: white;
 }
 
 .main_left{
@@ -358,9 +389,9 @@ export default {
   border: 3px white solid;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
-  margin-left: 50px;
-  margin-top: 50px;
-  width: 60%;
+  margin-top: 2%;
+  margin-left: 15%;
+  margin-right: 15%;
   /*height: 1000px;*/
 }
 
@@ -376,7 +407,7 @@ export default {
 .left_inform:hover{
   margin-top: 20px;
   /*border: 3px saddlebrown solid;*/
-  font-size: 17px;
+  font-size: 14px;
   color: #007dfa;
   cursor: pointer;
   text-align: center;
@@ -387,7 +418,7 @@ export default {
 .left_inform:active{
   margin-top: 20px;
   /*border: 3px saddlebrown solid;*/
-  font-size: 22px;
+  font-size: 17px;
   color: #007dfa;
   cursor: pointer;
   text-align: center;
@@ -398,7 +429,7 @@ export default {
 
 .left_paper{
   /*border: 3px seagreen solid;*/
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
   height: 50px;
   transition: 0.2s;
@@ -417,7 +448,7 @@ export default {
 
 .left_scholar{
   /*border: 3px skyblue solid;*/
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
   height: 50px;
   transition: 0.2s;
@@ -446,8 +477,8 @@ export default {
   /*border: 3px midnightblue solid;*/
   width: 160px;
   height: 160px;
-  margin-top: 50px;
-  margin-left: 50px;
+  margin-top: 80px;
+  margin-left: 90px;
 }
 
 .main_right_inform_right{
@@ -455,8 +486,8 @@ export default {
   display: inline-block;
   /*border: 3px midnightblue solid;*/
   margin-top: 20px;
-  margin-left: 30px;
-  height: 500px;
+  margin-left: 130px;
+  /*height: 500px;*/
   width: 500px;
 }
 

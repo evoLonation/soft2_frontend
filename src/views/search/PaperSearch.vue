@@ -145,7 +145,7 @@
         <div class="example-pagination-block">
           <div v-for="(item,index) in papers" :key="item">
             <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                        :paper-name="item.title" :type="type" :num="item.n_citation" :paperid="item.id" :scholar-id="item.authors[0].id"
+                        :paper-name="item.title" :type="0" :num="item.n_citation" :paperid="item.id" :scholar-id="item.authors[0].id"
                         style="margin-left: 50px;margin-top: 10px;vertical-align: top" v-if="index<10"></paper-show>
           </div>
           <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
@@ -604,7 +604,7 @@ export default {
 .home_root{
   background-color: #f3f3f3;
   position: relative;
-  width: 100%;
+  width: 1690px;
   min-width: 1500px;
   height: 100%;
   min-height: 2300px;
