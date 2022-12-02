@@ -83,11 +83,7 @@ const routes = [
                 name: "Identify",
                 component: () => import('../views/scholar/Identify/MyIdentify')
             },
-            {
-                path: '/mv-paper',
-                name: "MovePaper",
-                component: () => import('../views/move/MvPaper')
-            },
+
             {
                 path: '/field',
                 name: 'Field',
@@ -120,7 +116,12 @@ const routes = [
                 path: 'complain-list',
                 name: 'ComplainList',
                 component: () => import('../views/admin/ComplainList')
-            }
+            },
+            {
+                path: '/mv-paper',
+                name: "MovePaper",
+                component: () => import('../views/move/MvPaper')
+            },
         ],
     },
 ];
