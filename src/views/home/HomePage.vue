@@ -76,7 +76,7 @@
 
 <script>
 import data from "@/assets/homedata.json";
-import {ref} from "vue";
+import {ref, onMounted} from "vue";
 import {loginStore, navigationStore} from "@/store";
 import {useRouter} from "vue-router";
 export default {
@@ -121,7 +121,7 @@ export default {
     }
     const fieldInfos = ([data, data, data, data]);
 
-
+    onMounted(() => scrollListener());
 
 
     const loginState = loginStore();

@@ -1,6 +1,6 @@
 <template>
   <div class="navigation-bar-root" :class="{opacity: navigationState.isOpacity, 'no-opacity': !navigationState.isOpacity}">
-    <div class="left-area">
+    <div class="left-area" @click="toHomeView">
       <p style="font-size: 25px;line-height: 25px;margin: 0">学术成果分享平台</p>
     </div>
     <div class="mid-area">
@@ -63,6 +63,10 @@ export default {
         }
       });
     }
+    const toHomeView = () =>{
+      router.push({name: "Home"});
+    }
+
 
     const nickname = ref('');
 
@@ -84,7 +88,7 @@ export default {
     });
 
     const navigationState = navigationStore();
-    router.afterEach(() => {
+    router.beforeEach(() => {
       navigationState.isDisplaySearchBox = true;
       navigationState.isOpacity = false;
     });
@@ -94,7 +98,8 @@ export default {
       toUserView,
       toMessageView,
       nickname,
-      navigationState
+      navigationState,
+      toHomeView
     }
   },
 }
