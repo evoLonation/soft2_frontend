@@ -208,6 +208,7 @@ export default {
     },
   },
   mounted() {
+    this.field_name = this.$route.query.content
     window.addEventListener("mousewheel", this.scrollFn);
     this.getPaperList()
   },
