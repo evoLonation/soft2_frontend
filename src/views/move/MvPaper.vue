@@ -1,11 +1,11 @@
 <template>
   <div class="MvPaper">
     <el-input v-model="id" size="large" class="id-input" placeholder="请输入文献ID" prefix-icon="Document" clearable/>
-    <el-input v-model="owner_id" size="large" class="id-input" style="margin-left: 230px" placeholder="请输入学者ID" prefix-icon="User" clearable/>
+    <el-input v-model="owner_id" size="large" class="id-input" style="margin-left: 220px" placeholder="请输入学者ID" prefix-icon="User" clearable/>
     <div style="display: flex">
       <div class="border">
         <el-empty class="no_data" v-if="tab_show === false"/>
-        <div style="height: 500px; width: 850px" v-loading="loading" v-if="tab_show === true">
+        <div style="height: 500px; width: 750px" v-loading="loading" v-if="tab_show === true">
           <el-table border :data="documents" style="width: 100%;" height="120">
             <el-table-column align="center" fixed prop="name" label="文件名称" width="250"/>
             <el-table-column align="center" label="作者列表">
@@ -29,7 +29,7 @@
           </el-table>
         </div>
       </div>
-      <div style="width: 450px; height: 500px; margin-right:90px; margin-top: 30px">
+      <div style="width: 450px; height: 500px; margin-top: 30px">
         <div class="border" style="width: 450px; height: 320px;">
           <el-empty class="no_data" v-if="owner_show === false" style="margin-top: 10px"/>
           <el-table border :data="scholars" style="width: 100%;" height="320" v-loading="loading1" v-if="owner_show === true" :show-header="false" :row-style="{height: '80px'}" :cell-style="cellStyle">
@@ -185,8 +185,8 @@ export default {
 
 <style scoped>
 .MvPaper {
-  min-width: 1400px;
-  max-width: 1400px;
+  min-width: 1350px;
+  max-width: 1350px;
   min-height: 700px;
   margin: 75px auto auto auto;
   border-radius: 5px;
@@ -196,15 +196,15 @@ export default {
 
 .id-input {
   width: 400px;
-  margin: 50px 0 auto 300px;
+  margin: 50px 0 auto 250px;
 }
 
 .border {
-  width: 850px;
+  width: 750px;
   height: 500px;
   border: 2px solid rgba(0,0,0,0.15);
   border-radius: 5px;
-  margin: 40px auto auto 45px;
+  margin: 40px 0 auto 47px;
 }
 
 .no_data {

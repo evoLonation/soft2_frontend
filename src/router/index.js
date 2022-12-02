@@ -118,7 +118,7 @@ const routes = [
                 component: () => import('../views/admin/ComplainList')
             },
             {
-                path: '/mv-paper',
+                path: 'mv-paper',
                 name: "MovePaper",
                 component: () => import('../views/move/MvPaper')
             },
