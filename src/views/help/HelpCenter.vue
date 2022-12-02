@@ -8,9 +8,7 @@
         margin-right: 40px;"
       >
 
-        <el-header
-            style="background-color: white"
-        >
+        <el-header>
           <div
               style="
                 margin: 10px 0;"
@@ -40,10 +38,7 @@
         </el-header>
 
         <el-main
-          style="
-            margin-top: 20px;
-            background-color: white"
-        >
+          style="margin-top: 20px;">
           <el-card class="box-card"
                    style="margin-bottom: 20px"
                    v-for="item in requestList"
@@ -68,21 +63,21 @@
               </div>
 
               <el-button type="primary"
-                          @click="dialogVisible = true"
+                          @click="itemDialog = true"
                          style="margin: auto 0">
                 我来应助
               </el-button>
 
               <el-dialog
-                  v-model="dialogVisible"
+                  v-model="itemDialog"
                   title="上传文件"
                   width="30%"
               >
                 <span>请上传文件</span>
                 <template #footer>
                   <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">
+                    <el-button @click="itemDialog = false">取消</el-button>
+                    <el-button type="primary" @click="itemDialog = false">
                       上传
                     </el-button>
                   </span>
@@ -124,8 +119,7 @@
 
       </el-container>
 
-      <el-aside style="
-                  background-color: white;" >
+      <el-aside>
 
         <el-card class="box-card"
                  style="
@@ -186,7 +180,7 @@ export default {
   data(){
     return {
       searchContent: "",
-      dialogVisible: false,
+      itemDialog: false,
       order: 1,
       page: 1,
       backUp: [],
@@ -273,5 +267,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -5,7 +5,6 @@
     padding-top: 30px">
 
     <div style="
-      background-color: white;
       width: 80%;
       height: 40px;
       margin: 0 auto;
