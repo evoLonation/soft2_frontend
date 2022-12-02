@@ -211,10 +211,10 @@ export default {
     this.field_name = this.$route.query.content
     window.addEventListener("mousewheel", this.scrollFn);
     this.getPaperList()
+    this.getScholarList()
   },
   beforeUnmount() {
     window.removeEventListener("mousewheel", this.scrollFn);
-    this.getScholarList()
   }
 }
 
@@ -234,6 +234,7 @@ export default {
 
 .show {
   margin-top: 50px;
+
 }
 
 .paper {
@@ -242,6 +243,11 @@ export default {
   display: inline-block;
   /*vertical-align: ;*/
   /*float: left;*/
+  padding-left: 50px;
+  padding-right: 50px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
 }
 
 .scholar {
@@ -249,7 +255,12 @@ export default {
   /*vertical-align: top;*/
   display: inline-block;
   /*float: left;*/
-  padding-left: 200px;
+  margin-left: 200px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
 }
 
 .show_scholar {

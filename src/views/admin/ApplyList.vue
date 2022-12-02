@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template #default="scope">
-          <el-button type="success" round @click="agree(scope.row.apply_id)">同意</el-button>
+          <el-button type="primary" round @click="agree(scope.row.apply_id)">同意</el-button>
           <el-button type="danger" round @click="disagree(scope.row.apply_id)">拒绝</el-button>
         </template>
 
@@ -105,11 +105,12 @@ export default {
 
 <style scoped>
 .list{
-  margin-left: 15%;
-  margin-right: 15%;
-  margin-top: 20px;
-  padding: 30px 30px 30px 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+  min-width: 1350px;
+  max-width: 1350px;
+  min-height: 700px;
+  margin: 50px auto auto auto;
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+  background-color: white;
 }
 </style>
