@@ -7,15 +7,15 @@
 
       <el-table-column>
 
-        <el-button>
+        <el-button  @click="download">
           下载文件
         </el-button>
 
-        <el-button>
+        <el-button type="primary" @click="pass">
           申诉通过
         </el-button>
 
-        <el-button>
+        <el-button type="danger" @click="fail">
           申诉退回
         </el-button>
 
@@ -54,6 +54,18 @@ export default {
 
 
     }
+  },
+  methods: {
+    download(){
+
+    },
+    pass(){
+
+    },
+    fail(){
+
+    }
+
   }
 }
 </script>

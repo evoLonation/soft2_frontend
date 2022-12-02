@@ -1,7 +1,5 @@
 <template>
-  <div
-    style="background-color: white"
-  >
+  <div>
     <el-tabs stretch=stretch
              v-model="listFilter"
              @tab-change="handleClick">

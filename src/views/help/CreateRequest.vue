@@ -78,6 +78,15 @@ export default {
       this.formData.title = this.$route.query.title;
       this.formData.magazine = this.$route.query.magazine;
       this.formData.author = qs.parse(this.$route.query.author)
+      console.log(this.$route.query.author)
+      this.formData.authorNames = "";
+      let i = 0;
+      while(!(this.formData.author[i] === undefined)){
+        this.formData.authorNames += (this.formData.author[i] + " ");
+        console.log(this.formData.author[i])
+        i++;
+      }
+      console.log(this.formData.authorNames)
     }
   }
 }
