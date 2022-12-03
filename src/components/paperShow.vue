@@ -19,7 +19,7 @@
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
     <div class="paper_author" style="margin-bottom: 10px">
       <span v-for="(item,index) in author.slice(0,4)" :key="index">
-        <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
+        <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>
         {{this.org}}  -  被引量:{{this.num}}</div>
@@ -32,7 +32,7 @@
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
     <div class="paper_author" style="margin-bottom: 10px">
       <span v-for="(item,index) in author.slice(0,4)" :key="index">
-        <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
+        <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>
       {{this.org}}  -  被引量:{{this.num}}</div>
@@ -43,7 +43,7 @@
       <div class="paper_name" style="margin-top: 3%" >{{this.paperName}}</div>
       <div class="paper_author" style="margin-top: 10px">
         <span v-for="(item,index) in author.slice(0,4)" :key="index">
-        <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
+        <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>  {{this.org}}  -  被引量:{{this.num}}</div>
     </div>
@@ -56,25 +56,31 @@
 </template>
 
 <script>
+import {useRouter} from "vue-router";
+
 export default {
   name: "paperShow",
   props:[
       'paperName','abstract','author','org','num','type','paperId'
   ],
-  setup(prop){
+  setup(props){
+    const router = useRouter();
     const gotoPaper = () => {
-      this.$router.push({
+      router.push({
         name:'Paper',
         params:{
-          paperId:prop.paperId
+          paperId:props.paperId
         }
       });
     }
     const gotoScholar = (index) => {
-      this.$router.push({
+      console.log("props")
+      console.log( props.author)
+      console.log(index)
+      router.push({
         name:'Scholar',
         params:{
-          scholarId:prop.author[index].id
+          scholarId:props.author[index].id
         }
       })
     }
