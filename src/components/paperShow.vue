@@ -4,8 +4,9 @@
 <!--                  :paper-name="title" :type="0" :num="n_citation" :paperid="id"-->
 <!--                      ></paper-show>-->
   其中type代表类型：
-      普通请使用0（int），在添加学术成功页面使用1-3，分别代表申请认领、已经认领和论文申诉
+      普通请使用0（int），
       无阴影使用4
+      取消收藏使用1
       author为对象，其结构必须包括id和name，即
           author=[
             {id:'1',name:'张三'}
@@ -45,18 +46,17 @@
         <span v-for="(item,index) in author.slice(0,4)" :key="index">
         <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
-      </span>  {{this.org}}  -  被引量:{{this.num}}</div>
+      </span>  {{this.org}}  </div>
     </div>
     <div class="inf_divide" style="width: 20%; height: 100%">
-      <el-button class="button_type" type="primary" v-if="type==1">申请认领</el-button>
-      <el-button class="button_type" type="success" v-if="type==2">已经认领</el-button>
-      <el-button class="button_type" type="danger" v-if="type==3">论文申诉</el-button>
+      <el-button type="danger" plain class="button_type" @click="cancelStar">取消收藏</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import {useRouter} from "vue-router";
+import {userAxios} from "@/axios";
 
 export default {
   name: "paperShow",
@@ -74,9 +74,6 @@ export default {
       });
     }
     const gotoScholar = (index) => {
-      console.log("props")
-      console.log( props.author)
-      console.log(index)
       router.push({
         name:'Scholar',
         params:{
@@ -85,8 +82,24 @@ export default {
       })
     }
 
+    const cancelStar = () =>{
+      let toSend={
+        id:props.paperId
+      };
+        userAxios({
+          method:'post',
+          url:'paper/star/cancel',
+          data:JSON.stringify(toSend)
+        }).then((res) =>{
+          if(res.data.code==="0"){
+            this.$message('success','取消成功');
+          }
+          else this.$message('error','取消失败');
+        })
+    }
+
     return {
-      gotoPaper,gotoScholar
+      gotoPaper,gotoScholar,cancelStar
     }
   },
   data(){
@@ -133,7 +146,7 @@ export default {
 
 .paper_skeleton_3{
   background-color: white;
-  /*border: 0.001px ghostwhite solid;*/
+  border: 0.001px white solid;
   border-radius: 4px;
   /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   min-width: 600px;
@@ -171,7 +184,7 @@ export default {
   background-color: white;
   border: 0.001px ghostwhite solid;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   min-width: 600px;
   padding-bottom: 35px;
   /*min-height: 150px;*/
@@ -179,19 +192,20 @@ export default {
 }
 
 .paper_skeleton_2:hover{
+  background-color: #F1F5F9;
   transition:  .3s ease;
-  background-color: white;
   border-radius: 4px;
-  /*border: 1px #777755 solid;*/
-  box-shadow: -0.5px 2px 5px rgba(0,0,0,0.15),
-              0 -1px 5px rgba(0,0,0,0.10),
-              4px 4px 10px rgba(0,0,0,0.10);
+  border: 1px white solid;
+  /*box-shadow: -0.5px 2px 5px rgba(0,0,0,0.15),*/
+  /*            0 -1px 5px rgba(0,0,0,0.10),*/
+  /*            4px 4px 10px rgba(0,0,0,0.10);*/
   min-width: 600px;
   padding-bottom: 35px;
   /*min-height: 150px;*/
   /*position: relative;*/
 }
 .paper_name{
+  vertical-align: top;
   cursor: pointer;
   position: relative;
   margin-left: 48px;
@@ -228,6 +242,10 @@ export default {
 .author_name:hover{
   color: #79bbff;
   cursor: pointer;
+}
+
+.button_cancel{
+  margin-bottom: 10px;
 }
 
 </style>

@@ -11,18 +11,20 @@
 </template>
 
 <script>
+import {useRouter} from "vue-router";
+
 export default {
   name: "scholarList",
   props:[
       'name','paper_num','institution','id'
   ],
-  setup(prop){
-
+  setup(props){
+    const router = useRouter();
     const gotoScholar = () => {
-      this.$router.push({
+      router.push({
         name:'Scholar',
         params:{
-          scholarId:prop.id
+          scholarId:props.id
         }
       })
     }

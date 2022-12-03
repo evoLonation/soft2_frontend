@@ -1,7 +1,7 @@
 <template>
-  <paper-show style="margin-top: 30px;margin-left: 30px"
+  <paper-show style="margin-top: 30px;margin-left: 30px;width: 1000px;"
               :paper-name="paperName" :abstract="this.abstract"
-                :author="this.author" :org="org"  :num="num" :type="type"
+                :author="this.author" :org="org"  :num="num" :type="5"
   ></paper-show>
   <el-button @click="JumpToSearch">test</el-button>
 

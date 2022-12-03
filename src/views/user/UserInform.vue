@@ -105,9 +105,12 @@
             </div>
             <div v-for="(item,index) in papers" :key="index" style="margin-top: 20px;margin-left: 50px;margin-right: 50px">
               <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                          :paper-name="item.title" :type="5" :num="item.n_citation"
+                          :paper-name="item.title" :type="1" :num="item.n_citation"
                           style="margin-left: 30px;margin-top: 20px;"></paper-show>
+              <el-divider  style="width: 100%; margin: 10px"/>
             </div>
+            <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="switchPaper()" v-model:current-page="nowPage"
+            />
           </div>
       </el-main>
     </el-container>
@@ -122,6 +125,8 @@ export default {
   data(){
     return{
       form:[],
+      pagePaper:0,
+      pageScholar:0,
       pageType:0,//0-个人信息，1-关注学者，2-收藏论文,
       userPhoto:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       userinfo: {
@@ -135,49 +140,49 @@ export default {
       },
       scholars:[
         {
-          "id":"",
-          "name":"刘伟",
-          "institution":"安全",
+          "scholar_id":"",
+          "scholar_name":"刘伟",
+          "org":"安全",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"张本",
           "institution":"不安全",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"蒋子",
           "institution":"无敌",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"翔子",
           "institution":"摆烂",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"桑杰",
           "institution":"质疑",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"桑杰",
           "institution":"质疑",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"桑杰",
           "institution":"质疑",
           "paper_num":111,
         },
         {
-          "id":"",
+          "scholar_id":"",
           "name":"桑杰",
           "institution":"质疑",
           "paper_num":111,
@@ -284,14 +289,13 @@ export default {
     }
   },
   methods:{
-    navigate(index){
-      this.pageType = index
-      let ele =  document.getElementsByName("part")[index]
-      ele.scrollIntoView({
-        behavior:"smooth",
-        block: "start"
-      })
+    switchPaper(){
+
     },
+    switchScholar(){
+
+    },
+
     clickInform(){
       this.pageType=0;
       document.getElementById('inform').style.color='#007dfa';
