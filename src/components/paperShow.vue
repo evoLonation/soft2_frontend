@@ -2,15 +2,29 @@
   使用时注意传参，具体传参方式参考testSearch，
   其中type代表类型：
       普通请使用0（int），在添加学术成功页面使用1-3，分别代表申请认领、已经认领和论文申诉
+      无阴影使用4
 */
 <template>
-  <div class="paper_skeleton" v-if="type==0">
+  <div class="paper_skeleton" v-if="type===0">
     <div class="paper_name" @click="gotoPaper">
         {{this.paperName}}
     </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
-    <div class="paper_author" style="margin-bottom: 10px">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
+    <div class="paper_author" style="margin-bottom: 10px">
+      <span @click="gotoScholar">{{this.author}}</span>
+        -  {{this.org}}  -  被引量:{{this.num}}</div>
   </div>
+
+  <div class="paper_skeleton_3" v-else-if="type===4">
+    <div class="paper_name" @click="gotoPaper">
+      {{this.paperName}}
+    </div>
+    <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
+    <div class="paper_author" style="margin-bottom: 10px">
+      <span @click="gotoScholar">{{this.author}}</span>
+      -  {{this.org}}  -  被引量:{{this.num}}</div>
+  </div>
+
   <div class="paper_skeleton_2" v-else>
     <div class="inf_divide" style="width: 80%; height: 100%">
       <div class="paper_name" style="margin-top: 3%" >{{this.paperName}}</div>
@@ -28,15 +42,25 @@
 export default {
   name: "paperShow",
   props:[
-      'paperName','abstract','author','org','num','type','id'
+      'paperName','abstract','author','org','num','type','paperId','scholarId'
   ],
   setup(prop){
     const gotoPaper = () => {
-      console.log(prop.id)
-
+      this.$router.push({
+        name:'Paper',
+        params:{
+          paperId:prop.paperId
+        }
+      });
     }
+    const gotoScholar = () => {
+      this.$router.push({
+        name:'Scholar',
+      })
+    }
+
     return {
-      gotoPaper
+      gotoPaper,gotoScholar
     }
   },
   data(){
@@ -71,8 +95,9 @@ export default {
 }
 
 .paper_skeleton{
+  background-color: white;
   border: 0.001px ghostwhite solid;
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   min-width: 600px;
   padding-bottom: 20px;
@@ -80,10 +105,23 @@ export default {
   /*position: relative;*/
 }
 
+.paper_skeleton_3{
+  background-color: white;
+  /*border: 0.001px ghostwhite solid;*/
+  border-radius: 4px;
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
+  min-width: 600px;
+  padding-bottom: 20px;
+  /*min-height: 150px;*/
+  /*position: relative;*/
+}
+
 .paper_skeleton:hover{
-  border-radius: 10px;
-  border: 1px #777755 solid;
-  box-shadow:  1px 3px 5px lightgray;
+  border-radius: 4px;
+  /*border: 1px #777755 solid;*/
+  box-shadow: -0.5px 2px 5px rgba(0,0,0,0.21),
+              0 -1px 5px rgba(0,0,0,0.21),
+              2px 2px 5px rgba(0,0,0,0.21);
   min-width: 600px;
   padding-bottom: 20px;
   /*min-height: 150px;*/
@@ -92,7 +130,7 @@ export default {
 
 .paper_skeleton_2{
   border: 0.001px ghostwhite solid;
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   min-width: 600px;
   padding-bottom: 35px;
@@ -101,9 +139,11 @@ export default {
 }
 
 .paper_skeleton_2:hover{
-  border-radius: 10px;
-  border: 1px #777755 solid;
-  box-shadow:  1px 3px 5px lightgray;
+  border-radius: 4px;
+  /*border: 1px #777755 solid;*/
+  box-shadow: -0.5px 2px 5px rgba(0,0,0,0.21),
+              0 -1px 5px rgba(0,0,0,0.21),
+              2px 2px 5px rgba(0,0,0,0.21);
   min-width: 600px;
   padding-bottom: 35px;
   /*min-height: 150px;*/

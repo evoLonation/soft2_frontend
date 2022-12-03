@@ -119,7 +119,7 @@ export default {
 .valid-content{
   margin: auto;
   height: 60px;
-  width: 1700px;
+  width: 1690px;
   display: flex;
 }
 .avatar{

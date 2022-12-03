@@ -77,7 +77,7 @@
 
 <script>
 import data from "@/assets/homedata.json";
-import {ref, onMounted} from "vue";
+import {ref, onMounted, onBeforeUnmount} from "vue";
 import {loginStore, navigationStore} from "@/store";
 import {useRouter} from "vue-router";
 export default {
@@ -104,7 +104,6 @@ export default {
         // console.log("top < 0!");
       }
     };
-    window.addEventListener("scroll", scrollListener,true);
 
 
     const fieldSearchContent = ref('');
@@ -122,8 +121,9 @@ export default {
     }
     const fieldInfos = ([data, data, data, data]);
 
+    window.addEventListener("scroll", scrollListener,true);
     onMounted(() => scrollListener());
-
+    onBeforeUnmount(() => window.removeEventListener("scroll", scrollListener, true))
 
     const loginState = loginStore();
     return{

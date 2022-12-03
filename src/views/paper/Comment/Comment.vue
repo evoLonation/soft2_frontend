@@ -3,13 +3,13 @@
     <el-row class="part-cmt">
       <el-col :span="3">热门评论</el-col>
       <el-col :span="3" :offset="18">
-        <el-button round @click="this.showComment=true" class="more" color="#66b1ff">更多<el-icon><DArrowRight /></el-icon></el-button>
+        <el-button round @click="this.showComment=true" class="more" size="large"><div style="color: #7682a2; font-weight: bold">更多</div></el-button>
       </el-col>
     </el-row>
     <el-card shadow="never" v-if="this.comment !== null">
-      <el-row class="user-info">
-        <el-col :span="2">{{this.comment.userName}}:</el-col>
-        <el-col :span="0.5" :offset="17">
+      <el-row>
+        <el-col :span="2" class="user">{{this.comment.userName}}:</el-col>
+        <el-col :span="0.5" :offset="17" class="date-like">
           <el-button circle size="small" v-if="this.comment.liked" @click="dislike(this.comment.id)" style="cursor: pointer">
             <el-icon color=" #66b1ff"><StarFilled /></el-icon>
           </el-button>
@@ -36,14 +36,14 @@
         <el-input type="textarea" :rows="2" placeholder="请输入评论" v-model="commentText" style="width: 420px"/>
       </el-col>
       <el-col :span="1">
-        <el-button circle size="large" @click="this.publish" color=" #66b1ff"><el-icon color="#ffffff"><Promotion /></el-icon></el-button>
+        <el-button circle size="large" @click="this.publish" color=" #87bdd8"><el-icon color="#ffffff"><Promotion /></el-icon></el-button>
       </el-col>
     </el-row>
     <el-row style="height: 20px"></el-row>
     <el-card v-for="cmt in this.comments" :key="cmt" shadow="hover" custom-class="card" >
-      <el-row class="user-info">
-        <el-col :span="3">{{cmt.userName}}:</el-col>
-        <el-col :span="1.5" style="float:right;" :offset="10">
+      <el-row>
+        <el-col :span="3" class="user">{{cmt.userName}}:</el-col>
+        <el-col :span="1.5" style="float:right;" :offset="10" class="date-like">
           <el-button circle size="small" v-if="cmt.liked===0" @click="dislike(cmt.id)" style="cursor: pointer">
             <el-icon color=" #66b1ff"><StarFilled /></el-icon>
           </el-button>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import {DArrowRight, DeleteFilled, Promotion, Star, StarFilled} from "@element-plus/icons";
+import {DeleteFilled, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
@@ -77,7 +77,7 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PaperComment",
   props:[],
-  components: {DeleteFilled, Promotion, DArrowRight, Star, StarFilled},
+  components: {DeleteFilled, Promotion, Star, StarFilled},
   setup(){
     return {
       commentText: ref(''),
@@ -204,19 +204,26 @@ export default {
 <style scoped>
 .wrap-comment{
   margin-top: 30px;
+  background-color: white;
   width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
   padding-top: 2px;
 }
 .part-cmt {
   font-weight: bold;
+  color: #87bdd8;
   line-height: 1.5;
   font-size: 20px;
   margin-left: 20px;
   margin-top: 20px;
 }
-.user-info{
+.user{
+  font-weight: bold;
+  color: #7682a2;
+  line-height: 1;
+}
+.date-like{
   line-height: 1;
 }
 .content {
@@ -238,7 +245,6 @@ export default {
 .more{
   font-size: 15px;
   margin-bottom: 10px;
-  color: #ecf5ff;
 }
 .likes{
    margin-top: 1.5%;

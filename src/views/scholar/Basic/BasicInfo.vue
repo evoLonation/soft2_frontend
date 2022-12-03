@@ -80,8 +80,8 @@ export default {
 <style scoped>
 .basic-info {
   background-color: white;
-  min-width: 1000px;
-  max-width: 1000px;
+  min-width: 900px;
+  max-width: 900px;
   width: 1000px;
   height: 200px;
   display: flex;
