@@ -19,7 +19,7 @@
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
     <div class="paper_author" style="margin-bottom: 10px">
       <span v-for="(item,index) in author.slice(0,4)" :key="index">
-        <span @click="gotoScholar(index-1)">{{item.name}}，</span>
+        <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>
         {{this.org}}  -  被引量:{{this.num}}</div>
@@ -32,7 +32,7 @@
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
     <div class="paper_author" style="margin-bottom: 10px">
       <span v-for="(item,index) in author.slice(0,4)" :key="index">
-        <span @click="gotoScholar(index-1)">{{item.name}}，</span>
+        <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>
       {{this.org}}  -  被引量:{{this.num}}</div>
@@ -43,7 +43,7 @@
       <div class="paper_name" style="margin-top: 3%" >{{this.paperName}}</div>
       <div class="paper_author" style="margin-top: 10px">
         <span v-for="(item,index) in author.slice(0,4)" :key="index">
-        <span @click="gotoScholar(index-1)">{{item.name}}，</span>
+        <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>  {{this.org}}  -  被引量:{{this.num}}</div>
     </div>
@@ -173,6 +173,7 @@ export default {
   /*position: relative;*/
 }
 .paper_name{
+  cursor: pointer;
   position: relative;
   margin-left: 48px;
   margin-top: 30px;
@@ -203,6 +204,11 @@ export default {
   margin-top: 10px;
   font-size: 16px;
   color: #b0b2b3;
+}
+
+.author_name:hover{
+  color: #79bbff;
+  cursor: pointer;
 }
 
 </style>

@@ -2,7 +2,8 @@
   <div class="scholar_skeleton">
       <el-avatar :size="100" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" style="margin-top: 25px;margin-left: 20px"/>
       <div style="display: inline-block;vertical-align: top;height: 100%;width: 275px">
-        <div style="font-size: 23px;margin-left: 20px;margin-top: 15px; color: #007dfa;" @click="jumpToShcolar">{{name}}</div>
+        <div style="font-size: 23px;margin-left: 20px;margin-top: 15px; color: #007dfa; cursor:pointer;overflow: hidden;
+                      width: 60%;white-space: nowrap;text-overflow: ellipsis" @click="gotoScholar">{{name}}</div>
         <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;">{{institution}}</div>
         <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;">发表的论文数:{{paper_num}}</div>
       </div>
@@ -15,6 +16,20 @@ export default {
   props:[
       'name','paper_num','institution','id'
   ],
+  setup(prop){
+
+    const gotoScholar = () => {
+      this.$router.push({
+        name:'Scholar',
+        params:{
+          scholarId:prop.id
+        }
+      })
+    }
+    return{
+      gotoScholar
+    }
+  },
   methods:{
     jumpToScholar(){
       // this.$router.push({name: 'Paper', params:{paperId: id}});
