@@ -5,7 +5,7 @@
 
     <el-input
         v-model="input"
-        style="width: 400px; margin-left: 650px; padding-top: 20px"
+        style="width: 500px; margin-left: 650px; padding-top: 20px"
         placeholder="请输入搜索领域"
     >
       <template #suffix>
@@ -16,6 +16,8 @@
   <div class="show">
 
     <div class="paper" id="paper" >
+      <h1 style="text-align: center">领域热门论文</h1>
+      <el-divider style=" margin-top: 8px" />
       <div v-for="(item, index) in PaperList" :key="index">
         <div>
           <list
@@ -25,9 +27,8 @@
               :num="item.num"
               :org="item.org"
               :paperName="item.paperName"
-              style="padding-bottom: 10px"
           />
-          <el-divider  style="width: 100%; margin: 10px"/>
+          <el-divider  style="width: 100%;"/>
         </div>
       </div>
       <div class="loading">
@@ -48,12 +49,12 @@
 
           <div style="display: flex;">
             <div style=" margin-top: 10px">
-              <el-divider style="height: 90px; " direction="vertical" />
+              <el-divider style="height: 110px; " direction="vertical" />
             </div>
             <div style=" margin-left: 10px; ">
-              <div style="padding-top: 10px">论文数量：{{item.n_paper}}</div>
-              <div style="padding-top: 10px">被引量：{{item.n_citation}}</div>
-              <div style="padding-top: 10px">领域指数：{{item.weight}}</div>
+              <div style="padding-top: 15px">论文数量：{{item.n_paper}}</div>
+              <div style="padding-top: 20px">被引量：{{item.n_citation}}</div>
+              <div style="padding-top: 20px">领域指数：{{item.weight}}</div>
             </div>
           </div>
 
@@ -197,6 +198,7 @@ export default {
           // document.getElementById("scholar").setAttribute('vertical-align', 'bottom')
           document.getElementById("scholar").style.position = "sticky"
           document.getElementById("scholar").style.bottom = "0"
+          document.getElementById("scholar").style.left= "100px"
         }
         else {
           //TODO: 调用加载函数
@@ -233,7 +235,7 @@ export default {
 }
 
 .field {
-  width: 100%;
+
   height: 150px;
   border: 1px solid;
   background-color: rgb(136, 160, 181);
@@ -246,13 +248,13 @@ export default {
 
 .paper {
   width: 800px;
+  min-width: 800px;
+  max-width: 800px;
   margin-left: 180px;
   display: inline-block;
   /*vertical-align: center;*/
-  /*float: left;*/
-  /*position: sticky;*/
-  padding-left: 50px;
-  padding-right: 50px;
+  position: sticky;
+  bottom: 0;
   border-radius: 5px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
@@ -262,14 +264,19 @@ export default {
   width: 340px;
   /*vertical-align: top;*/
   display: inline-block;
-  /*float: left;*/
   position: sticky;
+  bottom: 0;
+  min-width: 340px;
+  max-width: 340px;
   margin-left: 80px;
   padding-left: 30px;
   padding-right: 30px;
   border-radius: 5px;
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 .show_scholar {
