@@ -132,6 +132,18 @@ export default {
   /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   min-width: 600px;
   padding-bottom: 20px;
+  /*padding-top: 1px;*/
+  /*min-height: 150px;*/
+  /*position: relative;*/
+}
+.paper_skeleton_3:hover{
+  background-color: #F1F5F9;
+  transition:  .3s ease;
+  /*border: 0.001px ghostwhite solid;*/
+  border-radius: 4px;
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
+  min-width: 600px;
+  padding-bottom: 20px;
   /*min-height: 150px;*/
   /*position: relative;*/
 }
@@ -161,12 +173,13 @@ export default {
 }
 
 .paper_skeleton_2:hover{
+  transition:  .3s ease;
   background-color: white;
   border-radius: 4px;
   /*border: 1px #777755 solid;*/
-  box-shadow: -0.5px 2px 5px rgba(0,0,0,0.21),
-              0 -1px 5px rgba(0,0,0,0.21),
-              2px 2px 5px rgba(0,0,0,0.21);
+  box-shadow: -0.5px 2px 5px rgba(0,0,0,0.15),
+              0 -1px 5px rgba(0,0,0,0.10),
+              4px 4px 10px rgba(0,0,0,0.10);
   min-width: 600px;
   padding-bottom: 35px;
   /*min-height: 150px;*/
