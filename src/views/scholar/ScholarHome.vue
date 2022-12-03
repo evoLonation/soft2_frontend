@@ -30,7 +30,7 @@
 
     <el-main class="wrap-paper" @scroll="this.handleScroll">
       <div class="style_need">
-        <InfoView name="part" style="margin-top: 10px"/>
+        <InfoView name="part" style="margin-top: 10px" :scholar_id="scholar_id"/>
         <OpView style="margin-top: 10px"/>
       </div>
       <div class="style_need">
@@ -74,7 +74,7 @@ export default {
   data(){
     return{
       activeName: 0,
-
+      scholar_id: '',
     }
   },
   methods: {
@@ -95,6 +95,10 @@ export default {
         block: "start"
       })
     },
+  },
+  created() {
+    this.scholar_id = this.$route.params.scholarId;
+    console.log(this.scholar_id);
   }
 }
 </script>
