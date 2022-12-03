@@ -193,7 +193,7 @@ export default {
       if(registerInput.password1 !== registerInput.password2){
         ElMessage({message: "两次输入密码不一致", type : "warning"});
       }else{
-        testAxios.post("user/register", {
+        userAxios.post("user/register", {
           login_id : registerInput.login_id,
           nickname : registerInput.nickname,
           password : registerInput.password1,

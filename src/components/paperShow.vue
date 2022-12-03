@@ -135,7 +135,7 @@ export default {
 
 .paper_skeleton{
   background-color: white;
-  border: 0.001px ghostwhite solid;
+  border: 0.001px white solid;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
   min-width: 600px;
@@ -182,7 +182,7 @@ export default {
 
 .paper_skeleton_2{
   background-color: white;
-  border: 0.001px ghostwhite solid;
+  border: 0.001px white solid;
   border-radius: 4px;
   /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   min-width: 600px;

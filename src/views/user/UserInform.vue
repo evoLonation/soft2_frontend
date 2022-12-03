@@ -81,7 +81,7 @@
                   </el-form-item>
                 </el-form>
               </div>
-            <div style="margin-left: 431px;margin-top: 30px;"><el-button type="danger" round>退出登录</el-button></div>
+            <div style="margin-left: 431px;margin-top: 30px;"><el-button type="danger" round @click="logout">退出登录</el-button></div>
           </div>
 
           <div v-if="pageType===1" style="margin-bottom: 30px">
@@ -90,7 +90,7 @@
                 关注的学者:
               </span>
             </div>
-            <div v-for="(item,index) in scholars.slice((pageScholar-1)*6,pageScholar*6)" :key="index" style="display: inline-block;margin-left: 60px;margin-top: 20px;">
+            <div v-for="(item,index) in scholars.slice((pageScholar-1)*6,pageScholar*6)" :key="index" style="display: inline-block;margin-left: 72px;margin-top: 20px;">
               <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :type="1"
                             ></scholar-list>
               <el-divider  style="width: 100%; margin: 10px"/>
@@ -105,10 +105,10 @@
                 收藏的论文:
               </span>
             </div>
-            <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;margin-left: 50px;margin-right: 50px">
+            <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;">
               <paper-show :author="item.authors" :abstract="item.abstract" :org="item.publisher"
                           :paper-name="item.title" :type="1" :num="item.n_citation"
-                          style="margin-left: 30px;margin-top: 20px;"></paper-show>
+                          style="margin-left: auto;margin-top: 20px;"></paper-show>
               <el-divider  style="width: 100%; margin: 10px"/>
             </div>
             <el-pagination background layout="prev, pager, next,jumper" :total="this.pagePaperCount"  v-model:current-page="pagePaper" :page-size="6"
@@ -122,8 +122,26 @@
 
 <script>
 import {userAxios,fileAxios} from "@/axios/index";
+import {loginStore} from "@/store"
+import {useRouter} from "vue-router";
 export default {
   name: "UserHome",
+  inject: ['reload'],
+  setup(){
+    const store = loginStore()
+    const route = useRouter();
+    const logout = () =>{
+      store.logout();
+      route.push({
+        name:'Home',
+      })
+    }
+
+    return{
+      store,
+      logout
+    }
+  },
   data(){
     return{
       form:[],
@@ -336,6 +354,7 @@ export default {
       return isPNG && isLt2M
     },
     upload(res) {
+      let that=this;
       if (res.file) {
         let form=new FormData();
         form.append("file",res.file);
@@ -344,10 +363,17 @@ export default {
             url:"user/upload-avatar",
             data:res.form
           }).then((res) => {
-            console.log(res);
+            userAxios({
+              method:'post',
+              url:'user/user-infor'
+            }).then((res) =>{
+              this.userinfo=res.data.avatar_url;
+              that.$store.state.avatarUrl=res.data.avatar_url;
+              this.reload();
+            })
           })
       }
-    }
+    },
   },
   created() {
       userAxios({

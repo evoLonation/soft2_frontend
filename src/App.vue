@@ -12,6 +12,16 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     LoginWindow,
   },
+  provide (){
+    return {
+      reload:this.reload
+    }
+  },
+  data(){
+    return {
+      isRouterAlive:true
+    }
+  },
   methods:{
     jump(){
       this.$router.push(
@@ -23,6 +33,12 @@ export default {
               magazine: 'Science' ,
             }
           });
+    },
+    reload (){
+      this.isRouterAlive = false
+      this.$nextTick(function(){
+        this.isRouterAlive = true
+      })
     }
   }
 }
