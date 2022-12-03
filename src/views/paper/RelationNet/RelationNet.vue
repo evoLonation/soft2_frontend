@@ -105,9 +105,11 @@ export default {
     },
     openPaper(id){
       console.log(id)
+      window.removeEventListener('scroll', this.handleScroll, true)
       this.$router.push({path: `/paper/${id}`})
     },
     openAuthor(author){
+      window.removeEventListener('scroll', this.handleScroll, true)
       if (author.hasId){
         //TODO: push到学者主页， 未完
         this.$router.push({name:'UserInfo'});

@@ -86,13 +86,15 @@ export default {
       }
     })
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll, true)
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll, true)
   },
   data(){
     return{
       activeName: 0,
-
     }
   },
   methods: {
@@ -113,12 +115,14 @@ export default {
         block: "start"
       })
     },
-  },
-  watch: {
-    '$route' () {
-      // 路由发生变化页面刷新
-      this.$router.go(0);
-    }
+    watch: {
+      '$route'() {
+        // 路由发生变化页面刷新
+        window.removeEventListener('scroll', this.handleScroll, true)
+        console.log('changed')
+        this.$router.go(0);
+      },
+    },
   },
 }
 </script>

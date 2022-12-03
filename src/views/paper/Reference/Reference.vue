@@ -31,6 +31,7 @@ export default {
     openPaper(row){
       const id = row.id
       console.log(id)
+      window.removeEventListener('scroll', this.handleScroll, true)
       this.$router.push({name: 'Paper', params:{paperId: id}})
     }
   },
