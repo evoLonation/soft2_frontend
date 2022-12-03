@@ -177,9 +177,11 @@ export default {
           }
       });
     };
-    store.$subscribe((mutation, state) => {
-      setHeaderAuth(state.token);
-      console.log(state.token);
+    store.$onAction(({store, after,}) => {
+      after(() => {
+        console.log("after login, store.token is " + store.token);
+        setHeaderAuth(store.token);
+      });
     });
     const registerInput = reactive({
       login_id : "",

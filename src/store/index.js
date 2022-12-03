@@ -85,6 +85,11 @@ export const loginStore = defineStore('main', {
                 storage: localStorage,
                 paths: ['isLogin']
             },
+            {
+                key: 'avatarUrl',
+                storage: localStorage,
+                paths: ['avatarUrl']
+            },
         ]
     },
 });
