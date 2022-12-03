@@ -90,11 +90,13 @@
                 关注的学者:
               </span>
             </div>
-            <div v-for="(item,index) in scholars" :key="index"
-                 style=" height: 150px; width: 410px;
-                      display: inline-block;  margin-left: 20px;margin-top: 20px;">
-              <scholar-list :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
+            <div v-for="(item,index) in scholars.slice((pageScholar-1)*6,pageScholar*6)" :key="index" style="display: inline-block;margin-left: 60px;margin-top: 20px;">
+              <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :type="1"
+                            ></scholar-list>
+              <el-divider  style="width: 100%; margin: 10px"/>
             </div>
+            <el-pagination background layout="prev, pager, next,jumper" :total="this.pageScholarCount" v-model:current-page="pageScholar" :page-size="6"
+            />
           </div>
 
           <div v-if="pageType===2" style="margin-bottom: 30px">
@@ -103,13 +105,13 @@
                 收藏的论文:
               </span>
             </div>
-            <div v-for="(item,index) in papers" :key="index" style="margin-top: 20px;margin-left: 50px;margin-right: 50px">
-              <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
+            <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;margin-left: 50px;margin-right: 50px">
+              <paper-show :author="item.authors" :abstract="item.abstract" :org="item.publisher"
                           :paper-name="item.title" :type="1" :num="item.n_citation"
                           style="margin-left: 30px;margin-top: 20px;"></paper-show>
               <el-divider  style="width: 100%; margin: 10px"/>
             </div>
-            <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="switchPaper()" v-model:current-page="nowPage"
+            <el-pagination background layout="prev, pager, next,jumper" :total="this.pagePaperCount"  v-model:current-page="pagePaper" :page-size="6"
             />
           </div>
       </el-main>
@@ -125,8 +127,10 @@ export default {
   data(){
     return{
       form:[],
-      pagePaper:0,
-      pageScholar:0,
+      pagePaper:1,
+      pagePaperCount:12,
+      pageScholar:1,
+      pageScholarCount:8,
       pageType:0,//0-个人信息，1-关注学者，2-收藏论文,
       userPhoto:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       userinfo: {
@@ -147,44 +151,44 @@ export default {
         },
         {
           "scholar_id":"",
-          "name":"张本",
-          "institution":"不安全",
+          "scholar_name":"张本",
+          "org":"不安全",
           "paper_num":111,
         },
         {
           "scholar_id":"",
-          "name":"蒋子",
-          "institution":"无敌",
+          "scholar_name":"蒋子",
+          "org":"无敌",
           "paper_num":111,
         },
         {
           "scholar_id":"",
-          "name":"翔子",
-          "institution":"摆烂",
+          "scholar_name":"翔子",
+          "org":"摆烂",
           "paper_num":111,
         },
         {
           "scholar_id":"",
-          "name":"桑杰",
-          "institution":"质疑",
+          "scholar_name":"桑杰",
+          "org":"质疑",
           "paper_num":111,
         },
         {
           "scholar_id":"",
-          "name":"桑杰",
-          "institution":"质疑",
+          "scholar_name":"桑杰",
+          "org":"质疑",
           "paper_num":111,
         },
         {
           "scholar_id":"",
-          "name":"桑杰",
-          "institution":"质疑",
+          "scholar_name":"桑杰",
+          "org":"质疑",
           "paper_num":111,
         },
         {
           "scholar_id":"",
-          "name":"桑杰",
-          "institution":"质疑",
+          "scholar_name":"桑杰",
+          "org":"质疑",
           "paper_num":111,
         },
       ],
@@ -289,12 +293,12 @@ export default {
     }
   },
   methods:{
-    switchPaper(){
-
-    },
-    switchScholar(){
-
-    },
+    // switchPaper(){
+    //
+    // },
+    // switchScholar(){
+    //
+    // },
 
     clickInform(){
       this.pageType=0;
@@ -333,10 +337,12 @@ export default {
     },
     upload(res) {
       if (res.file) {
+        let form=new FormData();
+        form.append("file",res.file);
           fileAxios({
             method:'post',
             url:"user/upload-avatar",
-            data:res.file
+            data:res.form
           }).then((res) => {
             console.log(res);
           })
@@ -508,5 +514,10 @@ export default {
   margin-right: 20px;
   width: 100px;
   color: #333333;
+}
+
+.el-pagination {
+  margin:50px auto 10px;
+  width: 40%;
 }
 </style>

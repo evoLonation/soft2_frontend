@@ -7,7 +7,7 @@
 
 
   <scholar-list style="margin-top: 30px;margin-left: 30px"
-              :name="paperName" :institution="org" :paper_num="num"
+              :name="paperName" :institution="org" :paper_num="num" :type="1"
         ></scholar-list>
 </template>
 

@@ -45,7 +45,7 @@
 
         <div class="advance_search" v-else>
           <div v-for="index in searchNum" :key="index">
-            <el-select v-if="index===1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
+            <el-select v-if="index===1" disabled v-model="ANvalue[index]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
               <el-option
                   v-for="item in ANoptions"
                   :key="item.value"
@@ -53,7 +53,7 @@
                   :value="item.value"
               />
             </el-select>
-            <el-select v-else v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
+            <el-select v-else v-model="ANvalue[index]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
               <el-option
                   v-for="item in ANoptions"
                   :key="item.value"
@@ -61,7 +61,7 @@
                   :value="item.value"
               />
             </el-select>
-            <el-select v-model="value[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-left: 30px">
+            <el-select v-model="value[index]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-left: 30px">
               <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -69,7 +69,7 @@
                   :value="item.value"
               />
             </el-select>
-            <el-autocomplete v-model="inputValue[index-1]"  :fetch-suggestions="querySearch(index-1)" :trigger-on-focus="false"
+            <el-autocomplete v-model="inputValue[index]"  :fetch-suggestions="querySearch(index)" :trigger-on-focus="false"
                              placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px">
               <template #append>
                 <el-select v-model="exact[index-1]" placeholder="Select" style="width: 90px">
@@ -128,7 +128,7 @@
               <span style="font-size: 15px">主题</span>
             </template>
             <div v-for="index in themes.length" :key="index">
-              <el-checkbox v-model="themesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.themes[index-1].name }}</el-checkbox>
+              <el-checkbox v-model="themesCheck[index]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.themes[index].name }}</el-checkbox>
             </div>
           </el-collapse-item>
           <el-collapse-item name="2">
@@ -136,7 +136,7 @@
               <span style="font-size: 15px">年份</span>
             </template>
             <div v-for="index in years.length" :key="index">
-              <el-checkbox v-model="yearsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.years[index-1].name }}</el-checkbox>
+              <el-checkbox v-model="yearsCheck[index]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.years[index].name }}</el-checkbox>
             </div>
           </el-collapse-item>
         </el-collapse>

@@ -24,7 +24,7 @@
             <div v-for="(item,index) in scholars.slice(0,6)" :key="index"
                  style=" height: 150px; width: 400px;
                     display: inline-block;  margin-left: 40px;margin-top: 20px;">
-                    <scholar-list  :id="item.id" :name="item.name" :paper_num="item.paper_num" :institution="item.institution"></scholar-list>
+                    <scholar-list  :id="item.id" :name="item.name" :paper_num="item.paper_num" :institution="item.institution" :type="0"></scholar-list>
             </div>
         </div>
         <el-pagination background layout="prev, pager, next, jumper" :total="this.num" page-size="6" v-model:current-page="nowPage" @current-change="scholarSearch"
