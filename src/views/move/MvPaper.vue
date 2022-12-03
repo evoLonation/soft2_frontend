@@ -188,7 +188,7 @@ export default {
   min-width: 1350px;
   max-width: 1350px;
   min-height: 700px;
-  margin: 75px auto auto auto;
+  margin: 50px auto auto auto;
   border-radius: 5px;
   box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
   background-color: white;

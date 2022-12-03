@@ -63,17 +63,46 @@
 
 <script>
 import Share from "@element-plus/icons-vue"
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "BasicInfo",
+  props: {
+    "scholar_id": String,
+  },
   components: {
     Share
   },
   data() {
     return {
+      name: '',
+      pos: '',
+      ID: '',
+      ref_num: '',
+      ach_num: '',
+      h_index: '',
       url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
     }
   },
+  methods: {
+    getBasicInfo() {
+      let got = false;
+      paperScholarAxios.post('scholar/basic/', {
+        "scholar_id": this.scholar_id,
+      }).then((res) => {
+        this.name = res.data.name;
+        this.pos = res.data.position;
+        this.ID = res.data.scholar_id;
+        this.ref_num = res.data.ref_num;
+        this.ach_num = res.data.ach_num;
+        this.h_index = res.data.h_index;
+        got = true;
+      })
+      if(!got) {
+        console.log('未获取到详情，使用本地测试数据')
+      }
+    }
+  }
 }
 </script>
 

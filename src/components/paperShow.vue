@@ -1,54 +1,105 @@
-/*
-  使用时注意传参，具体传参方式参考testSearch，
+/****
+  使用时注意传参，具体传参方式如下：
+<!--    <paper-show :author="authors" :abstract="abstract" :org="publisher"-->
+<!--                  :paper-name="title" :type="0" :num="n_citation" :paperid="id"-->
+<!--                      ></paper-show>-->
   其中type代表类型：
-      普通请使用0（int），在添加学术成功页面使用1-3，分别代表申请认领、已经认领和论文申诉
-*/
+      普通请使用0（int），
+      无阴影使用4
+      取消收藏使用1
+      author为对象，其结构必须包括id和name，即
+          author=[
+            {id:'1',name:'张三'}
+          ]
+****/
 <template>
-  <div class="paper_skeleton" v-if="type==0">
+  <div class="paper_skeleton" v-if="type===0">
     <div class="paper_name" @click="gotoPaper">
         {{this.paperName}}
     </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
     <div class="paper_author" style="margin-bottom: 10px">
-      <span @click="gotoScholar">{{this.author}}</span>
-        -  {{this.org}}  -  被引量:{{this.num}}</div>
+      <span v-for="(item,index) in author.slice(0,4)" :key="index">
+        <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
+        <span v-if="index===3">...-</span>
+      </span>
+        {{this.org}}  -  被引量:{{this.num}}</div>
   </div>
+
+  <div class="paper_skeleton_3" v-else-if="type===4">
+    <div class="paper_name" @click="gotoPaper">
+      {{this.paperName}}
+    </div>
+    <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
+    <div class="paper_author" style="margin-bottom: 10px">
+      <span v-for="(item,index) in author.slice(0,4)" :key="index">
+        <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
+        <span v-if="index===3">...-</span>
+      </span>
+      {{this.org}}  -  被引量:{{this.num}}</div>
+  </div>
+
   <div class="paper_skeleton_2" v-else>
     <div class="inf_divide" style="width: 80%; height: 100%">
       <div class="paper_name" style="margin-top: 3%" >{{this.paperName}}</div>
-      <div class="paper_author" style="margin-top: 10px">{{this.author}}  -  {{this.org}}  -  被引量:{{this.num}}</div>
+      <div class="paper_author" style="margin-top: 10px">
+        <span v-for="(item,index) in author.slice(0,4)" :key="index">
+        <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
+        <span v-if="index===3">...-</span>
+      </span>  {{this.org}}  </div>
     </div>
     <div class="inf_divide" style="width: 20%; height: 100%">
-      <el-button class="button_type" type="primary" v-if="type==1">申请认领</el-button>
-      <el-button class="button_type" type="success" v-if="type==2">已经认领</el-button>
-      <el-button class="button_type" type="danger" v-if="type==3">论文申诉</el-button>
+      <el-button type="danger" plain class="button_type" @click="cancelStar">取消收藏</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import {useRouter} from "vue-router";
+import {userAxios} from "@/axios";
+
 export default {
   name: "paperShow",
   props:[
-      'paperName','abstract','author','org','num','type','paperId','scholarId'
+      'paperName','abstract','author','org','num','type','paperId'
   ],
-  setup(prop){
+  setup(props){
+    const router = useRouter();
     const gotoPaper = () => {
-      this.$router.push({
+      router.push({
         name:'Paper',
         params:{
-          paperId:prop.paperId
+          paperId:props.paperId
         }
       });
     }
-    const gotoScholar = () => {
-      this.$router.push({
+    const gotoScholar = (index) => {
+      router.push({
         name:'Scholar',
+        params:{
+          scholarId:props.author[index].id
+        }
       })
     }
 
+    const cancelStar = () =>{
+      let toSend={
+        id:props.paperId
+      };
+        userAxios({
+          method:'post',
+          url:'paper/star/cancel',
+          data:JSON.stringify(toSend)
+        }).then((res) =>{
+          if(res.data.code==="0"){
+            this.$message('success','取消成功');
+          }
+          else this.$message('error','取消失败');
+        })
+    }
+
     return {
-      gotoPaper,gotoScholar
+      gotoPaper,gotoScholar,cancelStar
     }
   },
   data(){
@@ -78,8 +129,8 @@ export default {
 }
 
 .button_type{
-  margin-right: 50px;
-  margin-top: 60px;
+  /*margin-right: 50px;*/
+  margin-top: 21%;
 }
 
 .paper_skeleton{
@@ -93,7 +144,31 @@ export default {
   /*position: relative;*/
 }
 
+.paper_skeleton_3{
+  background-color: white;
+  border: 0.001px white solid;
+  border-radius: 4px;
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
+  min-width: 600px;
+  padding-bottom: 20px;
+  /*padding-top: 1px;*/
+  /*min-height: 150px;*/
+  /*position: relative;*/
+}
+.paper_skeleton_3:hover{
+  background-color: #F1F5F9;
+  transition:  .3s ease;
+  /*border: 0.001px ghostwhite solid;*/
+  border-radius: 4px;
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
+  min-width: 600px;
+  padding-bottom: 20px;
+  /*min-height: 150px;*/
+  /*position: relative;*/
+}
+
 .paper_skeleton:hover{
+  background-color: white;
   border-radius: 4px;
   /*border: 1px #777755 solid;*/
   box-shadow: -0.5px 2px 5px rgba(0,0,0,0.21),
@@ -106,9 +181,10 @@ export default {
 }
 
 .paper_skeleton_2{
+  background-color: white;
   border: 0.001px ghostwhite solid;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   min-width: 600px;
   padding-bottom: 35px;
   /*min-height: 150px;*/
@@ -116,17 +192,21 @@ export default {
 }
 
 .paper_skeleton_2:hover{
+  background-color: #F1F5F9;
+  transition:  .3s ease;
   border-radius: 4px;
-  /*border: 1px #777755 solid;*/
-  box-shadow: -0.5px 2px 5px rgba(0,0,0,0.21),
-              0 -1px 5px rgba(0,0,0,0.21),
-              2px 2px 5px rgba(0,0,0,0.21);
+  border: 1px white solid;
+  /*box-shadow: -0.5px 2px 5px rgba(0,0,0,0.15),*/
+  /*            0 -1px 5px rgba(0,0,0,0.10),*/
+  /*            4px 4px 10px rgba(0,0,0,0.10);*/
   min-width: 600px;
   padding-bottom: 35px;
   /*min-height: 150px;*/
   /*position: relative;*/
 }
 .paper_name{
+  vertical-align: top;
+  cursor: pointer;
   position: relative;
   margin-left: 48px;
   margin-top: 30px;
@@ -134,6 +214,10 @@ export default {
   height: 25%;
   text-decoration: underline;
   color: #007dfa;
+  width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .paper_abstract_1{
@@ -153,6 +237,15 @@ export default {
   margin-top: 10px;
   font-size: 16px;
   color: #b0b2b3;
+}
+
+.author_name:hover{
+  color: #79bbff;
+  cursor: pointer;
+}
+
+.button_cancel{
+  margin-bottom: 10px;
 }
 
 </style>

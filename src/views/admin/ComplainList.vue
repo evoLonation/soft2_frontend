@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list">
     <el-table :data="complaintList" style="width: 100%">
       <el-table-column prop="time" label="求助时间" width="180" />
       <el-table-column prop="title" label="标题" width="300" />
@@ -71,5 +71,13 @@ export default {
 </script>
 
 <style scoped>
-
+.list {
+  min-width: 1350px;
+  max-width: 1350px;
+  min-height: 700px;
+  margin: 50px auto auto auto;
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+  background-color: white;
+}
 </style>

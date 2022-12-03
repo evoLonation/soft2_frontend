@@ -2,16 +2,22 @@
 
   <div class="field" style="position: relative">
     <h1 style="text-align: center; padding: 10px">{{ field_name }}</h1>
+
     <el-input
         v-model="input"
-        style="width: 400px; margin-left: 800px; padding-top: 20px"
+        style="width: 500px; margin-left: 650px; padding-top: 20px"
         placeholder="请输入搜索领域"
-        :prefix-icon="Search"
-    />
+    >
+      <template #suffix>
+        <el-icon size="large" @click="normalSearch" ><search /></el-icon>
+      </template>
+    </el-input>
   </div>
   <div class="show">
 
     <div class="paper" id="paper" >
+      <h1 style="text-align: center">领域热门论文</h1>
+      <el-divider style=" margin-top: 8px" />
       <div v-for="(item, index) in PaperList" :key="index">
         <div>
           <list
@@ -21,8 +27,8 @@
               :num="item.num"
               :org="item.org"
               :paperName="item.paperName"
-              style="margin: auto"
           />
+          <el-divider  style="width: 100%;"/>
         </div>
       </div>
       <div class="loading">
@@ -33,7 +39,7 @@
 
     <div class="scholar" id="scholar">
       <h1 style="text-align: center">领域杰出学者</h1>
-      <el-divider />
+      <el-divider style="margin: 8px"/>
       <div v-for="(item, index) in ScholarList" :key="index">
         <div class="show_scholar">
           <div class="scholar_name">
@@ -43,12 +49,12 @@
 
           <div style="display: flex;">
             <div style=" margin-top: 10px">
-              <el-divider style="height: 90px; " direction="vertical" />
+              <el-divider style="height: 110px; " direction="vertical" />
             </div>
             <div style=" margin-left: 10px; ">
-              <div style="padding-top: 10px">论文数量：{{item.n_paper}}</div>
-              <div style="padding-top: 10px">被引量：{{item.n_citation}}</div>
-              <div style="padding-top: 10px">领域指数：{{item.weight}}</div>
+              <div style="padding-top: 15px">论文数量：{{item.n_paper}}</div>
+              <div style="padding-top: 20px">被引量：{{item.n_citation}}</div>
+              <div style="padding-top: 20px">领域指数：{{item.weight}}</div>
             </div>
           </div>
 
@@ -86,7 +92,7 @@ export default {
       loading2: true,
       PaperList: [
         {
-          type: "0",
+          type: 4,
           author: "赵正阳",
           abstract: "游戏发生在一个被称作“提瓦特”的幻想世界，在这里，被神选中的人将被授予“神之眼”，导引元素之力。",
           num: "114514",
@@ -94,7 +100,7 @@ export default {
           paperName: "深度分析鲁迅《论他妈的》中的文学风骨",
         },
         {
-          type: "0",
+          type: 4,
           author: "赵正阳",
           abstract: "不知不觉间，今年的最后一个新番季已经过去一半了，也是时候开始关注明年一月番的消息了",
           num: "11",
@@ -120,7 +126,7 @@ export default {
   },
   methods: {
     getPaperList() {
-      paperScholarAxios.get('field/paper', {
+      paperScholarAxios.post('field/paper', {
         "field": this.field_name,
         "start": this.start1,
         "end": this.end1,
@@ -132,7 +138,7 @@ export default {
       })
     },
     getScholarList() {
-      paperScholarAxios.get('field/scholar', {
+      paperScholarAxios.post('field/scholar', {
         "field": this.field_name,
         "start": this.start2,
         "end": this.end2,
@@ -161,6 +167,7 @@ export default {
         if(this.PaperList.length >= 14) {
           console.log('1需要固定')
           this.loading1 = false
+          // document.getElementById("paper").setAttribute('vertical-align', 'bottom')
           document.getElementById("paper").style.position = "sticky"
           document.getElementById("paper").style.bottom = "0"
         }
@@ -169,7 +176,7 @@ export default {
           this.getPaperList()
           this.PaperList.push(
               {
-                type: "0",
+                type: 4,
                 author: "刘禹宏",
                 abstract: "蓝色妖姬是一种加工花卉，由月季和蔷薇多种杂交及研制所得。它通常是用一种染色剂和助染剂调合成着色剂，将鲜花喷染成型，最早来自荷兰",
                 num: "0",
@@ -191,6 +198,7 @@ export default {
           // document.getElementById("scholar").setAttribute('vertical-align', 'bottom')
           document.getElementById("scholar").style.position = "sticky"
           document.getElementById("scholar").style.bottom = "0"
+          document.getElementById("scholar").style.left= "100px"
         }
         else {
           //TODO: 调用加载函数
@@ -211,45 +219,64 @@ export default {
     this.field_name = this.$route.query.content
     window.addEventListener("mousewheel", this.scrollFn);
     this.getPaperList()
+    this.getScholarList()
   },
   beforeUnmount() {
     window.removeEventListener("mousewheel", this.scrollFn);
-    this.getScholarList()
   }
 }
 
 </script>
 
-<style>
+<style scoped>
 * {
   padding: 0;
   margin: 0;
 }
 
 .field {
-  width: 100%;
+
   height: 150px;
   border: 1px solid;
+  background-color: rgb(136, 160, 181);
 }
 
 .show {
   margin-top: 50px;
+
 }
 
 .paper {
-  width: 45%;
-  margin-left: 10%;
+  width: 800px;
+  min-width: 800px;
+  max-width: 800px;
+  margin-left: 180px;
   display: inline-block;
-  /*vertical-align: ;*/
-  /*float: left;*/
+  /*vertical-align: center;*/
+  position: sticky;
+  bottom: 0;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
 }
 
 .scholar {
-  width: 20%;
+  width: 340px;
   /*vertical-align: top;*/
   display: inline-block;
-  /*float: left;*/
-  padding-left: 200px;
+  position: sticky;
+  bottom: 0;
+  min-width: 340px;
+  max-width: 340px;
+  margin-left: 80px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 .show_scholar {

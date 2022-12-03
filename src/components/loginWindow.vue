@@ -161,14 +161,7 @@ export default {
       login_id : "",
       password : "",
     });
-    const login = (userId, nickname, token, url) => {
-      store.isLogin = true;
-      store.userId = userId;
-      store.nickname = nickname;
-      store.token = token;
-      store.displayLoginWindow = false;
-      store.avatarUrl = url;
-    }
+
     const clickLogin = () => {
       console.log("发送登录请求")
       userAxios.post("user/login", {
@@ -176,7 +169,7 @@ export default {
         password : loginInput.password
       }).then((res) => {
           if(res.data.code === 0){
-            login(res.data.user_id, res.data.nick_name, res.data.token, res.data.avatar_url);
+            store.login(res.data.user_id, res.data.nick_name, res.data.token, res.data.avatar_url);
           }else if(res.data.code === 1){
             ElMessage({message: "用户名/邮箱不存在", type : "warning"});
           }else if(res.data.code === 2){
@@ -205,7 +198,7 @@ export default {
         }).then((res) => {
           if(res.data.code === 0){
             const data = res.data;
-            login(data.user_id, data.nick_name, data.token, data.avatar_url);
+            store.login(data.user_id, data.nick_name, data.token, data.avatar_url);
           }else if(res.data.code === 1) {
             ElMessage({message: "用户名已存在", type : "warning"});
           }

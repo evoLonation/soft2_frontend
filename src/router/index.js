@@ -74,7 +74,7 @@ const routes = [
                 component: ()=> import('../views/message/Message')
             },
             {
-                path: '/scholar',
+                path: '/scholar/:scholarId',
                 name: "Scholar",
                 component: () => import('../views/scholar/ScholarHome')
             },
