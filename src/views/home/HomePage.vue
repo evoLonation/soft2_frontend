@@ -6,6 +6,7 @@
         <div class="logo">
           <div>
             <div class="main">金刚石学术</div>
+            <button @click="loginState.logout()">退出登录</button>
             <div class="vice">找论文，学术分享，金刚石学术就够了！</div>
           </div>
 
