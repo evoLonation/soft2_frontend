@@ -25,9 +25,9 @@
               :num="item.num"
               :org="item.org"
               :paperName="item.paperName"
-              style="padding-bottom: 0"
+              style="padding-bottom: 10px"
           />
-          <el-divider  style="width: 100%;"/>
+          <el-divider  style="width: 100%; margin: 10px"/>
         </div>
       </div>
       <div class="loading">
@@ -226,7 +226,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 * {
   padding: 0;
   margin: 0;
@@ -245,8 +245,8 @@ export default {
 }
 
 .paper {
-  width: 45%;
-  margin-left: 10%;
+  width: 800px;
+  margin-left: 180px;
   display: inline-block;
   /*vertical-align: center;*/
   /*float: left;*/
@@ -259,12 +259,12 @@ export default {
 }
 
 .scholar {
-  width: 20%;
+  width: 340px;
   /*vertical-align: top;*/
   display: inline-block;
   /*float: left;*/
   position: sticky;
-  margin-left: 200px;
+  margin-left: 80px;
   padding-left: 30px;
   padding-right: 30px;
   border-radius: 5px;
