@@ -6,6 +6,7 @@
   其中type代表类型：
       普通请使用0（int），在添加学术成功页面使用1-3，分别代表申请认领、已经认领和论文申诉
       无阴影使用4
+      取消收藏使用5
       author为对象，其结构必须包括id和name，即
           author=[
             {id:'1',name:'张三'}
@@ -45,17 +46,19 @@
         <span v-for="(item,index) in author.slice(0,4)" :key="index">
         <span @click="gotoScholar(index-1)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
-      </span>  {{this.org}}  -  被引量:{{this.num}}</div>
+      </span>  {{this.org}}</div>
     </div>
     <div class="inf_divide" style="width: 20%; height: 100%">
-      <el-button class="button_type" type="primary" v-if="type==1">申请认领</el-button>
-      <el-button class="button_type" type="success" v-if="type==2">已经认领</el-button>
-      <el-button class="button_type" type="danger" v-if="type==3">论文申诉</el-button>
+      <el-button class="button_type" type="primary" v-if="type==1" @click="claimPaper">申请认领</el-button>
+      <el-button class="button_type" type="success" v-if="type==2" >已经认领</el-button>
+      <el-button class="button_type" type="danger" v-if="type==3" @click="">论文申诉</el-button>
+      <el-button class="button_type" type="danger" v-if="type==5" @click="cancelStar">取消收藏</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import {userAxios,applyAxios} from "@/axios"
 export default {
   name: "paperShow",
   props:[
@@ -79,24 +82,48 @@ export default {
       })
     }
 
+    const cancelStar = () => {
+      let toSend={
+        id:prop.paperId
+      };
+      userAxios({
+        method:'post',
+        url:'paper/star/cancel',
+        data:JSON.stringify(toSend)
+      }).then((res)=>{
+        if(res.data.code.equal("0")){
+          this.$message('success','取消成功');
+        }
+        else this.$message('error','取消失败');
+      })
+    }
+
+    const claimPaper = () =>{
+      let that=this;
+        applyAxios({
+          method:'post',
+          url:'scholar/check-scholar'
+        }).then((res) =>{
+          if(res.data.code===0){
+            that.scholarId=res.data.scholar_id.toString();
+          }
+          else {
+            this.$message('error',res.data.msg);
+          }
+        })
+
+    }
+
     return {
-      gotoPaper,gotoScholar
+      gotoPaper,gotoScholar,cancelStar,claimPaper
     }
   },
   data(){
     return{
-
+        scholarId:"",
     }
   },
   methods:{
-    switchType(type){
-      if(type==0){
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
   }
 }
 </script>

@@ -105,7 +105,7 @@
             </div>
             <div v-for="(item,index) in papers" :key="index" style="margin-top: 20px;margin-left: 50px;margin-right: 50px">
               <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                          :paper-name="item.title" :type="type" :num="item.n_citation"
+                          :paper-name="item.title" :type="5" :num="item.n_citation"
                           style="margin-left: 30px;margin-top: 20px;"></paper-show>
             </div>
           </div>
