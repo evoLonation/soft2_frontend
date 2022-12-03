@@ -144,8 +144,8 @@
       <div class="paper_main_right">
         <div class="example-pagination-block">
           <div v-for="(item,index) in papers" :key="item">
-            <paper-show :author="item.authors[0].name" :abstract="item.abstract" :org="item.publisher"
-                        :paper-name="item.title" :type="0" :num="item.n_citation" :paperid="item.id" :scholar-id="item.authors[0].id"
+            <paper-show :author="item.authors" :abstract="item.abstract" :org="item.publisher"
+                        :paper-name="item.title" :type="0" :num="item.n_citation" :paperid="item.id"
                         style="margin-left: 50px;margin-top: 10px;vertical-align: top" v-if="index<10"></paper-show>
           </div>
           <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
@@ -239,7 +239,7 @@ export default {
         {
           "title": "test0",
           "abstract": "000",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "authors": [{name: "a", id: "1"},{name: 'b',id:'2'},{name: "a", id: "1"},{name: "a", id: "1"},{name: "a", id: "1"},{name: "a", id: "1"}], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
@@ -343,6 +343,7 @@ export default {
   },
   methods:{
     querySearch(index,queryString, cb) {
+      console.log("ssss");
       let toSend={
         search_type:this.toIntSearchType(this.value[index]),
         text:queryString,
