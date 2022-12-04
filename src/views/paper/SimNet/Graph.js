@@ -212,7 +212,8 @@ export class Graph {
                 node = n;
         })
         let info = JSON.parse(JSON.stringify(node.info))
-        window.postMessage(info, '*')
+        let msg = ['sim', info]
+        window.postMessage(msg, '*')
     }
 
     initListener(){

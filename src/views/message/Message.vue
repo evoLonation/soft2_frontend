@@ -70,31 +70,60 @@ import {Checked, Delete, DeleteFilled} from "@element-plus/icons";
 import Messages from "@/views/message/Data";
 import {ElMessage} from "element-plus";
 import {messageAxios, userAxios} from "@/axios";
+import {loginStore} from "@/store";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Message",
   components: {DeleteFilled, Delete, Checked},
+  setup(){
+    const loginStore1 = loginStore()
+    let messages , curMessages
+    const checkGet = loginStore1.$onAction(
+        ({
+          name,
+          store,
+          args,
+          after,
+          onError
+        })=>{
+          console.log(name,store,args,onError)
+          after(()=>{
+            messageAxios.post('message/get-all-messages',{
+            }).then(res=>{
+              messages = curMessages = res.data.messages
+            }).catch(()=>{
+              console.log('未能获取，使用本地数据')
+              messages = curMessages = Messages.Messages
+              console.log(curMessages)
+            })
+          })
+        })
+    return{
+      loginStore1,
+      messages,
+      curMessages,
+      checkGet,
+    }
+  },
   mounted() {
     this.getMessages()
+    console.log(this.curMessages)
   },
   data(){
     return {
-      messages: [],
-      curMessages: [],
       showConfirm: false,
     }
   },
   methods:{
     getMessages(){
+      if (!this.loginStore1.isLogin){
+        this.messages = this.curMessages = Messages.Messages
+        return
+      }
       messageAxios.post('message/get-all-messages',{
       }).then(res=>{
-        const code = res.data.code
-        if (code === '1'){
-          ElMessage('请先登录')
-        }else {
-          this.messages = this.curMessages = res.data.messages
-        }
+        this.messages = this.curMessages = res.data.messages
       }).catch(()=>{
         console.log('未能获取，使用本地数据')
         this.messages = this.curMessages = Messages.Messages

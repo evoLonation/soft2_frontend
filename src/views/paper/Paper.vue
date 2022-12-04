@@ -16,9 +16,17 @@
       </el-menu-item>
       <el-menu-item index="2">
         <el-icon><Opportunity /></el-icon>
-        <template #title>关系网</template>
+        <template #title>参考关系网</template>
       </el-menu-item>
       <el-menu-item index="3">
+        <el-icon><InfoFilled /></el-icon>
+        <template #title>相似文献</template>
+      </el-menu-item>
+      <el-menu-item index="4">
+        <el-icon><Opportunity /></el-icon>
+        <template #title>相似关系网</template>
+      </el-menu-item>
+      <el-menu-item index="5">
         <el-icon><Comment /></el-icon>
         <template #title>评论</template>
       </el-menu-item>
@@ -31,6 +39,8 @@
       </div>
       <Reference name="part"></Reference>
       <RefNet name="part"></RefNet>
+      <Similar name="part"></Similar>
+      <SimNet name="part"></SimNet>
       <PaperComment name="part"></PaperComment>
     </div>
   </el-container>
@@ -43,17 +53,22 @@ import RefNet from "@/views/paper/RefNet/RefNet";
 import Operation from "@/views/paper/Side/Operation";
 import Reference from "@/views/paper/Reference/Reference";
 import PaperComment from "@/views/paper/Comment/Comment";
-import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
+import {HomeFilled, Opportunity, Comment, Reading, InfoFilled} from "@element-plus/icons";
 import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
 import {paperStore, loginStore} from "@/store";
 import {onBeforeMount} from "vue";
 import {paperScholarAxios, userAxios} from "@/axios";
+import Similar from "@/views/paper/Similar/Similar";
+import SimNet from "@/views/paper/SimNet/SimNet";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Paper",
-  components: {Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RefNet, Info, PaperComment},
+  components: {
+    InfoFilled,
+    SimNet,
+    Similar, Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RefNet, Info, PaperComment},
   props: [],
   setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
     // eslint-disable-next-line no-unused-vars

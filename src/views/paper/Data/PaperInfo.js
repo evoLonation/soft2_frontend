@@ -49,6 +49,26 @@ export default {
                 year: '2017',
             }
         ],
+        similars: [
+            {
+                title: '当代网络文学的发展脉络',
+                id:'1',
+                author: "刘禹宏",
+                year: '2022',
+            },
+            {
+                title: '论原神的商业成功有哪些可借鉴之处',
+                id: '2',
+                author: '姜星如',
+                year: '2019'
+            },
+            {
+                title: '基于Diffusion模型的全自动二次元涩图生成平台',
+                id: '3',
+                author: '陶海榕',
+                year: '2017',
+            }
+        ],
         comments: [
             {
                 id: '0',
