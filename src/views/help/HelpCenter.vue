@@ -20,7 +20,7 @@
             >
 
               <template #append>
-                <el-button :icon="Search" />
+                <el-button :icon="Search" @click="SearchRequest" />
               </template>
 
             </el-input>
@@ -42,7 +42,7 @@
           <el-card class="box-card"
                    style="margin-bottom: 20px"
                    v-for="item in requestList"
-                   :key="item.user">
+                   :key="item.request_id">
             <div>
 
               <div style="
@@ -55,31 +55,40 @@
                   {{ item.link }}
                 </p>
                 <p>
-                  {{ item.user }}
-                </p>
-                <p>
-                  {{ item.time }}
+                  {{ item.request_time}}
                 </p>
               </div>
 
               <el-button type="primary"
-                          @click="itemDialog = true"
+                          @click="beforeHelp(item.request_id)"
                          style="margin: auto 0">
                 我来应助
               </el-button>
 
               <el-dialog
-                  v-model="itemDialog"
+                  v-model="uploadDialog"
                   title="上传文件"
                   width="30%"
               >
                 <span>请上传文件</span>
                 <template #footer>
                   <span class="dialog-footer">
-                    <el-button @click="itemDialog = false">取消</el-button>
-                    <el-button type="primary" @click="itemDialog = false">
+                    <el-button @click="uploadDialog = false">取消</el-button>
+                    <el-button type="primary" @click="uploadDialog = false">
                       上传
                     </el-button>
+                  </span>
+                </template>
+              </el-dialog>
+
+              <el-dialog
+                  v-model="rejectDialog"
+                  title="该求助已被应助"
+                  width="30%"
+              >
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="rejectDialog = false">确定</el-button>
                   </span>
                 </template>
               </el-dialog>
@@ -98,7 +107,7 @@
           </el-button>
 
           <span>
-            第{{page}}页
+            第{{page+1}} / {{parseInt(requestLength/10) + 1}}页
           </span>
 
           <el-button @click="goAhead">
@@ -133,19 +142,19 @@
           <div>
             <div style="float: left; width: 33%; text-align: center;">
               <p>
-                12
+                {{user_request}}
               </p>
               我的求助
             </div>
             <div style="float: left; width: 34%; text-align: center;">
               <p>
-                12
+                {{user_help}}
               </p>
               我的应助
             </div>
             <div style="float: left; width: 33%; text-align: center;">
               <p>
-                12
+                {{user_wealth}}
               </p>
               我的财富值
             </div>
@@ -165,6 +174,8 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import { Search, Right} from '@element-plus/icons-vue';
+import {ElMessage} from 'element-plus'
+import {helpAxios} from '@/axios'
 
 export default {
 
@@ -179,12 +190,18 @@ export default {
 
   data(){
     return {
+      user_request: "",
+      user_help: "",
+      user_wealth: "",
       searchContent: "",
-      itemDialog: false,
-      order: 1,
-      page: 1,
+      searching: "",
+      uploadDialog: false,
+      rejectDialog: false,
+      page: 0,
+      order: 0,
       backUp: [],
       jumpPage: "",
+      requestLength: "",
       requestList: [
         {
           title: "分段计费题别忘列方程1",
@@ -193,75 +210,134 @@ export default {
           time: "2022-11-09 11:16:51",
           wealth: 6,
         },
-        {
-          title: "分段计费题别忘列方程2",
-          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
-          user: "杨航1234",
-          time: "2022-11-09 11:16:52",
-          wealth: 5,
-        },
-        {
-          title: "分段计费题别忘列方程3",
-          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
-          user: "杨航1234",
-          time: "2022-11-09 11:16:53",
-          wealth: 4,
-        },
-        {
-          title: "分段计费题别忘列方程4",
-          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
-          user: "杨航1234",
-          time: "2022-11-09 11:16:54",
-          wealth: 3,
-        },
-        {
-          title: "分段计费题别忘列方程5",
-          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
-          user: "杨航1234",
-          time: "2022-11-09 11:16:55",
-          wealth: 2,
-        },
-        {
-          title: "分段计费题别忘列方程6",
-          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
-          user: "杨航1234",
-          time: "2022-11-09 11:16:56",
-          wealth: 1,
-        }
       ]
     }
   },
   methods:{
+    SearchRequest(){
+      console.log("searching");
+      this.page = 0
+      if (this.searchContent === "") this.searching = false
+      else this.searching = true
+      this.getRequest()
+    },
+    beforeHelp(request_id){
+      console.log("before help")
+      helpAxios.post('help/before-help', {
+        "request_id": request_id
+      }).then(res =>{
+        console.log("before help res data:")
+        console.log(res.data)
+        if (res.data.status === 1){
+          this.uploadDialog = true;
+        }else {
+          this.rejectDialog = true;
+        }
+      }).catch(e=>{
+        ElMessage('获取失败，发生错误')
+        console.log(e)
+      })
+    },
     goTOFirstPage(){
-
+      console.log("go first")
+      this.page = 0
+      this.getRequest()
     },
     goBack(){
-      this.requestList = this.backUp;
-
+      if (this.page <= 0){
+        ElMessage('已经是第一页了')
+        return
+      }
+      this.page--
+      this.getRequest()
     },
     goAhead(){
-      this.backUp = this.requestList;
-      this.requestList = [];
+      if (this.page >= parseInt(this.requestLength/10)){
+        ElMessage('已经是最后一页了')
+        return
+      }
+      this.page++
+      this.getRequest()
     },
     goToLastPage(){
-
+      console.log("go last")
+      this.page = parseInt(this.requestLength/10)
+      this.getRequest()
     },
     orderByTime(){
       console.log("order by time")
-      this.requestList.sort((a, b) => {
-        return a.time - b.time;
-      })
+      this.page = 0
+      this.order = 0
+      this.getRequest()
       console.log(this.requestList)
     },
     orderByWealth(){
       console.log("order by wealth")
-      this.requestList.sort((a, b) => {
-        return a.wealth - b.wealth;
-      })
+      this.page = 0
+      this.order = 1
+      this.getRequest()
+      console.log(this.requestList)
     },
     jump(){
+      if (this.jumpPage-1 > parseInt(this.requestLength/10) || this.jumpPage < 1){
+        ElMessage('无法跳转到该页面')
+        return
+      }
+      this.page = this.jumpPage-1
+      this.getRequest()
+    },
+    getRequest(){
+      if (this.page*10 > this.requestLength){
+        ElMessage('已无更多数据')
+        return
+      }
 
+      if (this.searching){
+        helpAxios.post('help/search', {
+          "start": this.page*10,
+          "end": this.  page*10 + 10,
+          "search_content": this.searchContent,
+        }).then(res =>{
+          console.log(res.data.requests_num)
+          console.log(res.data.requests)
+          this.requestList = res.data.requests
+          this.requestLength = res.data.requests_num
+          ElMessage('已更新数据')
+        }).catch(e=>{
+          ElMessage('获取失败，发生错误')
+          console.log(e)
+        })
+      }
+      else {
+        helpAxios.post('help/requests', {
+          "start": this.page*10,
+          "end": this.  page*10 + 10,
+          "order": this.order,
+        }).then(res =>{
+          console.log(res.data.requests_num)
+          console.log(res.data.requests)
+          this.requestList = res.data.requests
+          this.requestLength = res.data.requests_num
+          ElMessage('已更新数据')
+        }).catch(e=>{
+          ElMessage('获取失败，发生错误')
+          console.log(e)
+        })
+      }
     }
+  },
+  created() {
+    this.getRequest();
+    helpAxios.post('help/user-info', {
+    }).then(res =>{
+      console.log(res.data)
+      this.user_request = res.data.request
+      this.user_help = res.data.help
+      this.user_wealth = res.data.wealth
+    }).catch(e=>{
+      ElMessage('获取失败，发生错误')
+      console.log(e)
+    })
   }
 }
 </script>

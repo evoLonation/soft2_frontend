@@ -91,8 +91,6 @@
       <div @click="viewType=true" class="side">已有帐户?登录</div>
       <el-button type="primary" round  @click="clickRegister" class="button">注册</el-button>
     </div>
-
-
   </el-dialog>
 </template>
 

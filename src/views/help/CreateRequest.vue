@@ -45,6 +45,8 @@
 <script>
 import qs from 'qs'
 import { ElMessage } from 'element-plus'
+// eslint-disable-next-line no-unused-vars
+import {helpAxios} from '@/axios'
 
 export default {
   name: "CreateRequest",
@@ -64,15 +66,43 @@ export default {
 
   methods :{
     createRequest(){
-      ElMessage({
-        message: '创建成功',
-        type: 'warning',
+
+      if ((this.formData.title === "") || (this.formData.authorNames === "")
+          || (this.formData.magazine === "") || (this.formData.link === "")
+          || (this.formData.notes === "") || (this.formData.wealth === "")){
+        ElMessage({
+          message: '请完整填写表单',
+          type: 'warning',
+        })
+        return
+      }
+
+      helpAxios.post('help/new-requests', {
+        "title": this.formData.title,
+        "author": this.formData.authorNames.split(' '),
+        "magazine": this.formData.magazine,
+        "link": this.formData.link,
+        "content": this.formData.notes,
+        "wealth": parseInt(this.formData.wealth),
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        ElMessage({
+          message: '创建成功',
+          type: 'success',
+        })
+      }).catch((e)=>{
+        ElMessage({
+          message: '创建失败',
+          type: 'error',
+        })
+        console.log(e)
       })
     },
   },
 
   created() {
-    console.log("create");
+    console.log("inter creaetRequest");
     console.log(this.$route.query);
     if (!(this.$route.query.title === undefined)){
       this.formData.title = this.$route.query.title;
