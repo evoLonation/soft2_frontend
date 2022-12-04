@@ -16,9 +16,17 @@
       </el-menu-item>
       <el-menu-item index="2">
         <el-icon><Opportunity /></el-icon>
-        <template #title>关系网</template>
+        <template #title>参考关系网</template>
       </el-menu-item>
       <el-menu-item index="3">
+        <el-icon><InfoFilled /></el-icon>
+        <template #title>相似文献</template>
+      </el-menu-item>
+      <el-menu-item index="4">
+        <el-icon><Opportunity /></el-icon>
+        <template #title>相似关系网</template>
+      </el-menu-item>
+      <el-menu-item index="5">
         <el-icon><Comment /></el-icon>
         <template #title>评论</template>
       </el-menu-item>
@@ -30,7 +38,9 @@
         <Operation></Operation>
       </div>
       <Reference name="part"></Reference>
-      <RelationNet name="part"></RelationNet>
+      <RefNet name="part"></RefNet>
+      <Similar name="part"></Similar>
+      <SimNet name="part"></SimNet>
       <PaperComment name="part"></PaperComment>
     </div>
   </el-container>
@@ -39,52 +49,84 @@
 
 <script>
 import Info from "@/views/paper/Info/Info";
-import RelationNet from "@/views/paper/RelationNet/RelationNet";
+import RefNet from "@/views/paper/RefNet/RefNet";
 import Operation from "@/views/paper/Side/Operation";
 import Reference from "@/views/paper/Reference/Reference";
 import PaperComment from "@/views/paper/Comment/Comment";
-import {HomeFilled, Opportunity, Comment,  Reading} from "@element-plus/icons";
+import {HomeFilled, Opportunity, Comment, Reading, InfoFilled} from "@element-plus/icons";
 import PaperInfo from "@/views/paper/Data/PaperInfo";
 import { useRoute } from "vue-router";
-import {paperStore} from "@/store";
+import {paperStore, loginStore} from "@/store";
 import {onBeforeMount} from "vue";
 import {paperScholarAxios, userAxios} from "@/axios";
+import Similar from "@/views/paper/Similar/Similar";
+import SimNet from "@/views/paper/SimNet/SimNet";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Paper",
-  components: {Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RelationNet, Info, PaperComment},
+  components: {
+    InfoFilled,
+    SimNet,
+    Similar, Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RefNet, Info, PaperComment},
   props: [],
   setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
     // eslint-disable-next-line no-unused-vars
     const router = useRoute();
-    const store = paperStore();
+    const paperStore1 = paperStore();
+    const loginStore1 = loginStore();
+    const checkStar = loginStore1.$onAction(
+        ({
+            name,
+            store,
+            args,
+            after,
+            onError
+        })=>{
+          console.log(name, store, args, onError)
+          after(()=>{
+            userAxios.post('paper/is-star', {
+              "paper_id": router.params.paperId,
+            }).then(res=>{
+              paperStore1.paperInfo.starred = res.data.is_star
+            }).catch((e)=>{
+              console.log(e)
+              console.log('未获取或未登录，默认没有收藏过')
+              paperStore1.paperInfo.starred = 1
+            })
+          })
+        })
     onBeforeMount(()=>{
       const paperId = router.params.paperId;
-      store.paperId = paperId
+      paperStore1.paperId = paperId
       let got = false
       paperScholarAxios.post('paper/', {
         "id": paperId,
       }).then((res) => {
-        store.paperInfo = res.data
+        paperStore1.paperInfo = res.data
         got = true
       })
       if (!got){
-        store.paperInfo = PaperInfo.info
+        paperStore1.paperInfo = PaperInfo.info
         console.log('未获取到详情，使用本地测试数据')
       }
-      got = false
+      if (!loginStore1.isLogin){
+        paperStore1.paperInfo.starred = 1
+        return; //没登录就不获取收藏状态
+      }
       userAxios.post('paper/is-star', {
         "paper_id": paperId
       }).then(res=>{
-        got = true
-        store.paperInfo.starred = res.data.is_star
-      })
-      if (!got){
+        paperStore1.paperInfo.starred = res.data.is_star
+      }).catch((e)=>{
+        console.log(e)
         console.log('未获取或未登录，默认没有收藏过')
-        store.paperInfo.starred = 1
-      }
+        paperStore1.paperInfo.starred = 1
+      })
     })
+    return{
+      checkStar
+    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll, true)

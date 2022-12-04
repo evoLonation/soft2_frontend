@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-net">
-    <div id="net" class="g6-graph" v-loading="this.loading" element-loading-text="论文关系网计算中..."></div>
+    <div id="sim-net" class="g6-graph" v-loading="this.loading" element-loading-text="参考关系网计算中..."></div>
     <div class="info">
       <el-row>
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
@@ -20,20 +20,21 @@
 </template>
 
 <script>
-import {Graph} from "@/views/paper/RelationNet/Graph";
-import Data from "@/views/paper/RelationNet/Data";
+import {Graph} from "@/views/paper/RefNet/Graph";
+import Data from "@/views/paper/RefNet/Data";
 import {paperStore} from "@/store";
 import qs from "qs";
 import searchType from "@/assets/searchType.json";
 import {paperScholarAxios} from "@/axios";
 
 export default {
-  name: "RelationNet",
+  name: "RefNet",
   props: [],
   components: [],
   beforeUnmount () {
      window.removeEventListener('message', (e) => {
-       this.showInfo(e.data)
+       if (e.data[0] === 'ref')
+         this.showInfo(e.data[1])
      })
   },
   setup(){
@@ -48,7 +49,8 @@ export default {
     this.info = this.store.paperInfo
     this.paperId = this.store.paperId
     window.addEventListener('message', (e) => {
-      this.showInfo(e.data)
+      if (e.data[0] === 'ref')
+        this.showInfo(e.data[1])
     })
   },
   data(){
@@ -75,7 +77,7 @@ export default {
       this.graph = new Graph(
           700,
           500,
-          document.getElementById("net"));
+          document.getElementById("sim-net"));
       let data = this.getData()
       this.graph.loadData(data)
       this.graph.render()
@@ -105,11 +107,9 @@ export default {
     },
     openPaper(id){
       console.log(id)
-      window.removeEventListener('scroll', this.handleScroll, true)
       this.$router.push({path: `/paper/${id}`})
     },
     openAuthor(author){
-      window.removeEventListener('scroll', this.handleScroll, true)
       if (author.hasId){
         //TODO: push到学者主页， 未完
         this.$router.push({name:'UserInfo'});
@@ -121,7 +121,14 @@ export default {
             content:author.name}});  //搜索内容
       }
     },
-  }
+  },
+  watch: {
+    '$route'() {
+      // 路由发生变化页面刷新
+      console.log('changed')
+      this.$router.go(0);
+    },
+  },
 }
 </script>
 

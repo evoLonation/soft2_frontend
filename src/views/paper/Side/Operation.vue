@@ -92,6 +92,7 @@ export default {
   props: [],
   components: {Check, Close, StarFilled, Help, Share, Tools, Star, Link, DocumentCopy, Avatar},
   setup(){
+
     return{
       store: paperStore(),
       input: ref('')

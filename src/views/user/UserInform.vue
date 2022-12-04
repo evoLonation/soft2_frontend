@@ -362,8 +362,7 @@ export default {
             method:'post',
             url:"user/upload-avatar",
             data:res.form
-            // eslint-disable-next-line no-unused-vars
-          }).then((res) => {
+          }).then(() => {
             userAxios({
               method:'post',
               url:'user/user-infor'

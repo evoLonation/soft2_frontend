@@ -70,7 +70,7 @@
 import {DeleteFilled, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
-import {paperStore} from "@/store";
+import {paperStore, loginStore} from "@/store";
 import {paperScholarAxios, userAxios} from "@/axios";
 
 export default {
@@ -79,9 +79,46 @@ export default {
   props:[],
   components: {DeleteFilled, Promotion, Star, StarFilled},
   setup(){
+    const loginStore1 = loginStore()
+    const paperStore1 = paperStore()
+    const checkLike = loginStore1.$onAction(
+        ({
+          name,
+          store,
+          args,
+          after,
+          onError,
+        })=>{
+          console.log(name,store,args,onError)
+          after(()=>{
+            if (!this.loginStore1.isLogin){
+              this.comments.forEach(cmt=>{
+                cmt.liked = 1
+              })
+              return;
+            }
+            userAxios.post('paper/comment-liked', {
+              "paper_id": paperStore1.paperId
+            }).then(res=>{
+              const comment_liked = res.data.comment_liked
+              for (let i = 0; i < this.comments.length; i++) {
+                this.comments[i].liked = comment_liked[i].is_liked
+              }
+            }).catch(()=>{
+              console.log('未获取，默认全false')
+              this.comments.forEach(cmt=>{
+                cmt.liked = 1
+              })
+            })
+          })
+        }
+    )
     return {
       commentText: ref(''),
-      store: paperStore()
+      store: paperStore(),
+      loginStore1,
+      paperStore1,
+      checkLike,
     }
   },
   mounted() {
@@ -107,24 +144,30 @@ export default {
   },
   methods: {
     getComments(){ //这个地方是从store拿，更新后从接口拿
-      this.comments = this.store.paperInfo.comments
+      this.comments = this.paperStore1.paperInfo.comments
       this.comment = this.comments[0]
     },
     getCommentsAPI(){
       paperScholarAxios.post('paper/comment/get-comment', {
-        "paper_id": this.store.paperInfo.id
+        "paper_id": this.paperStore1.paperInfo.id
       }).then(res=>{
         this.comments = res.data.comments
         //store的comments也要更新：
-        this.store.paperInfo.comments = this.comments
+        this.paperStore1.paperInfo.comments = this.comments
       }).catch(()=>{
         console.log('评论更新失败，从本地获取')
         this.getComments()
       })
     },
     getLiked(){
+      if (!this.loginStore1.isLogin){
+        this.comments.forEach(cmt=>{
+          cmt.liked = 1
+        })
+        return;
+      }
       userAxios.post('paper/comment-liked', {
-        "paper_id": this.store.paperId
+        "paper_id": this.paperStore1.paperId
       }).then(res=>{
         const comment_liked = res.data.comment_liked
         for (let i = 0; i < this.comments.length; i++) {
