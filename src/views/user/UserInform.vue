@@ -362,7 +362,7 @@ export default {
             method:'post',
             url:"user/upload-avatar",
             data:res.form
-          }).then((res) => {
+          }).then(() => {
             userAxios({
               method:'post',
               url:'user/user-infor'

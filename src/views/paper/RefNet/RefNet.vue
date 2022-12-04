@@ -20,15 +20,15 @@
 </template>
 
 <script>
-import {Graph} from "@/views/paper/RelationNet/Graph";
-import Data from "@/views/paper/RelationNet/Data";
+import {Graph} from "@/views/paper/RefNet/Graph";
+import Data from "@/views/paper/RefNet/Data";
 import {paperStore} from "@/store";
 import qs from "qs";
 import searchType from "@/assets/searchType.json";
 import {paperScholarAxios} from "@/axios";
 
 export default {
-  name: "RelationNet",
+  name: "RefNet",
   props: [],
   components: [],
   beforeUnmount () {
