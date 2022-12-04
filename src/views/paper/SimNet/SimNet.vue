@@ -86,7 +86,7 @@ export default {
     getData(){
       let gotData = false
       let data = null
-      paperScholarAxios.post('paper/relation-net', {
+      paperScholarAxios.post('paper/similar-net', {
         'id': this.store.paperId
       }).then(res=>{
         data = res.data
