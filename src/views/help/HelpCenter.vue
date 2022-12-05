@@ -162,7 +162,7 @@
                   width: 290px">
 
           <div style="height: 60%; text-align: center;">
-            <el-avatar :size="100" :src="circleUrl" style="margin-top: 40px"/>
+            <el-avatar :size="100" :src="this.user_url" style="margin-top: 40px"/>
           </div>
 
           <div>
@@ -201,7 +201,7 @@
 // eslint-disable-next-line no-unused-vars
 import { Search, Right} from '@element-plus/icons-vue';
 import {ElMessage} from 'element-plus'
-import {fileAxios, helpAxios} from '@/axios'
+import {fileAxios, helpAxios, userAxios} from '@/axios'
 
 export default {
 
@@ -219,6 +219,7 @@ export default {
       user_request: "",
       user_help: "",
       user_wealth: "",
+      user_url:"",
       searchContent: "",
       searching: "",
       uploadDialog: false,
@@ -398,6 +399,14 @@ export default {
       this.user_wealth = res.data.wealth
     }).catch(e=>{
       ElMessage('获取失败，发生错误')
+      console.log(e)
+    })
+    userAxios.post('user/user-info', {
+    }).then(res =>{
+      console.log(res.data)
+      this.user_url = res.data.avatar_url
+    }).catch(e=>{
+      ElMessage('头像获取失败，发生错误')
       console.log(e)
     })
   }
