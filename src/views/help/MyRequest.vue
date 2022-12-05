@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <el-card class="box-card">
     <el-tabs stretch=stretch
              v-model="listFilter"
-             >
+    >
       <el-tab-pane label="全部" name="0"/>
       <el-tab-pane label="待应助" name="1"/>
       <el-tab-pane label="待确认" name="2"/>
@@ -12,7 +12,7 @@
     </el-tabs>
 
     <el-table :data="showList" style="width: 100%">
-      <el-table-column prop="type" label="状态" width="90" >
+      <el-table-column prop="type" label="状态" width="80" >
         <template #default="scope">
           <el-icon>
             <Clock v-if="scope.row.type === 0"/>
@@ -24,19 +24,20 @@
         </template>
       </el-table-column>
       <el-table-column prop="request_time" label="求助时间" width="180" />
-      <el-table-column prop="title" label="标题" width="300" />
-      <el-table-column prop="res" label="结果" width="180" >
+      <el-table-column prop="title" label="标题" width="200" />
+      <el-table-column prop="res" label="结果" width="100" >
         <template #default="scope">
-            <p v-if="scope.row.type === 0">待应助</p>
-            <p v-if="scope.row.type === 1">待确认</p>
-            <p v-if="scope.row.type === 2">应助成功</p>
-            <p v-if="scope.row.type === 3">投诉中</p>
-            <p v-if="scope.row.type === 4">应助失败</p>
+          <p v-if="scope.row.type === 0">待应助</p>
+          <p v-if="scope.row.type === 1">待确认</p>
+          <p v-if="scope.row.type === 2">应助成功</p>
+          <p v-if="scope.row.type === 3">投诉中</p>
+          <p v-if="scope.row.type === 4">应助失败</p>
         </template>
       </el-table-column>
+      <el-table-column prop="request_content" label="描述" width="200" />
 
 
-      <el-table-column>
+      <el-table-column label="操作">
 
         <template #default="scope">
 
@@ -48,22 +49,14 @@
               确认文献正确
             </el-button>
 
-            <el-button type="danger" @click="errorDialog = true">
+            <el-button type="danger" @click="fileError(scope.row.request_id)">
               文件错误，投诉
             </el-button>
 
-            <el-dialog v-model="errorDialog" title="请输入申诉理由">
-              <el-input
-                  type="textarea"
-                  :autosize="{ minRows: 3, maxRows: 5 }"
-                  v-model="content" />
+          </div>
 
-              <el-button type="primary" @click="complaint(scope.row.request_id)">
-                确认
-              </el-button>
-            </el-dialog>
-
-
+          <div v-else>
+            <p>无可执行操作</p>
           </div>
 
           <div v-if="4 === scope.row.type">
@@ -76,8 +69,20 @@
       </el-table-column>
     </el-table>
 
-  </div>
+    <el-dialog v-model="errorDialog" title="请输入申诉理由">
+      <el-input
+          type="textarea"
+          :autosize="{ minRows: 3, maxRows: 5 }"
+          v-model="content" />
 
+      <template #footer>
+        <el-button type="primary" @click="complaint()">
+          确认
+        </el-button>
+      </template>
+
+    </el-dialog>
+  </el-card>
 
 </template>
 
@@ -90,6 +95,7 @@ export default {
   data(){
     return {
       listFilter: "0",
+      select_id: "",
       content: "",
       errorDialog: false,
       requestList: [],
@@ -142,10 +148,14 @@ export default {
         console.log(e)
       })
     },
-    complaint(request_id){
-      console.log("complaint  " + request_id)
+    fileError(request_id){
+      this.select_id = request_id;
+      this.errorDialog = true
+    },
+    complaint(){
+      console.log("complaint  " + this.select_id)
       helpAxios.post('help/complaint', {
-        "request_id": request_id,
+        "request_id": this.select_id,
         "content": this.content
       }).then(res=>{
         console.log(res.status)
@@ -163,6 +173,7 @@ export default {
         console.log(e)
       })
     },
+
     requestAgain(){
       ElMessage({
         message: '再次求助成功',

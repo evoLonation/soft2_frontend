@@ -9,10 +9,9 @@
       >
 
         <el-header>
-          <div
-              style="
-                margin: 10px 0;"
-          >
+
+          <el-card class="box-card">
+
             <el-input
                 v-model="searchContent"
                 size="large"
@@ -24,23 +23,28 @@
               </template>
 
             </el-input>
-          </div>
 
-          <el-breadcrumb separator="/">
-            <el-breadcrumb-item @click="orderByTime">
-              按时间排序
-            </el-breadcrumb-item>
-            <el-breadcrumb-item @click="orderByWealth">
-              按财富值排序
-            </el-breadcrumb-item>
-          </el-breadcrumb>
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item @click="orderByTime">
+                按时间排序
+              </el-breadcrumb-item>
+              <el-breadcrumb-item @click="orderByWealth">
+                按财富值排序
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+          </el-card>
 
         </el-header>
 
         <el-main
-          style="margin-top: 20px;">
+          style="
+          margin-top: 20px;
+          min-height: 100%;
+          position: relative">
+
+
           <el-card class="box-card"
-                   style="margin-bottom: 20px"
+                   style="margin-bottom: 20px; position: relative"
                    v-for="item in requestList"
                    :key="item.request_id">
             <div>
@@ -52,29 +56,35 @@
                   {{ item.title }}
                 </h1>
                 <p>
+                  {{item.request_content}}
+                </p>
+                <p style="font-size: 75%">
                   {{ item.link }}
                 </p>
-                <p>
-                  {{ item.request_time}}
+                <p style="font-size: 50%">
+                  {{item.request_time}}
                 </p>
               </div>
 
               <el-button type="primary"
                           @click="beforeHelp(item.request_id)"
-                         style="margin: auto 0">
-                我来应助
+                         style="position: absolute; right: 30px; top: 50px">
+                <el-icon><Coin /></el-icon>{{item.wealth}} &nbsp;我来应助
               </el-button>
 
-              <el-dialog
-                  v-model="uploadDialog"
-                  title="上传文件"
-                  width="30%"
-              >
-                <span>请上传文件</span>
-                <template #footer>
+            </div>
+          </el-card>
+
+          <el-dialog
+              v-model="uploadDialog"
+              title="上传文件"
+              width="30%"
+          >
+            <span>请上传pdf文件</span>
+            <template #footer>
                   <span class="dialog-footer">
 
-                    <el-button @click="uploadDialog = false">取消</el-button>
+                    <el-button style="float: left" @click="uploadDialog = false">取消</el-button>
 
                     <el-upload
                         action="#"
@@ -83,58 +93,62 @@
                         :before-upload="beforeFileUpload"
                         :http-request="upload"
                     >
-                      <el-button type="primary" @click="beforeUpload(item.request_id)">
+                      <el-button type="primary" @click="uploadDialog = false">
                       上传
                       </el-button>
 
                     </el-upload>
 
                   </span>
-                </template>
-              </el-dialog>
+            </template>
+          </el-dialog>
 
-              <el-dialog
-                  v-model="rejectDialog"
-                  title="该求助已被应助"
-                  width="30%"
-              >
-                <template #footer>
+          <el-dialog
+              v-model="rejectDialog"
+              title="该求助已被应助"
+              width="30%"
+          >
+            <template #footer>
                   <span class="dialog-footer">
                     <el-button @click="rejectDialog = false">确定</el-button>
                   </span>
-                </template>
-              </el-dialog>
-
-            </div>
-          </el-card>
+            </template>
+          </el-dialog>
 
 
+          <div style="
+          width: 90%;
+          margin: auto 0;
+          position: absolute;
+          bottom: 30px">
+            <el-button @click="goTOFirstPage">
+              <el-icon><DArrowLeft /></el-icon>
+            </el-button>
 
-          <el-button @click="goTOFirstPage">
-            <el-icon><DArrowLeft /></el-icon>
-          </el-button>
+            <el-button @click="goBack">
+              <el-icon><ArrowLeft /></el-icon>
+            </el-button>
 
-          <el-button @click="goBack">
-            <el-icon><ArrowLeft /></el-icon>
-          </el-button>
-
-          <span>
-            第{{page+1}} / {{parseInt(requestLength/10) + 1}}页
+            <span>
+            &nbsp;第{{page+1}} / {{parseInt(requestLength/10) + 1}}页&nbsp;
           </span>
 
-          <el-button @click="goAhead">
-            <el-icon><ArrowRight /></el-icon>
-          </el-button>
+            <el-button @click="goAhead">
+              <el-icon><ArrowRight /></el-icon>
+            </el-button>
 
-          <el-button @click="goToLastPage">
-            <el-icon><DArrowRight /></el-icon>
-          </el-button>
+            <el-button @click="goToLastPage">
+              <el-icon><DArrowRight /></el-icon>
+            </el-button>
 
-          <el-input v-model="jumpPage" style="width: 150px; float: right" placeholder="跳转到">
-            <template #append>
-              <el-button :icon="Right" @click="jump"/>
-            </template>
-          </el-input>
+            <el-input v-model="jumpPage" style="width: 120px; float: right" placeholder="跳转到">
+              <template #append>
+                <el-button :icon="Right" @click="jump"/>
+              </template>
+            </el-input>
+
+          </div>
+
 
         </el-main>
 
@@ -218,11 +232,8 @@ export default {
       requestList: []
     }
   },
+
   methods:{
-    beforeUpload(request_id){
-      this.loadingId = request_id;
-      this.uploadDialog = false;
-    },
     handleFileSuccess(res, file) {
       console.log(res, file)
       // this.value = URL.createObjectURL(file.raw)// 可以获取一段data:base64的字符串
@@ -273,6 +284,7 @@ export default {
     },
     beforeHelp(request_id){
       console.log("before help")
+      this.loadingId = request_id;
       helpAxios.post('help/before-help', {
         "request_id": request_id
       }).then(res =>{

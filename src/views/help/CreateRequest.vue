@@ -1,45 +1,45 @@
 <template>
-<div>
-  <el-form
-      :label-position="'right'"
-      label-width="100px"
-      :model="formData"
-      style="width: 60%; margin: 0 auto"
-  >
-    <el-form-item label="标题">
-      <el-input v-model="formData.title" />
-    </el-form-item>
-    <el-form-item label="作者">
-      <el-input v-model="formData.authorNames" />
-    </el-form-item>
-    <el-form-item label="杂志与期刊">
-      <el-input v-model="formData.magazine" />
-    </el-form-item>
-    <el-form-item label="全文链接">
-      <el-input v-model="formData.link" />
-    </el-form-item>
-    <el-form-item label="备注">
-      <el-input
-          type="textarea"
-          :autosize="{ minRows: 3, maxRows: 5 }"
-          v-model="formData.notes" />
-    </el-form-item>
-    <el-form-item label="悬赏财富值">
-      <el-input v-model="formData.wealth"
-        style="
+  <el-card class="box-card">
+    <el-form
+        :label-position="'right'"
+        label-width="100px"
+        :model="formData"
+        style="width: 60%; margin: 0 auto"
+    >
+      <el-form-item label="标题">
+        <el-input v-model="formData.title" />
+      </el-form-item>
+      <el-form-item label="作者">
+        <el-input v-model="formData.authorNames" />
+      </el-form-item>
+      <el-form-item label="杂志与期刊">
+        <el-input v-model="formData.magazine" />
+      </el-form-item>
+      <el-form-item label="全文链接">
+        <el-input v-model="formData.link" />
+      </el-form-item>
+      <el-form-item label="备注">
+        <el-input
+            type="textarea"
+            :autosize="{ minRows: 3, maxRows: 5 }"
+            v-model="formData.notes" />
+      </el-form-item>
+      <el-form-item label="悬赏财富值">
+        <el-input v-model="formData.wealth"
+                  style="
           width: 40px;
           float: left;
       "/>
-      <el-button type="success"
-                 @click="createRequest"
-                 style="float: right;margin: 0 auto"
-      >
-        发布求助
-      </el-button>
-    </el-form-item>
-  </el-form>
+        <el-button type="success"
+                   @click="createRequest"
+                   style="float: right;margin: 0 auto"
+        >
+          发布求助
+        </el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
 
-</div>
 </template>
 
 <script>
@@ -91,6 +91,7 @@ export default {
           message: '创建成功',
           type: 'success',
         })
+        this.$router.push({name: "HelpCenter"})
       }).catch((e)=>{
         ElMessage({
           message: '创建失败',

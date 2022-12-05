@@ -4,28 +4,27 @@
     padding-bottom: 30px;
     padding-top: 30px">
 
-    <div style="
-      width: 80%;
-      height: 40px;
-      margin: 0 auto;
-      position: relative;
-    ">
+    <el-card class="box-card"
+             style="
+              width: 80%;
+              min-width: 1200px;
+              margin: 0 auto;
+              position: relative;">
 
-      <div style=" float: left; margin: auto 0">
-        <el-tabs
-            v-model="activeName"
-            type="card"
-            class="demo-tabs"
-            @tab-change="handleClick"
-        >
-          <el-tab-pane label="互助中心" name="HelpCenter"/>
-          <el-tab-pane label="我的求助" name="MyRequest"/>
-          <el-tab-pane label="我的应助" name="MyHelp"/>
-          <el-tab-pane label="发布求助" name="CreateRequest"/>
-          <el-tab-pane label="帮助中心" name="HelpTips"/>
+      <el-tabs
+          v-model="activeName"
+          type="card"
+          class="demo-tabs"
+          style=" float: left;"
+          @tab-change="handleClick"
+      >
+        <el-tab-pane label="互助中心" name="HelpCenter"/>
+        <el-tab-pane label="我的求助" name="MyRequest"/>
+        <el-tab-pane label="我的应助" name="MyHelp"/>
+        <el-tab-pane label="发布求助" name="CreateRequest"/>
+        <el-tab-pane label="帮助中心" name="HelpTips"/>
 
-        </el-tabs>
-      </div>
+      </el-tabs>
 
       <el-button
           type="success"
@@ -33,11 +32,23 @@
           style="float: right; margin: auto 0">
         发布求助
       </el-button>
+    </el-card>
+
+
+    <div >
+
+      <div style=" float: left; margin: auto 0">
+
+      </div>
+
+
     </div>
 
 
     <div style="
       width: 80%;
+      min-width: 1200px;
+      min-height: 900px;
       margin: 30px auto;
     ">
       <router-view/>
@@ -56,7 +67,6 @@ export default {
   data() {
     return {
       activeName: 'helpCenter',
-
     }
   },
 
