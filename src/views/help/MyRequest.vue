@@ -6,8 +6,8 @@
       <el-tab-pane label="全部" name="0"/>
       <el-tab-pane label="待应助" name="1"/>
       <el-tab-pane label="待确认" name="2"/>
-      <el-tab-pane label="投诉中" name="3"/>
-      <el-tab-pane label="应助成功" name="4"/>
+      <el-tab-pane label="应助成功" name="3"/>
+      <el-tab-pane label="投诉中" name="4"/>
       <el-tab-pane label="应助失败" name="5"/>
     </el-tabs>
 
@@ -15,23 +15,23 @@
       <el-table-column prop="type" label="状态" width="90" >
         <template #default="scope">
           <el-icon>
-            <Clock v-if="scope.row.type === 1"/>
-            <Edit v-if="scope.row.type === 2"/>
+            <Clock v-if="scope.row.type === 0"/>
+            <Edit v-if="scope.row.type === 1"/>
+            <CircleCheck v-if="scope.row.type === 2" />
             <Warning v-if="scope.row.type === 3" />
-            <CircleCheck v-if="scope.row.type === 4" />
-            <CircleClose v-if="scope.row.type === 5" />
+            <CircleClose v-if="scope.row.type === 4" />
           </el-icon>
         </template>
       </el-table-column>
       <el-table-column prop="request_time" label="求助时间" width="180" />
-      <el-table-column prop="request_title" label="标题" width="300" />
+      <el-table-column prop="title" label="标题" width="300" />
       <el-table-column prop="res" label="结果" width="180" >
         <template #default="scope">
-            <p v-if="scope.row.type === 1">待应助</p>
-            <p v-if="scope.row.type === 2">待确认</p>
+            <p v-if="scope.row.type === 0">待应助</p>
+            <p v-if="scope.row.type === 1">待确认</p>
+            <p v-if="scope.row.type === 2">应助成功</p>
             <p v-if="scope.row.type === 3">投诉中</p>
-            <p v-if="scope.row.type === 4">应助成功</p>
-            <p v-if="scope.row.type === 5">应助失败</p>
+            <p v-if="scope.row.type === 4">应助失败</p>
         </template>
       </el-table-column>
 
@@ -40,19 +40,33 @@
 
         <template #default="scope">
 
-          <div v-if="showOp('3', scope.row.status)">
-            <el-button type="primary" @click="download">
-              下载文件
+          <div v-if="1 === scope.row.type">
+            <el-button type="primary" @click="download(scope.row.request_id)">
+              查看文件
             </el-button >
-            <el-button type="success" @click="fileRight">
+            <el-button type="success" @click="fileRight(scope.row.request_id)">
               确认文献正确
             </el-button>
-            <el-button type="danger" @click="fileError">
+
+            <el-button type="danger" @click="errorDialog = true">
               文件错误，投诉
             </el-button>
+
+            <el-dialog v-model="errorDialog" title="请输入申诉理由">
+              <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 3, maxRows: 5 }"
+                  v-model="content" />
+
+              <el-button type="primary" @click="complaint(scope.row.request_id)">
+                确认
+              </el-button>
+            </el-dialog>
+
+
           </div>
 
-          <div v-if="showOp('6', scope.row.status)">
+          <div v-if="4 === scope.row.type">
             <el-button type="success" @click="requestAgain">
               再次求助
             </el-button>
@@ -75,36 +89,79 @@ export default {
 
   data(){
     return {
-      listFilter: '0',
-      requestList: [
-        {
-          status: '2',
-          time: "2022-11-09 14:18",
-          title: "劳动伦理的基本内涵及其当代形态1",
-          res: "待应助"
-        },
-      ],
+      listFilter: "0",
+      content: "",
+      errorDialog: false,
+      requestList: [],
     }
   },
 
   computed : {
     showList(){
-      return this.requestList.filter(item => item.type === this.listFilter || this.listFilter === '0')
+      return this.requestList.filter(item => item.type === parseInt(this.listFilter)-1 || this.listFilter === "0")
     },
   },
 
   methods: {
-    showOp(type, status){
-      return status === type;
+    download(request_id){
+      console.log("downloading " + request_id)
+      helpAxios.post('help/download ', {
+        "request_id": request_id
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        window.open(res.data.url)
+        ElMessage({
+          message: '正在下载文件',
+          type: 'success',
+        })
+      }).catch((e)=>{
+        ElMessage({
+          message: '文件下载失败',
+          type: 'error',
+        })
+        console.log(e)
+      })
     },
-    download(){
-
+    fileRight(request_id){
+      console.log("file right " + request_id)
+      helpAxios.post('help/confirmed', {
+        "request_id": request_id
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        ElMessage({
+          message: '确认文件正确',
+          type: 'success',
+        })
+      }).catch((e)=>{
+        ElMessage({
+          message: '确认失败',
+          type: 'error',
+        })
+        console.log(e)
+      })
     },
-    fileRight(){
-
-    },
-    fileError(){
-
+    complaint(request_id){
+      console.log("complaint  " + request_id)
+      helpAxios.post('help/complaint', {
+        "request_id": request_id,
+        "content": this.content
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        ElMessage({
+          message: '已提交申诉',
+          type: 'success',
+        })
+        this.errorDialog = false
+      }).catch((e)=>{
+        ElMessage({
+          message: '提交申诉失败',
+          type: 'error',
+        })
+        console.log(e)
+      })
     },
     requestAgain(){
       ElMessage({

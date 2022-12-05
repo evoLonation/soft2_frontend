@@ -73,10 +73,22 @@
                 <span>请上传文件</span>
                 <template #footer>
                   <span class="dialog-footer">
+
                     <el-button @click="uploadDialog = false">取消</el-button>
-                    <el-button type="primary" @click="uploadDialog = false">
+
+                    <el-upload
+                        action="#"
+                        :show-file-list="false"
+                        :on-success="handleFileSuccess"
+                        :before-upload="beforeFileUpload"
+                        :http-request="upload"
+                    >
+                      <el-button type="primary" @click="beforeUpload(item.request_id)">
                       上传
-                    </el-button>
+                      </el-button>
+
+                    </el-upload>
+
                   </span>
                 </template>
               </el-dialog>
@@ -175,7 +187,7 @@
 // eslint-disable-next-line no-unused-vars
 import { Search, Right} from '@element-plus/icons-vue';
 import {ElMessage} from 'element-plus'
-import {helpAxios} from '@/axios'
+import {fileAxios, helpAxios} from '@/axios'
 
 export default {
 
@@ -197,23 +209,61 @@ export default {
       searching: "",
       uploadDialog: false,
       rejectDialog: false,
+      loadingId: "",
       page: 0,
       order: 0,
       backUp: [],
       jumpPage: "",
       requestLength: "",
-      requestList: [
-        {
-          title: "分段计费题别忘列方程1",
-          link: "http://doc.paperpass.com/journal/20150299jrzxs.html",
-          user: "杨航1234",
-          time: "2022-11-09 11:16:51",
-          wealth: 6,
-        },
-      ]
+      requestList: []
     }
   },
   methods:{
+    beforeUpload(request_id){
+      this.loadingId = request_id;
+      this.uploadDialog = false;
+    },
+    handleFileSuccess(res, file) {
+      console.log(res, file)
+      // this.value = URL.createObjectURL(file.raw)// 可以获取一段data:base64的字符串
+    },
+    beforeFileUpload(file) {
+      console.log(file.type)
+      const isPDF = file.type === 'application/pdf'
+      const isLt100M = file.size / 1024 / 1024 < 100
+      if (!isPDF)
+        this.$message.error('请上传pdf文件')
+      if (!isLt100M)
+        this.$message.error('上传文件大小不能超过 100MB!')
+      return isPDF && isLt100M
+    },
+    upload(res) {
+      console.log(res)
+      if (res.file) {
+        let form=new FormData();
+        form.append("file",res.file);
+        form.append("request_id", this.loadingId)
+        fileAxios({
+          method:'post',
+          url:"help/upload",
+          data:form
+        }).then((res) => {
+          console.log(res.data)
+          ElMessage({
+            message: "应助成功",
+            type: "success"
+          })
+          this.getRequest()
+        }).catch(e => {
+          ElMessage({
+            message: "应助失败",
+            type: "success"
+          })
+          console.log(e)
+        })
+      }
+    },
+
     SearchRequest(){
       console.log("searching");
       this.page = 0
