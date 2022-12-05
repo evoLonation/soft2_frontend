@@ -131,6 +131,7 @@ export default {
         "start": this.start1,
         "end": this.end1,
       }).then(res=>{
+        console.log('获取论文成功')
         this.paper_num = res.data.paper_num
         this.PaperList = res.data.papers
         this.start1 = this.start1 + 9
@@ -160,20 +161,22 @@ export default {
       let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
       document.getElementById("paper").style.height = docHeight1 + "px"
       document.getElementById("scholar").style.height = docHeight2 + "px"
-
+      document.getElementById("paper").setAttribute('vertical-align', 'bottom')
       if(winHeight1 + st >= docHeight1) {
+        document.getElementById("paper").removeAttribute('vertical-align')
+
         console.log('1触底了')
         console.log('1st', st)
         if(this.PaperList.length >= 14) {
           console.log('1需要固定')
           this.loading1 = false
           // document.getElementById("paper").setAttribute('vertical-align', 'bottom')
-          document.getElementById("paper").style.position = "sticky"
-          document.getElementById("paper").style.bottom = "0"
+          // document.getElementById("paper").style.position = "sticky"
+          // document.getElementById("paper").style.bottom = "0"
         }
         else {
           //TODO: 调用加载函数
-          this.getPaperList()
+          // this.getPaperList()
           this.PaperList.push(
               {
                 type: 4,
@@ -195,10 +198,9 @@ export default {
         if(this.ScholarList.length >= 20) {
           this.loading2 = false
           console.log('2需要固定')
-          // document.getElementById("scholar").setAttribute('vertical-align', 'bottom')
-          document.getElementById("scholar").style.position = "sticky"
-          document.getElementById("scholar").style.bottom = "0"
-          document.getElementById("scholar").style.left= "100px"
+          // document.getElementById("scholar").setAttribute('vertical-align', 'bottom'
+          // document.getElementById("scholar").style.position = "sticky"
+          // document.getElementById("scholar").style.bottom = "0"
         }
         else {
           //TODO: 调用加载函数
@@ -218,7 +220,7 @@ export default {
   mounted() {
     this.field_name = this.$route.query.content
     window.addEventListener("mousewheel", this.scrollFn);
-    this.getPaperList()
+    // this.getPaperList()
     this.getScholarList()
   },
   beforeUnmount() {
@@ -252,7 +254,7 @@ export default {
   max-width: 800px;
   margin-left: 180px;
   display: inline-block;
-  /*vertical-align: center;*/
+  /*vertical-align: top;*/
   position: sticky;
   bottom: 0;
   border-radius: 5px;
