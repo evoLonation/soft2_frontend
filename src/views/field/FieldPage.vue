@@ -16,7 +16,7 @@
   <div class="show">
 
     <div class="paper" id="paper" >
-      <h1 style="text-align: center">领域热门论文</h1>
+      <h1 style="text-align: center; padding-top: 15px">领域热门论文</h1>
       <el-divider style=" margin-top: 8px" />
       <div v-for="(item, index) in PaperList" :key="index">
         <div>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="scholar" id="scholar">
-      <h1 style="text-align: center">领域杰出学者</h1>
+      <h1 style="text-align: center;padding-top: 15px">领域杰出学者</h1>
       <el-divider style="margin: 8px"/>
       <div v-for="(item, index) in ScholarList" :key="index">
         <div class="show_scholar">
@@ -106,9 +106,16 @@ export default {
           num: "11",
           org: "北京工地大学软件安装学院",
           paperName: "浅谈近年日本番剧清一色异世界龙傲天后宫厕纸剧情的内在驱动力",
-        }
+        },
+
       ],
       ScholarList: [
+        {
+          name: 'Ameame',
+          n_paper: 8,
+          n_citation: 20,
+          weight: '70%'
+        },
         {
           name: 'Ameame',
           n_paper: 8,
@@ -159,20 +166,42 @@ export default {
       let docHeight2 = document.getElementById("scholar").scrollHeight;
       let winHeight2 = document.getElementById("scholar").offsetHeight
       let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      // let h1 = docHeight1 + 140
+      // let h2 = docHeight2 + 140
+      // if(this.loading1 === false) {
+      //   let hh1 = docHeight1 - 20
+      //   document.getElementById("paper").style.height = hh1 + "px"
+      // } else {
+      //   document.getElementById("paper").style.height = h1 + "px"
+      // }
+      //
+      // if(this.loading2 === false) {
+      //   let hh2 = docHeight2 - 20
+      //   document.getElementById("scholar").style.height = hh2+ "px"
+      // } else {
+      //   document.getElementById("scholar").style.height = h2 + "px"
+      // }
       document.getElementById("paper").style.height = docHeight1 + "px"
-      document.getElementById("scholar").style.height = docHeight2 + "px"
-      document.getElementById("paper").setAttribute('vertical-align', 'bottom')
-      if(winHeight1 + st >= docHeight1) {
-        document.getElementById("paper").removeAttribute('vertical-align')
+      document.getElementById("scholar").style.height = docHeight2+ "px"
+      let height = document.documentElement.clientHeight
+      console.log(height)
+      let tmp1 = height - docHeight1
+      let tmp2 = height - docHeight2
+      console.log(docHeight1, st, winHeight1)
+      console.log(tmp1, tmp2)
+      if(this.loading1 === false) {
+        document.getElementById("paper").style.top = tmp1 + "px"
+      }
+      if(this.loading2 === false) {
+        document.getElementById("scholar").style.top = tmp2 + "px"
+      }
 
+      if(winHeight1 + st >= docHeight1) {
         console.log('1触底了')
         console.log('1st', st)
         if(this.PaperList.length >= 14) {
           console.log('1需要固定')
           this.loading1 = false
-          // document.getElementById("paper").setAttribute('vertical-align', 'bottom')
-          // document.getElementById("paper").style.position = "sticky"
-          // document.getElementById("paper").style.bottom = "0"
         }
         else {
           //TODO: 调用加载函数
@@ -187,9 +216,6 @@ export default {
                 paperName: "历史风云（3）————蓝色妖姬与她的黄金切尔西",
               }
           )
-
-          docHeight1 = document.getElementById("paper").scrollHeight;
-          document.getElementById("paper").style.height = docHeight1 + "px"
         }
       }
       if(winHeight2 + st >= docHeight2) {
@@ -198,9 +224,6 @@ export default {
         if(this.ScholarList.length >= 20) {
           this.loading2 = false
           console.log('2需要固定')
-          // document.getElementById("scholar").setAttribute('vertical-align', 'bottom'
-          // document.getElementById("scholar").style.position = "sticky"
-          // document.getElementById("scholar").style.bottom = "0"
         }
         else {
           //TODO: 调用加载函数
@@ -211,8 +234,6 @@ export default {
             n_citation: 1,
             weight: '2%'
           })
-          docHeight2 = document.getElementById("scholar").scrollHeight;
-          document.getElementById("scholar").style.height = docHeight2 + "px"
         }
       }
     },
@@ -245,18 +266,16 @@ export default {
 
 .show {
   margin-top: 50px;
-
+  display: flex;
+  align-items: flex-start;
+  /*align-items: start;*/
 }
 
 .paper {
   width: 800px;
-  min-width: 800px;
-  max-width: 800px;
   margin-left: 180px;
-  display: inline-block;
-  /*vertical-align: top;*/
   position: sticky;
-  bottom: 0;
+  display: block;
   border-radius: 5px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06)
@@ -264,21 +283,14 @@ export default {
 
 .scholar {
   width: 340px;
-  /*vertical-align: top;*/
-  display: inline-block;
   position: sticky;
-  bottom: 0;
-  min-width: 340px;
-  max-width: 340px;
+  display: block;
   margin-left: 80px;
   padding-left: 30px;
   padding-right: 30px;
   border-radius: 5px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
 }
 
 .show_scholar {

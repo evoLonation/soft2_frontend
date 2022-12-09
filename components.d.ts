@@ -56,6 +56,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScholarList: typeof import('./src/components/scholarList.vue')['default']
+    ScholarShow: typeof import('./src/components/ScholarShow.vue')['default']
     SearchBox: typeof import('./src/components/SearchBox.vue')['default']
   }
   export interface ComponentCustomProperties {
