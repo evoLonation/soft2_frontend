@@ -111,8 +111,7 @@ export default {
     },
     openAuthor(author){
       if (author.hasId){
-        //TODO: push到学者主页， 未完
-        this.$router.push({name:'UserInfo'});
+        this.$router.push({name:'Scholar', params:{scholarId: author.id}});
       }else {
         this.$router.push({
           name:'PaperSearch',  //跳转路由

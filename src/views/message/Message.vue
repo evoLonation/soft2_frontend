@@ -16,7 +16,7 @@
       <el-menu-item index="5">系统</el-menu-item>
     </el-menu>
     <el-table
-      :data="this.curMessages" table-layout="fixed">
+      :data="this.curMessages" table-layout="fixed" :key="this.flush">
       <el-table-column prop="content" label="内容" width="600" resizable>
       </el-table-column>
       <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>
@@ -41,7 +41,7 @@
             <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
               <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">打开互助</el-button>
             </el-col>
-            <el-col :span="5" v-if="scope.row.type==='4'">
+            <el-col :span="5" v-if="scope.row.type==='4' && !scope.row.read">
               <el-popconfirm
                   confirm-button-text="同意"
                   cancel-button-text="拒绝"
@@ -71,6 +71,7 @@ import Messages from "@/views/message/Data";
 import {ElMessage} from "element-plus";
 import {messageAxios, userAxios} from "@/axios";
 import {loginStore} from "@/store";
+import router from "@/router";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -109,10 +110,12 @@ export default {
   mounted() {
     this.getMessages()
     console.log(this.curMessages)
+    this.flush++;
   },
   data(){
     return {
       showConfirm: false,
+      flush: 0,
     }
   },
   methods:{
@@ -124,6 +127,7 @@ export default {
       messageAxios.post('message/get-all-messages',{
       }).then(res=>{
         this.messages = this.curMessages = res.data.messages
+        this.flush++;
       }).catch(()=>{
         console.log('未能获取，使用本地数据')
         this.messages = this.curMessages = Messages.Messages
@@ -169,6 +173,7 @@ export default {
           break;
         default: console.log("err")
       }
+      this.flush++;
     },
     read(id){
       messageAxios.post('message/read', {
@@ -185,22 +190,24 @@ export default {
           }
         })
       })
+      this.flush++;
     },
     allRead(){
       this.messages.forEach((m)=>{
         this.read(m.id)
       })
+      this.flush++;
     },
     openPaper(id){
       this.$router.push({name: 'Paper', params:{paperId: id}});
     },
     openAuthor(id){
-      //TODO: 跳转到学者主页
-      console.log(id)
+      this.$router.push({name:'Scholar', params:{scholarId: id}});
     },
     openHelp(id){
       //TODO: 跳转到那条互助页
       console.log(id)
+      this,router.push({name: 'HelpCenter'})
     },
     del(id){
       messageAxios.post('message/delete',{
@@ -216,6 +223,7 @@ export default {
             this.curMessages.splice(this.curMessages.indexOf(m))
           }
         })
+        this.flush++;
       }).catch(e=>{
         console.log(e)
       })
@@ -234,6 +242,7 @@ export default {
         ElMessage('操作失败，发生错误')
         console.log(e)
       })
+      this.flush++;
     },
     refuse(id){
       userAxios.post('grievance/refuse', {
