@@ -361,8 +361,9 @@ export default {
           fileAxios({
             method:'post',
             url:"user/upload-avatar",
-            data:res.form
-          }).then(() => {
+            data:form
+          }).then((res) => {
+            console.log(res);
             userAxios({
               method:'post',
               url:'user/user-infor'

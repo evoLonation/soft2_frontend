@@ -45,7 +45,7 @@
 
         <div class="advance_search" v-else>
           <div v-for="index in searchNum" :key="index">
-            <el-select v-if="index===1" disabled v-model="ANvalue[index]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
+            <el-select v-if="index===0" disabled v-model="ANvalue[index]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
               <el-option
                   v-for="item in ANoptions"
                   :key="item.value"
@@ -72,14 +72,14 @@
             <el-autocomplete v-model="inputValue[index]"  :fetch-suggestions="querySearch(index)" :trigger-on-focus="false"
                              placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px">
               <template #append>
-                <el-select v-model="exact[index-1]" placeholder="Select" style="width: 90px">
+                <el-select v-model="exact[index]" placeholder="Select" style="width: 90px">
                   <el-option label="精确" value="0" />
                   <el-option label="模糊" value="1" />
                 </el-select>
               </template>
             </el-autocomplete>
             <el-icon v-if="index>2" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="decreaseNum(index)"><Minus /></el-icon>
-            <el-icon v-if="index===searchNum" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="addNum"><Plus /></el-icon>
+            <el-icon v-if="index===searchNum-1" size="20px" style="margin-left: 20px;vertical-align: top;margin-top: 34px" @click="addNum"><Plus /></el-icon>
           </div>
           <div style="display: inline-block;margin-left: 216px;margin-top: 40px;">年份范围</div>
           <el-date-picker
@@ -128,7 +128,7 @@
               <span style="font-size: 15px">主题</span>
             </template>
             <div v-for="index in themes.length" :key="index">
-              <el-checkbox v-model="themesCheck[index]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.themes[index].name }}</el-checkbox>
+              <el-checkbox v-model="themesCheck[index]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.themes[index-1].name }}</el-checkbox>
             </div>
           </el-collapse-item>
           <el-collapse-item name="2">
@@ -136,7 +136,7 @@
               <span style="font-size: 15px">年份</span>
             </template>
             <div v-for="index in years.length" :key="index">
-              <el-checkbox v-model="yearsCheck[index]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.years[index].name }}</el-checkbox>
+              <el-checkbox v-model="yearsCheck[index]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.years[index-1].name }}</el-checkbox>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -371,10 +371,10 @@ export default {
       document.getElementById("normal-search-btn").style.borderBottom = "0px solid white";
     },
     decreaseNum(index){
-      this.inputValue.splice(index-1,1);
-      this.value.splice(index-1,1);
-      this.ANvalue.splice(index-1,1);
-      this.exact.splice(index-1,1);
+      this.inputValue.splice(index,1);
+      this.value.splice(index,1);
+      this.ANvalue.splice(index,1);
+      this.exact.splice(index,1);
       this.searchNum--;
     },
     addNum(){
