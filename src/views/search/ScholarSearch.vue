@@ -47,13 +47,13 @@ export default {
       nowPage:1,
       scholars:[
         {
-          "id":"",
+          "id":"1",
           "name":"刘伟",
           "institution":"安全",
           "paper_num":111,
         },
         {
-          "id":"",
+          "id":"1",
           "name":"张本",
           "institution":"不安全",
           "paper_num":111,
