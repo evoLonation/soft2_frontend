@@ -39,26 +39,14 @@
 
     <div class="scholar" id="scholar">
       <h1 style="text-align: center;padding-top: 15px">领域杰出学者</h1>
-      <el-divider style="margin: 8px"/>
+      <el-divider style="margin: 8px 0"/>
       <div v-for="(item, index) in ScholarList" :key="index">
-        <div class="show_scholar">
-          <div class="scholar_name">
-            <el-icon ><User /></el-icon>
-            <div style="display: inline-block; padding-left: 10px; font-size: 20px; font-weight: bold">{{item.name}}</div> <br/>
-          </div>
-
-          <div style="display: flex;">
-            <div style=" margin-top: 10px">
-              <el-divider style="height: 110px; " direction="vertical" />
-            </div>
-            <div style=" margin-left: 10px; ">
-              <div style="padding-top: 15px">论文数量：{{item.n_paper}}</div>
-              <div style="padding-top: 20px">被引量：{{item.n_citation}}</div>
-              <div style="padding-top: 20px">领域指数：{{item.weight}}</div>
-            </div>
-          </div>
-
-        </div>
+        <list2
+            :name="item.name"
+            :n_citation="item.n_citation"
+            :n_paper="item.n_paper"
+            :weight="item.weight"
+          />
       </div>
       <div class="loading">
         <el-icon class="iconfont" v-show="loading2"><Loading /></el-icon>
@@ -72,11 +60,12 @@
 
 <script>
 import list from "../../components/paperShow"
+import list2 from "../../components/ScholarShow"
 import {paperScholarAxios} from "@/axios";
 export default {
   name: 'FieldPage',
   components: {
-    list
+    list, list2
   },
   data() {
     return {
@@ -110,18 +99,6 @@ export default {
 
       ],
       ScholarList: [
-        {
-          name: 'Ameame',
-          n_paper: 8,
-          n_citation: 20,
-          weight: '70%'
-        },
-        {
-          name: 'Ameame',
-          n_paper: 8,
-          n_citation: 20,
-          weight: '70%'
-        },
         {
           name: 'Ameame',
           n_paper: 8,
@@ -166,29 +143,17 @@ export default {
       let docHeight2 = document.getElementById("scholar").scrollHeight;
       let winHeight2 = document.getElementById("scholar").offsetHeight
       let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      // let h1 = docHeight1 + 140
-      // let h2 = docHeight2 + 140
-      // if(this.loading1 === false) {
-      //   let hh1 = docHeight1 - 20
-      //   document.getElementById("paper").style.height = hh1 + "px"
-      // } else {
-      //   document.getElementById("paper").style.height = h1 + "px"
-      // }
-      //
-      // if(this.loading2 === false) {
-      //   let hh2 = docHeight2 - 20
-      //   document.getElementById("scholar").style.height = hh2+ "px"
-      // } else {
-      //   document.getElementById("scholar").style.height = h2 + "px"
-      // }
+
       document.getElementById("paper").style.height = docHeight1 + "px"
       document.getElementById("scholar").style.height = docHeight2+ "px"
+
       let height = document.documentElement.clientHeight
       console.log(height)
       let tmp1 = height - docHeight1
       let tmp2 = height - docHeight2
       console.log(docHeight1, st, winHeight1)
       console.log(tmp1, tmp2)
+
       if(this.loading1 === false) {
         document.getElementById("paper").style.top = tmp1 + "px"
       }
@@ -206,6 +171,9 @@ export default {
         else {
           //TODO: 调用加载函数
           // this.getPaperList()
+          let h1 = docHeight1 + 140
+          document.getElementById("paper").style.height = h1 + "px"
+
           this.PaperList.push(
               {
                 type: 4,
@@ -228,6 +196,8 @@ export default {
         else {
           //TODO: 调用加载函数
           this.getScholarList()
+          let h2 = docHeight2 + 140
+          document.getElementById("scholar").style.height = h2 + "px"
           this.ScholarList.push({
             name: '赵正阳',
             n_paper: 0,
@@ -268,7 +238,6 @@ export default {
   margin-top: 50px;
   display: flex;
   align-items: flex-start;
-  /*align-items: start;*/
 }
 
 .paper {
@@ -286,20 +255,9 @@ export default {
   position: sticky;
   display: block;
   margin-left: 80px;
-  padding-left: 30px;
-  padding-right: 30px;
   border-radius: 5px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
-}
-
-.show_scholar {
-  margin-top: 25px;
-}
-
-.scholar .show_scholar .scholar_name div:hover {
-  color: aquamarine;
-  cursor: pointer;
 }
 
 .loading {

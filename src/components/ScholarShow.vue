@@ -29,5 +29,16 @@ export default {
 </script>
 
 <style scoped>
+.show_scholar {
+  background-color: white;
+  border: 0.001px white solid;
+  border-radius: 4px;
+  padding-left: 15px;
+  padding-top: 10px;
+}
 
+.show_scholar .scholar_name div:hover {
+  color: aquamarine;
+  cursor: pointer;
+}
 </style>
