@@ -3,7 +3,7 @@ import G6 from "@antv/g6";
 const f2 = {
     type: 'force2',
     animate: true,
-    distanceThresholdMode: 'max',
+    // distanceThresholdMode: 'max',
     damping: 0.5,
     gravity: 15,
     preventOverlap: true,
