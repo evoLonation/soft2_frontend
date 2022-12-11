@@ -87,12 +87,13 @@ export default {
         got = true
       }).catch(e=>{
         console.log(e)
-      }).finally(()=>{console.log('paper-api')})
+      })
 
       if (!got){
         paperStore1.paperInfo = PaperInfo.info
         console.log('未获取到详情，使用本地测试数据')
       }
+
       if (!loginStore1.isLogin){
         paperStore1.paperInfo.starred = 1
         console.log('return')
@@ -100,6 +101,7 @@ export default {
           checkStar
         }; //没登录就不获取收藏状态
       }
+
       userAxios.post('paper/is-star', {
         "paper_id": paperId
       }).then(res=>{
@@ -110,6 +112,7 @@ export default {
         paperStore1.paperInfo.starred = 1
       })
     })
+
     const checkStar = loginStore1.$onAction(
         ({
            name,
@@ -166,8 +169,6 @@ export default {
     },
     watch: {
       '$route'() {
-        // 路由发生变化页面刷新
-        window.removeEventListener('scroll', this.handleScroll, true)
         this.$router.go(0);
       },
     },

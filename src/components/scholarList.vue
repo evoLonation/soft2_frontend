@@ -4,7 +4,8 @@
       <div style="display: inline-block;vertical-align: top;height: 100%;width: 275px">
         <div style="font-size: 23px;margin-left: 20px;margin-top: 15px; color: #007dfa; cursor:pointer;overflow: hidden;
                       width: 60%;white-space: nowrap;text-overflow: ellipsis" @click="gotoScholar">{{name}}</div>
-        <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;">{{institution}}</div>
+        <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;overflow: hidden;white-space: nowrap;text-overflow: ellipsis
+                                                                        ">{{institution}}</div>
         <div style="font-size: 18px;margin-left: 20px;margin-top: 15px; color: #b0b2b3;">发表的论文数:{{paper_num}}</div>
       </div>
   </div>
@@ -22,19 +23,22 @@
 
 <script>
 import {useRouter} from "vue-router";
-import {userAxios} from "@/axios"
+import {ref} from "vue"
+import {userAxios,paperScholarAxios} from "@/axios"
 
 export default {
   name: "scholarList",
   props:[
       'name','paper_num','institution','id','type'
   ],
+  inject:['reload'],
   data(){
     return{
-      src:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      // src:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
     }
   },
-  setup(props){
+  setup(props,inject){
+    const src=ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
     const router = useRouter();
     const gotoScholar = () => {
       router.push({
@@ -48,6 +52,7 @@ export default {
       let toSend={
         scholar_id:props.id
       }
+      console.log(props.id);
       userAxios({
         method:'post',
         url:'scholar/delete-subscribe',
@@ -55,10 +60,25 @@ export default {
       }).then((res)=>{
         if(res.data.code==="0")this.$message('success',"取关成功");
         else this.$message('error',"取关失败");
+        inject.reload();
       })
     }
+    const getAva = () =>{
+      let toSend={
+        scholar_id: props.id
+      };
+        paperScholarAxios({
+          method:'post',
+          url:'scholar/get-avatar',
+          data:toSend
+        }).then((res) =>{
+          // console.log(res.data);
+          src.value=res.data.url;
+        })
+    }
+
     return{
-      gotoScholar,cancelStar
+      gotoScholar,cancelStar,getAva,src
     }
   },
   methods:{
@@ -66,8 +86,9 @@ export default {
       // this.$router.push({name: 'Paper', params:{paperId: id}});
     }
   },
-  created() {
+  mounted() {
     // this.sid=id;
+    this.getAva();
   }
 }
 </script>

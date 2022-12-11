@@ -18,12 +18,17 @@
         {{this.paperName}}
     </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
-    <div class="paper_author" style="margin-bottom: 10px">
+    <div class="paper_author" style="margin-bottom: 10px" v-if="author!=null">
+
       <span v-for="(item,index) in author.slice(0,4)" :key="index">
         <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>
+
         {{this.org}}  -  被引量:{{this.num}}</div>
+    <div class="paper_author" style="margin-bottom: 10px" v-else>
+      作者不详-
+      {{this.org}}  -  被引量:{{this.num}}</div>
   </div>
 
   <div class="paper_skeleton_3" v-else-if="type===4">
@@ -31,22 +36,28 @@
       {{this.paperName}}
     </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
-    <div class="paper_author" style="margin-bottom: 10px">
+    <div class="paper_author" style="margin-bottom: 10px" v-if="author!=null">
       <span v-for="(item,index) in author.slice(0,4)" :key="index">
         <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>
+      {{this.org}}  -  被引量:{{this.num}}</div>
+    <div class="paper_author" style="margin-bottom: 10px" v-else>
+      作者不详-
       {{this.org}}  -  被引量:{{this.num}}</div>
   </div>
 
   <div class="paper_skeleton_2" v-else>
     <div class="inf_divide" style="width: 80%; height: 100%">
       <div class="paper_name" style="margin-top: 3%" >{{this.paperName}}</div>
-      <div class="paper_author" style="margin-top: 10px">
+      <div class="paper_author" style="margin-top: 10px" v-if="author!=null">
         <span v-for="(item,index) in author.slice(0,4)" :key="index">
         <span @click="gotoScholar(index)" class="author_name">{{item.name}}，</span>
         <span v-if="index===3">...-</span>
       </span>  {{this.org}}  </div>
+      <div class="paper_author" style="margin-bottom: 10px" v-else>
+        作者不详-
+        {{this.org}}</div>
     </div>
     <div class="inf_divide" style="width: 20%; height: 100%">
       <el-button type="danger" plain class="button_type" @click="cancelStar">取消收藏</el-button>

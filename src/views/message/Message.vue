@@ -17,6 +17,9 @@
     </el-menu>
     <el-table
       :data="this.curMessages" table-layout="fixed" :key="this.flush">
+      <template #empty>
+        <h1 style="margin:20px auto;">暂无消息</h1>
+      </template>
       <el-table-column prop="content" label="内容" width="600" resizable>
       </el-table-column>
       <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>

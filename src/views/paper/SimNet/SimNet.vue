@@ -5,9 +5,9 @@
       <el-row>
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
       </el-row>
-      <el-row style="display: flex" gutter="5">
+      <el-row style="display: flex">
         <el-col :span="6" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
-        <!--        <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>-->
+<!--                <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>-->
       </el-row>
       <el-row>
         <el-col :span="30" class="year">{{this.info.year}}</el-col>
@@ -32,6 +32,7 @@ export default {
   props: [],
   components: [],
   beforeUnmount () {
+    this.graph.destroy()
     window.removeEventListener('message', (e) => {
       if (e.data[0] === 'sim')
         this.showInfo(e.data[1])
@@ -45,7 +46,6 @@ export default {
   },
   mounted() {
     this.initGraph()
-    this.loading = false
     this.info = this.store.paperInfo
     this.paperId = this.store.paperId
     window.addEventListener('message', (e) => {
@@ -78,28 +78,23 @@ export default {
           700,
           500,
           document.getElementById("net"));
-      let data = this.getData()
-      this.graph.loadData(data)
-      this.graph.render()
-      this.graph.initListener()
-    },
-    getData(){
-      let gotData = false
-      let data = null
       paperScholarAxios.post('paper/similar-net', {
         'id': this.store.paperId
       }).then(res=>{
-        data = res.data
-        gotData = true
+        this.graph.loadData(res.data)
+        this.graph.render()
+        this.graph.initListener()
+        this.loading = false
+      }).catch(e=>{
+        console.log(e)
+        this.graph.loadData(Data.data)
+        this.graph.render()
+        this.graph.initListener()
+        this.loading = false
       })
-      if (!gotData){
-        data = Data.data
-        console.log('获取关系网失败，使用本地测试数据')
-      }
-      return data
     },
     showInfo(info) { //显示详细信息
-      const limit = 800;
+      const limit = 600;
       if(info.abstract.length > limit){
         info.abstract = info.abstract.substring(0, limit) + "......";
       }
@@ -140,8 +135,8 @@ export default {
 .title{
   cursor: pointer;
   font-family: '微软雅黑',sans-serif;
-  line-height:2;
-  font-size: 22px;
+  line-height:1.5;
+  font-size: 20px;
   font-weight: bold;
 }
 .title:hover{
@@ -150,7 +145,7 @@ export default {
 .author{
   color:  #3375b9;
   cursor: pointer;
-  line-height:2;
+  line-height:1.25;
   font-size: 12px;
 }
 .author:hover{
@@ -161,7 +156,7 @@ export default {
   font-size: 12px;
 }
 .abstract{
-  line-height: 1.5;
+  line-height: 1.25;
 }
 .sim-g6-graph {
   width: 60%;

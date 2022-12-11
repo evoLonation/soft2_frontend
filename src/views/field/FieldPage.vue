@@ -9,7 +9,7 @@
         placeholder="请输入搜索领域"
     >
       <template #suffix>
-        <el-icon size="large" @click="normalSearch" ><search /></el-icon>
+        <el-icon size="large" @click="gotoField" ><search /></el-icon>
       </template>
     </el-input>
   </div>
@@ -110,12 +110,14 @@ export default {
   },
   methods: {
     getPaperList() {
+      console.log(this.field_name, this.start1, this.end1)
       paperScholarAxios.post('field/paper', {
         "field": this.field_name,
-        "start": this.start1,
-        "end": this.end1,
+        "start": "1",
+        "end": "5",
       }).then(res=>{
-        console.log('获取论文成功')
+        console.log('获取论文成功',res.data.paper_num)
+
         this.paper_num = res.data.paper_num
         this.PaperList = res.data.papers
         this.start1 = this.start1 + 9
@@ -133,6 +135,9 @@ export default {
         this.start2 = this.start2 + 9
         this.end2 = this.end2 + 9
       })
+    },
+    gotoField() {
+      this.$router.push({name : "Field", query: {content: this.input}})
     },
     scrollFn() {
       console.log('1滚动')
@@ -211,12 +216,17 @@ export default {
   mounted() {
     this.field_name = this.$route.query.content
     window.addEventListener("mousewheel", this.scrollFn);
-    // this.getPaperList()
+    this.getPaperList()
     this.getScholarList()
   },
   beforeUnmount() {
     window.removeEventListener("mousewheel", this.scrollFn);
-  }
+  },
+  watch: {
+    $route() {
+      this.$router.go()
+    },
+  },
 }
 
 </script>
