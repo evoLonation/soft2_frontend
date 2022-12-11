@@ -1,20 +1,27 @@
 <template>
-  <div id="charts-contianer" class="charts-container" />
+  <div id="charts-contianer" class="charts-container" v-show="show"/>
 </template>
 
 <script>
 // 引入echarts核心模块，核心模块提供了echarts使用必须要的接口
 import * as echarts from 'echarts';
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "TestNewEchart",
   data() {
     return {
-
+      show: true,
+      years: [],
+      achievements: [],
+      references: [],
     };
   },
   mounted() {
     this.init();
+  },
+  props: {
+    "scholarId": String,
   },
   methods: {
     /**
@@ -193,7 +200,22 @@ export default {
       };
       myChart.setOption(option);
       window.addEventListener('resize', function () {myChart.resize();});
-     }
+     },
+    getData() {
+      let tmp = [];
+      paperScholarAxios.post('scholar/barchart/', {
+        "scholar_id": this.scholarId,
+      }).then((res) => {
+        tmp = res.data.statistic;
+        console.log(tmp);
+      })
+    }
+  },
+  created() {
+    this.getData();
+    if(this.years.length === 0) {
+      this.show = false;
+    }
   }
 }
 

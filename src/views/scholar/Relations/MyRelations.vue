@@ -1,5 +1,5 @@
 <template>
-  <div class="relations">
+  <div class="relations" v-show="rel">
     <div class="rel_title">
       <p>合作学者：</p>
       <NetView/>
@@ -15,10 +15,10 @@
         />
         <div class="name-insti">
           <div class="name">
-            <p>{{item.name}}</p>
+            <p>{{ item.name }}</p>
           </div>
           <div class="insti">
-            <p>{{item.institution}}</p>
+            <p>{{ item.institution[0] }}</p>
           </div>
         </div>
       </div>
@@ -28,26 +28,50 @@
 
 <script>
 import NetView from "../RelationNet/RelationNet"
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "MyRelations",
   components: {
     NetView,
   },
+  props: {
+    "scholarId": String,
+  },
   data() {
     return {
-      coopList: [
-        {name: "学者1", institution: "学者单位1"},
-        {name: "学者2", institution: "学者单位2"},
-        {name: "学者3", institution: "学者单位3"},
-        {name: "学者4", institution: "学者单位4"},
-      ],
-      urls:[
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      ]
+      coopList: [],
+      urls:[],
+      rel: true,
+    }
+  },
+  methods: {
+    getCoopList() {
+      paperScholarAxios.post("scholar/coop-list/", {
+        "scholar_id": this.scholarId,
+      }).then((res) => {
+        if(res.data.coop_list !== null) {
+          this.coopList = res.data.coop_list;
+        }
+        for(var i = 0; i < this.coopList.length; i++) {
+          let url;
+          paperScholarAxios.post('scholar/get-avatar', {
+            "scholar_id": this.coopList[i].id,
+          }).then((res) => {
+            url = res.data.url;
+            this.urls.push(url);
+          })
+        }
+        console.log(this.coopList);
+        console.log(this.urls);
+      })
+    }
+  },
+  created() {
+    this.getCoopList();
+    if(this.coopList.length === 0) {
+      // eslint-disable-next-line no-unused-vars
+      this.rel = false;
     }
   }
 }

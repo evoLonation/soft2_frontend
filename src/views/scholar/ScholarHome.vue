@@ -34,8 +34,8 @@
         <OpView style="margin-top: 10px" :scholar_id="scholar_id"/>
       </div>
       <div class="style_need">
-        <ChartView name="part" style="margin-top: 30px"/>
-        <RelView name="part" style="margin-top: 30px"/>
+        <ChartView :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
+        <RelView :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
       </div>
       <div class="style_need">
         <PaperView name="part" style="margin-top: 30px"/>
