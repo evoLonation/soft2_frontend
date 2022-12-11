@@ -45,7 +45,6 @@ export default {
   },
   mounted() {
     this.initGraph()
-    this.loading = false
     this.info = this.store.paperInfo
     this.paperId = this.store.paperId
     window.addEventListener('message', (e) => {
@@ -78,25 +77,20 @@ export default {
           700,
           500,
           document.getElementById("net"));
-      let data = this.getData()
-      this.graph.loadData(data)
-      this.graph.render()
-      this.graph.initListener()
-    },
-    getData(){
-      let gotData = false
-      let data = null
       paperScholarAxios.post('paper/similar-net', {
         'id': this.store.paperId
       }).then(res=>{
-        data = res.data
-        gotData = true
+        this.graph.loadData(res.data)
+        this.graph.render()
+        this.graph.initListener()
+        this.loading = false
+      }).catch(e=>{
+        console.log(e)
+        this.graph.loadData(Data.data)
+        this.graph.render()
+        this.graph.initListener()
+        this.loading = false
       })
-      if (!gotData){
-        data = Data.data
-        console.log('获取关系网失败，使用本地测试数据')
-      }
-      return data
     },
     showInfo(info) { //显示详细信息
       const limit = 800;
@@ -140,7 +134,7 @@ export default {
 .title{
   cursor: pointer;
   font-family: '微软雅黑',sans-serif;
-  line-height:2;
+  line-height:1.5;
   font-size: 22px;
   font-weight: bold;
 }
@@ -150,7 +144,7 @@ export default {
 .author{
   color:  #3375b9;
   cursor: pointer;
-  line-height:2;
+  line-height:1.25;
   font-size: 12px;
 }
 .author:hover{
@@ -161,7 +155,7 @@ export default {
   font-size: 12px;
 }
 .abstract{
-  line-height: 1.5;
+  line-height: 1.25;
 }
 .sim-g6-graph {
   width: 60%;

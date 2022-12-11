@@ -13,8 +13,8 @@
     </div>
     <div class="info">
       <div class="name-pos">
-        <span class="name">学者姓名</span>
-        <span class="pos">学者职称</span>
+        <span class="name">{{ name }}</span>
+        <span class="pos">{{ pos }}</span>
         <div class="icon">
           <el-icon
               style="height: 100%; width: 100%"
@@ -27,7 +27,7 @@
             <p>学者ID号</p>
           </div>
           <div class="ID_content">
-            <p>scholarID</p>
+            <p>{{ ID }}</p>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
             <span>被引频次</span>
           </div>
           <div class="index_num">
-            <span>ref_num</span>
+            <span>{{ ref_num }}</span>
           </div>
         </div>
         <div class="index">
@@ -45,7 +45,7 @@
             <span>成果数</span>
           </div>
           <div class="index_num">
-            <span>ach_num</span>
+            <span>{{ ach_num }}</span>
           </div>
         </div>
         <div class="index_last">
@@ -53,7 +53,7 @@
             <span>H指数</span>
           </div>
           <div class="index_num">
-            <span>h_index</span>
+            <span>{{ h_index }}</span>
           </div>
         </div>
       </div>
@@ -97,11 +97,28 @@ export default {
         this.ach_num = res.data.ach_num;
         this.h_index = res.data.h_index;
         got = true;
+        console.log(res);
       })
       if(!got) {
         console.log('未获取到详情，使用本地测试数据')
       }
+    },
+    getAvatar() {
+      let got;
+      paperScholarAxios.post('scholar/get-avatar', {
+        "scholar_id": this.scholar_id,
+      }).then((res) => {
+        got = res.data.code;
+        this.url = res.data.url;
+      })
+      if(got === 0) {
+        console.log('未获取到相关头像，使用默认头像');
+      }
     }
+  },
+  created() {
+    this.getBasicInfo();
+    this.getAvatar();
   }
 }
 </script>
@@ -221,7 +238,7 @@ export default {
 }
 
 .ID {
-  width: 30%;
+  width: 35%;
   height: 100%;
   border: 1px dashed #a0cfff;
   margin: auto 0 auto auto;
@@ -234,7 +251,7 @@ export default {
 }
 
 .ID_title {
-  width: 40%;
+  width: 35%;
   height: 100%;
   line-height: 14px;
   font-size: 14px;
@@ -244,7 +261,7 @@ export default {
 }
 
 .ID_content {
-  width: 60%;
+  width: 65%;
   height: 100%;
   line-height: 14px;
   font-size: 14px;

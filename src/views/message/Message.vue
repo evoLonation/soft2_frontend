@@ -17,6 +17,9 @@
     </el-menu>
     <el-table
       :data="this.curMessages" table-layout="fixed" :key="this.flush">
+      <template #empty>
+        <h1 style="margin:20px auto;">暂无消息</h1>
+      </template>
       <el-table-column prop="content" label="内容" width="600" resizable>
       </el-table-column>
       <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>
@@ -71,7 +74,6 @@ import Messages from "@/views/message/Data";
 import {ElMessage} from "element-plus";
 import {messageAxios, userAxios} from "@/axios";
 import {loginStore} from "@/store";
-import router from "@/router";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -207,7 +209,7 @@ export default {
     openHelp(id){
       //TODO: 跳转到那条互助页
       console.log(id)
-      this,router.push({name: 'HelpCenter'})
+      this.$router.push({name: 'HelpCenter'})
     },
     del(id){
       messageAxios.post('message/delete',{

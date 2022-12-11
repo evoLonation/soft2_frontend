@@ -75,14 +75,52 @@ export default {
     const router = useRoute();
     const paperStore1 = paperStore();
     const loginStore1 = loginStore();
+    onBeforeMount(()=>{
+      const paperId = router.params.paperId;
+      paperStore1.paperId = paperId
+      let got = false
+
+      paperScholarAxios.post('paper', {
+        "id": paperId,
+      }).then((res) => {
+        paperStore1.paperInfo = res.data
+        got = true
+      }).catch(e=>{
+        console.log(e)
+      })
+
+      if (!got){
+        paperStore1.paperInfo = PaperInfo.info
+        console.log('未获取到详情，使用本地测试数据')
+      }
+
+      if (!loginStore1.isLogin){
+        paperStore1.paperInfo.starred = 1
+        console.log('return')
+        return{
+          checkStar
+        }; //没登录就不获取收藏状态
+      }
+
+      userAxios.post('paper/is-star', {
+        "paper_id": paperId
+      }).then(res=>{
+        paperStore1.paperInfo.starred = res.data.is_star
+      }).catch((e)=>{
+        console.log(e)
+        console.log('未获取或未登录，默认没有收藏过')
+        paperStore1.paperInfo.starred = 1
+      })
+    })
+
     const checkStar = loginStore1.$onAction(
         ({
-            name,
-            store,
-            args,
-            after,
-            onError
-        })=>{
+           name,
+           store,
+           args,
+           after,
+           onError
+         })=>{
           console.log(name, store, args, onError)
           after(()=>{
             userAxios.post('paper/is-star', {
@@ -96,34 +134,6 @@ export default {
             })
           })
         })
-    onBeforeMount(()=>{
-      const paperId = router.params.paperId;
-      paperStore1.paperId = paperId
-      let got = false
-      paperScholarAxios.post('paper/', {
-        "id": paperId,
-      }).then((res) => {
-        paperStore1.paperInfo = res.data
-        got = true
-      })
-      if (!got){
-        paperStore1.paperInfo = PaperInfo.info
-        console.log('未获取到详情，使用本地测试数据')
-      }
-      if (!loginStore1.isLogin){
-        paperStore1.paperInfo.starred = 1
-        return; //没登录就不获取收藏状态
-      }
-      userAxios.post('paper/is-star', {
-        "paper_id": paperId
-      }).then(res=>{
-        paperStore1.paperInfo.starred = res.data.is_star
-      }).catch((e)=>{
-        console.log(e)
-        console.log('未获取或未登录，默认没有收藏过')
-        paperStore1.paperInfo.starred = 1
-      })
-    })
     return{
       checkStar
     }
@@ -159,9 +169,6 @@ export default {
     },
     watch: {
       '$route'() {
-        // 路由发生变化页面刷新
-        window.removeEventListener('scroll', this.handleScroll, true)
-        console.log('changed')
         this.$router.go(0);
       },
     },

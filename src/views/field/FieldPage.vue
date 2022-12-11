@@ -110,12 +110,14 @@ export default {
   },
   methods: {
     getPaperList() {
+      console.log(this.field_name, this.start1, this.end1)
       paperScholarAxios.post('field/paper', {
         "field": this.field_name,
         "start": this.start1,
         "end": this.end1,
       }).then(res=>{
-        console.log('获取论文成功')
+        console.log('获取论文成功',res.data.paper_num)
+
         this.paper_num = res.data.paper_num
         this.PaperList = res.data.papers
         this.start1 = this.start1 + 9
@@ -211,7 +213,7 @@ export default {
   mounted() {
     this.field_name = this.$route.query.content
     window.addEventListener("mousewheel", this.scrollFn);
-    // this.getPaperList()
+    this.getPaperList()
     this.getScholarList()
   },
   beforeUnmount() {

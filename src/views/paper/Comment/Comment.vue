@@ -3,30 +3,38 @@
     <el-row class="part-cmt">
       <el-col :span="3">热门评论</el-col>
       <el-col :span="3" :offset="18">
-        <el-button round @click="this.showComment=true" class="more" size="large"><div style="color: #7682a2; font-weight: bold">更多</div></el-button>
+        <el-button round @click="this.showComment=true" class="more" size="large">
+          <div style="color: #7682a2; font-weight: bold">更多</div>
+        </el-button>
       </el-col>
     </el-row>
+    <h1 v-if="this.comments.length===0" style="margin:20px auto;">暂无评论</h1>
     <el-card shadow="never" v-if="this.comment !== null">
       <el-row>
-        <el-col :span="2" class="user">{{this.comment.userName}}:</el-col>
+        <el-col :span="2" class="user">{{ this.comment.userName }}:</el-col>
         <el-col :span="0.5" :offset="17" class="date-like">
-          <el-button circle size="small" v-if="this.comment.liked" @click="dislike(this.comment.id)" style="cursor: pointer">
-            <el-icon color=" #66b1ff"><StarFilled /></el-icon>
+          <el-button circle size="small" v-if="this.comment.liked" @click="dislike(this.comment.id)"
+                     style="cursor: pointer">
+            <el-icon color=" #66b1ff">
+              <StarFilled/>
+            </el-icon>
           </el-button>
           <el-button circle size="small" v-else @click="this.like(this.comment.id)" style="cursor: pointer">
-            <el-icon color=" #66b1ff"><Star /></el-icon>
+            <el-icon color=" #66b1ff">
+              <Star/>
+            </el-icon>
           </el-button>
         </el-col>
-        <el-col :span="1" class="likes1">{{this.comment.likes}}</el-col>
-        <el-col :span="2" class="date1">{{this.comment.date}}</el-col>
+        <el-col :span="1" class="likes1">{{ this.comment.likes }}</el-col>
+        <el-col :span="2" class="date1">{{ this.comment.date }}</el-col>
       </el-row>
       <el-row class="content">
-        <el-col>{{this.comment.content}}</el-col>
+        <el-col>{{ this.comment.content }}</el-col>
       </el-row>
     </el-card>
     <div v-else style="padding: 20px 20px 20px 20px">暂无评论</div>
   </div>
-<!--右侧评论区-->
+  <!--右侧评论区-->
   <el-drawer v-model="this.showComment"
              :direction="'rtl'"
              title="评论区"
@@ -36,31 +44,41 @@
         <el-input type="textarea" :rows="2" placeholder="请输入评论" v-model="commentText" style="width: 420px"/>
       </el-col>
       <el-col :span="1">
-        <el-button circle size="large" @click="this.publish" color=" #87bdd8"><el-icon color="#ffffff"><Promotion /></el-icon></el-button>
+        <el-button circle size="large" @click="this.publish" color=" #87bdd8">
+          <el-icon color="#ffffff">
+            <Promotion/>
+          </el-icon>
+        </el-button>
       </el-col>
     </el-row>
     <el-row style="height: 20px"></el-row>
-    <el-card v-for="cmt in this.comments" :key="cmt" shadow="hover" custom-class="card" >
+    <el-card v-for="cmt in this.comments" :key="cmt" shadow="hover" custom-class="card">
       <el-row>
-        <el-col :span="3" class="user">{{cmt.userName}}:</el-col>
+        <el-col :span="3" class="user">{{ cmt.userName }}:</el-col>
         <el-col :span="1.5" style="float:right;" :offset="10" class="date-like">
           <el-button circle size="small" v-if="cmt.liked===0" @click="dislike(cmt.id)" style="cursor: pointer">
-            <el-icon color=" #66b1ff"><StarFilled /></el-icon>
+            <el-icon color=" #66b1ff">
+              <StarFilled/>
+            </el-icon>
           </el-button>
           <el-button circle size="small" v-else @click="this.like(cmt.id)" style="cursor: pointer">
-            <el-icon color=" #66b1ff"><Star /></el-icon>
+            <el-icon color=" #66b1ff">
+              <Star/>
+            </el-icon>
           </el-button>
         </el-col>
-        <el-col :span="2" class="likes">{{cmt.likes}}</el-col>
-        <el-col :span="4" class="date">{{cmt.date}}</el-col>
+        <el-col :span="2" class="likes">{{ cmt.likes }}</el-col>
+        <el-col :span="4" class="date">{{ cmt.date }}</el-col>
         <el-col :span="1" class="delete" v-if="cmt.userId === this.store.userId">
           <el-button circle size="small" @click="this.del(cmt.id)">
-            <el-icon color=" #b25252"><DeleteFilled/></el-icon>
+            <el-icon color=" #b25252">
+              <DeleteFilled/>
+            </el-icon>
           </el-button>
         </el-col>
       </el-row>
       <el-row class="content">
-        <el-col>{{cmt.content}}</el-col>
+        <el-col>{{ cmt.content }}</el-col>
       </el-row>
     </el-card>
   </el-drawer>
@@ -76,37 +94,38 @@ import {paperScholarAxios, userAxios} from "@/axios";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "PaperComment",
-  props:[],
+  props: [],
   components: {DeleteFilled, Promotion, Star, StarFilled},
-  setup(){
+  setup() {
     const loginStore1 = loginStore()
     const paperStore1 = paperStore()
+    let comments = []
     const checkLike = loginStore1.$onAction(
         ({
-          name,
-          store,
-          args,
-          after,
-          onError,
-        })=>{
-          console.log(name,store,args,onError)
-          after(()=>{
-            if (!this.loginStore1.isLogin){
-              this.comments.forEach(cmt=>{
+           name,
+           store,
+           args,
+           after,
+           onError,
+         }) => {
+          console.log(name, store, args, onError)
+          after(() => {
+            if (!loginStore1.isLogin) {
+              comments.forEach(cmt => {
                 cmt.liked = 1
               })
               return;
             }
             userAxios.post('paper/comment-liked', {
               "paper_id": paperStore1.paperId
-            }).then(res=>{
+            }).then(res => {
               const comment_liked = res.data.comment_liked
               for (let i = 0; i < this.comments.length; i++) {
-                this.comments[i].liked = comment_liked[i].is_liked
+                comments[i].liked = comment_liked[i].is_liked
               }
-            }).catch(()=>{
+            }).catch(() => {
               console.log('未获取，默认全false')
-              this.comments.forEach(cmt=>{
+              comments.forEach(cmt => {
                 cmt.liked = 1
               })
             })
@@ -119,123 +138,113 @@ export default {
       loginStore1,
       paperStore1,
       checkLike,
+      comments,
     }
   },
   mounted() {
     this.getComments();
     this.getLiked();
   },
-  data(){
+  data() {
     return {
-      comments: [
-        {
-          userName: '',
-          userId: '',
-          id: '',
-          content: '',
-          likes: '',
-          date: '',
-          liked: Number,
-        },
-      ],
       comment: null,
       showComment: false,
     }
   },
   methods: {
-    getComments(){ //这个地方是从store拿，更新后从接口拿
+    getComments() { //这个地方是从store拿，更新后从接口拿
       this.comments = this.paperStore1.paperInfo.comments
       this.comment = this.comments[0]
     },
-    getCommentsAPI(){
+    getCommentsAPI() {
       paperScholarAxios.post('paper/comment/get-comment', {
         "paper_id": this.paperStore1.paperInfo.id
-      }).then(res=>{
+      }).then(res => {
         this.comments = res.data.comments
         //store的comments也要更新：
         this.paperStore1.paperInfo.comments = this.comments
-      }).catch(()=>{
+      }).catch(() => {
         console.log('评论更新失败，从本地获取')
         this.getComments()
       })
     },
-    getLiked(){
-      if (!this.loginStore1.isLogin){
-        this.comments.forEach(cmt=>{
+    getLiked() {
+      if (!this.loginStore1.isLogin) {
+        this.comments.forEach(cmt => {
           cmt.liked = 1
         })
         return;
       }
       userAxios.post('paper/comment-liked', {
         "paper_id": this.paperStore1.paperId
-      }).then(res=>{
+      }).then(res => {
         const comment_liked = res.data.comment_liked
         for (let i = 0; i < this.comments.length; i++) {
           this.comments[i].liked = comment_liked[i].is_liked
         }
-      }).catch(()=>{
+      }).catch(() => {
         console.log('未获取，默认全false')
-        this.comments.forEach(cmt=>{
+        this.comments.forEach(cmt => {
           cmt.liked = 1
         })
       })
-      },
-    like(id){
+    },
+    like(id) {
       userAxios.post('paper/comment/like', {
         'comment_id': this.comment.id
-      }).then(()=>{
-        this.comments.forEach((cmt)=>{
-          if (cmt.id === id){
+      }).then(() => {
+        this.comments.forEach((cmt) => {
+          if (cmt.id === id) {
             cmt.likes++
             cmt.liked = true
           }
         })
-      }).catch(e=>{
+      }).catch(e => {
         ElMessage('操作失败')
         console.log(e)
       })
     },
-    dislike(id){
+    dislike(id) {
       userAxios.post('paper/comment/dislike', {
         'comment_id': this.comment.id
-      }).then(()=>{
-        this.comments.forEach((cmt)=>{
-          if (cmt.id === id){
+      }).then(() => {
+        this.comments.forEach((cmt) => {
+          if (cmt.id === id) {
             cmt.likes--
             cmt.liked = false
           }
         })
-      }).catch(e=>{
+      }).catch(e => {
         ElMessage('操作失败')
         console.log(e)
       })
     },
-    publish(){
-      if (this.commentText.length === 0){
+    publish() {
+      if (this.commentText.length === 0) {
         ElMessage('评论不能为空')
         return
       }
       userAxios.post('paper/comment', {
         'paper_id': this.comment.id,
         'content': this.commentText
-      }).then(()=>{
-        setTimeout(()=>{
+      }).then(() => {
+        setTimeout(() => {
           this.getCommentsAPI()
-        },500)
-      }).catch(e=>{
+        }, 500)
+      }).catch(e => {
         console.log(e)
         ElMessage('操作失败')
       })
     },
-    del(id){
+    del(id) {
       userAxios.post('paper/comment/delete', {
         'comment_id': id
-      }).then(()=>{
+      }).then(() => {
         ElMessage("删除成功")
-        setTimeout(()=>{
+        setTimeout(() => {
           this.getCommentsAPI()
-        },500)
-      }).catch(e=>{
+        }, 500)
+      }).catch(e => {
         console.log(e)
         ElMessage('操作失败')
       })
@@ -245,14 +254,15 @@ export default {
 </script>
 
 <style scoped>
-.wrap-comment{
+.wrap-comment {
   margin-top: 30px;
   background-color: white;
   width: 100%;
   border-radius: 5px;
-  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0, 0, 0, 0.06);
   padding-top: 2px;
 }
+
 .part-cmt {
   font-weight: bold;
   color: #87bdd8;
@@ -261,39 +271,47 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
 }
-.user{
+
+.user {
   font-weight: bold;
   color: #7682a2;
   line-height: 1;
 }
-.date-like{
+
+.date-like {
   line-height: 1;
 }
+
 .content {
   line-height: 1;
   font-size: 10px;
   margin-top: 10px;
   color: dimgrey;
 }
-.date{
+
+.date {
   margin-top: 1.5%;
   margin-left: 3%;
   font-size: 10px;
 }
-.date1{
+
+.date1 {
   margin-top: 0.6%;
   margin-left: 3%;
   font-size: 12px;
 }
-.more{
+
+.more {
   font-size: 15px;
   margin-bottom: 10px;
 }
-.likes{
-   margin-top: 1.5%;
-   font-size: 10px
- }
-.likes1{
+
+.likes {
+  margin-top: 1.5%;
+  font-size: 10px
+}
+
+.likes1 {
   margin-top: 0.6%;
   font-size: 12px
 }
