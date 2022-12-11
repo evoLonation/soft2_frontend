@@ -5,7 +5,7 @@
       <el-row>
         <el-col :span="30" class="title" @click="this.openPaper(this.info.id)">{{this.info.title}}</el-col>
       </el-row>
-      <el-row style="display: flex" gutter="5">
+      <el-row style="display: flex">
         <el-col :span="6" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
 <!--        <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>-->
       </el-row>
@@ -32,6 +32,7 @@ export default {
   props: [],
   components: [],
   beforeUnmount () {
+    this.graph.destroy()
      window.removeEventListener('message', (e) => {
        if (e.data[0] === 'ref')
          this.showInfo(e.data[1])
@@ -84,6 +85,7 @@ export default {
         this.graph.render()
         this.graph.initListener()
         this.loading = false
+        console.log(res.data)
       }).catch(e=>{
         console.log(e)
         this.graph.loadData(Data.data)
@@ -93,7 +95,7 @@ export default {
       })
     },
     showInfo(info) { //显示详细信息
-      const limit = 800;
+      const limit = 600;
       if(info.abstract.length > limit){
         info.abstract = info.abstract.substring(0, limit) + "......";
       }
@@ -135,7 +137,7 @@ export default {
   cursor: pointer;
   font-family: '微软雅黑',sans-serif;
   line-height:1.5;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
 }
 .title:hover{
