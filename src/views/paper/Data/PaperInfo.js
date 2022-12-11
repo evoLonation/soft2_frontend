@@ -27,7 +27,7 @@ export default {
         doi: 'f8894i08439f',
         isbn: '8g0h4hf0',
         n_citation: 114514,
-        starred: false,
+        starred: 1,
         urls: ["https://www.baidu.com", "https://www.bilibili.com", "https://www.pornhub.com"],
         references: [
             {

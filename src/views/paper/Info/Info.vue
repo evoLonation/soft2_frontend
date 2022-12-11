@@ -42,6 +42,7 @@ export default {
   },
   mounted(){
     this.getInfo()
+    this.processInfo()
   },
   data(){
     return{
@@ -52,6 +53,44 @@ export default {
     getInfo(){ // 从state获取文献信息
       const store = paperStore()
       this.info = store.paperInfo
+    },
+    processInfo(){
+      if (this.info.title === ''){
+        this.info.title = '无标题'
+      }
+      if (this.info.abstract === ''){
+        this.info.abstract = '无摘要'
+      }
+      if (this.info.authors.length === 0){
+        this.info.authors = [{name: '作者未知', id: '-1'}]
+      }
+      if (this.info.keywords.length === 0){
+        this.info.keywords = ['无关键词']
+      }
+      if (this.info.org === ''){
+        this.info.org = '发布组织未知'
+      }
+      if (this.info.year === ''){
+        this.info.year = '年份未知'
+      }
+      if (this.info.publisher === ''){
+        this.info.publisher = '发布者未知'
+      }
+      if (this.info.doi === ''){
+        this.info.doi = 'doi未知'
+      }
+      if (this.info.isbn === ''){
+        this.info.isbn = 'isbn未知'
+      }
+      if (this.info.n_citation === ''){
+        this.info.n_citation = '被引量未知'
+      }
+      if (this.info.starred === ''){
+        this.info.starred = 1;
+      }
+      if (this.info.urls.length === 0){
+        this.info.urls = ['暂无链接']
+      }
     },
     openAuthor(author){
       if (author.hasId){
