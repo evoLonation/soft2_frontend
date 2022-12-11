@@ -8,6 +8,7 @@
         </el-button>
       </el-col>
     </el-row>
+    <h1 v-if="this.comments.length===0" style="margin:20px auto;">暂无评论</h1>
     <el-card shadow="never" v-if="this.comment !== null">
       <el-row>
         <el-col :span="2" class="user">{{ this.comment.userName }}:</el-col>

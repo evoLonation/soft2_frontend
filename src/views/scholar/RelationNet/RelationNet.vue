@@ -36,6 +36,7 @@ export default {
   mounted() {
     this.initData()
     window.addEventListener('message', (e) => {
+      console.log('catch: ',e.data)
       this.openAuthor(e.data)
     })
   },
