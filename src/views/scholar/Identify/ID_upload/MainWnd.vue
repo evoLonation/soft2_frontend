@@ -16,14 +16,24 @@ export default {
   components: {
     idView,
   },
+  props: {
+    "scholarId": String,
+  },
   methods: {
     changeFather() {
-      console.log(this.$refs.id.fileList.length);
       if(this.$refs.id.fileList.length !== 2) {
         this.$message.warning("上传照片数量少于2张！");
         return;
       }
-      this.$emit('activate');
+      // 将fileList用formData改写
+      let formList = new FormData();
+      formList.append("scholar_id", this.scholarId);
+      formList.append("file_num", this.$refs.id.fileList.length);
+      for(let i = 0; i < this.$refs.id.fileList.length; i++) {
+        formList.append("file" + (i+1), this.$refs.id.fileList[i]);
+      }
+      // 传输相关信息
+      this.$emit('activate', formList);
     },
   }
 }

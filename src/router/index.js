@@ -79,7 +79,7 @@ const routes = [
                 component: () => import('../views/scholar/ScholarHome')
             },
             {
-                path: '/identify',
+                path: '/identify/:scholarId',
                 name: "Identify",
                 component: () => import('../views/scholar/Identify/MyIdentify')
             },

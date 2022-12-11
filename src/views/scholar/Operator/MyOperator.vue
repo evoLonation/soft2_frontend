@@ -11,7 +11,7 @@
           style="margin: auto auto auto 60px"
           type="primary"
           v-if="isMe === false"
-          @click="this.$router.push({name: 'Identify'})"
+          @click="toIdentify(this.scholar_id)"
       >
         学者认证
       </el-button>
@@ -34,15 +34,29 @@
 
 <script>
 import Tools from "@element-plus/icons-vue"
+import router from "@/router";
 
 export default {
   name: "MyOperator",
   components: {
     Tools,
   },
+  props: {
+    "scholar_id": String,
+  },
   data() {
     return {
       isMe: false,
+    }
+  },
+  methods: {
+    toIdentify(id) {
+      router.push({
+        name: 'Identify',
+        params: {
+          scholarId: id,
+        }
+      })
     }
   }
 }
