@@ -1,7 +1,11 @@
 {
   "type" : "物理科学与工程",
+  "fields" : [
+    "人工智能", "深度学习", "大数据", "网络存储"
+  ],
   "papers": [
     {
+      "paper_id" : "1",
       "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
       "authors": [
         "赵正阳",
@@ -10,6 +14,7 @@
       "n_citation": 10
     },
     {
+      "paper_id" : "1",
       "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
       "authors": [
         "赵正阳",
@@ -18,6 +23,7 @@
       "n_citation": 10
     },
     {
+      "paper_id" : "1",
       "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
       "authors": [
         "赵正阳",
@@ -25,6 +31,7 @@
       ]
     },
     {
+      "paper_id" : "1",
       "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
       "authors": [
         "赵正阳",
@@ -32,6 +39,7 @@
       ]
     },
     {
+      "paper_id" : "1",
       "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
       "authors": [
         "赵正阳",
@@ -49,6 +57,7 @@
       ]
     },
     {
+      "paper_id" : "1",
       "name": "Nicotinamide mononucleotide (NMN) as an anti-aging health product – Promises and safety concerns",
       "authors": [
         "赵正阳",
@@ -59,32 +68,32 @@
   "scholars": [
     {
       "name" : "Current Biology",
-      "scholar_id" : "",
+      "scholar_id" : "123",
       "ref_num" : 123
     },
     {
       "name" : "赵正阳",
-      "scholar_id" : "",
+      "scholar_id" : "123",
       "ref_num" : 123
     },
     {
       "name" : "Current Biology",
-      "scholar_id" : "",
+      "scholar_id" : "123",
       "ref_num" : 123
     },
     {
       "name" : "赵正阳",
-      "scholar_id" : "",
+      "scholar_id" : "123",
       "ref_num" : 123
     },
     {
       "name" : "Current Biology",
-      "scholar_id" : "",
+      "scholar_id" : "123",
       "ref_num" : 123
     },
     {
       "name" : "赵正阳",
-      "scholar_id" : "",
+      "scholar_id" : "123",
       "ref_num" : 123
     }
   ],

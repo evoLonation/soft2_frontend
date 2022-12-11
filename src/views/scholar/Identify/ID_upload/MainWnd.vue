@@ -30,7 +30,7 @@ export default {
       formList.append("scholar_id", this.scholarId);
       formList.append("file_num", this.$refs.id.fileList.length);
       for(let i = 0; i < this.$refs.id.fileList.length; i++) {
-        formList.append("file" + (i+1), this.$refs.id.fileList[i]);
+        formList.append("file" + (i+1), this.$refs.id.fileList[i].raw);
       }
       // 传输相关信息
       this.$emit('activate', formList);

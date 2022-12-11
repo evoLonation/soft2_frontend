@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="indexes">
-        <div class="index">
+        <div class="index_first">
           <div class="index_title">
             <span>被引频次</span>
           </div>
@@ -48,7 +48,7 @@
             <span>{{ ach_num }}</span>
           </div>
         </div>
-        <div class="index_last">
+        <div class="index" v-if="h_index !== -1">
           <div class="index_title">
             <span>H指数</span>
           </div>
@@ -81,7 +81,7 @@ export default {
       ref_num: '',
       ach_num: '',
       h_index: '',
-      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      url: '',
     }
   },
   methods: {
@@ -97,11 +97,11 @@ export default {
         this.ach_num = res.data.ach_num;
         this.h_index = res.data.h_index;
         got = true;
+        if(!got) {
+          console.log('未获取到详情，使用本地测试数据')
+        }
         console.log(res);
       })
-      if(!got) {
-        console.log('未获取到详情，使用本地测试数据')
-      }
     },
     getAvatar() {
       let got;
@@ -205,7 +205,7 @@ export default {
   margin-top: 20px;
   width: 19%;
   height: 50%;
-  border-right: 1px dashed rgba(0,0,0,0.40);
+  border-left: 1px dashed rgba(0,0,0,0.40);
   text-align: center;
   display: inline-block;
 }
@@ -228,7 +228,7 @@ export default {
   color: rgba(0,0,0,0.40);
 }
 
-.index_last {
+.index_first {
   margin-top: 20px;
   width: 19%;
   height: 50%;

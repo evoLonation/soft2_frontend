@@ -373,6 +373,7 @@ export default {
       if (res.file) {
         let form=new FormData();
         form.append("file",res.file);
+        console.log(res.file)
           fileAxios({
             method:'post',
             url:"user/upload-avatar",
