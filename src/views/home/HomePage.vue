@@ -132,8 +132,14 @@ export default {
 
 
     const querySearch = (queryString , cb) => {
-      const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
-      cb(results);
+      paperScholarAxios.post("search/auto-complete", {
+        search_type : 2,
+        text : queryString,
+      }).then((res) => {
+        cb(res.data.auto_completes.map((value) => {return {value : value}}))
+      })
+      // const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
+      // cb(results);
     }
     const paperAuthorText = (authors) => {
       return authors.join(", ");
