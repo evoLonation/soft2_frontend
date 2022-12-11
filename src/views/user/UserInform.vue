@@ -107,7 +107,7 @@
               </span>
             </div>
             <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;">
-              <paper-show :author="item.author" :abstract="item.abstract" :org="item.publisher"
+              <paper-show :author="item.author" :abstract="item.abstract" :org="item.org"
                           :paper-name="item.paper_name" :type="1" :num="item.n_citation"
                           style="margin-left: auto;margin-top: 20px;"></paper-show>
               <el-divider  style="width: 100%; margin: 10px"/>
@@ -223,7 +223,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test1",
@@ -231,7 +231,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test2",
@@ -239,7 +239,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test3",
@@ -247,7 +247,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test4",
@@ -255,7 +255,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test5",
@@ -263,7 +263,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test6",
@@ -271,7 +271,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test7",
@@ -279,7 +279,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test8",
@@ -287,7 +287,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test9",
@@ -295,7 +295,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test10",
@@ -303,7 +303,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
         {
           "paper_name": "test11",
@@ -311,7 +311,7 @@ export default {
           "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
-          "publisher": "aaa", //期刊
+          "org": "aaa", //期刊
         },
       ],
     }
