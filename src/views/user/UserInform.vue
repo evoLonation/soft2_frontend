@@ -84,7 +84,7 @@
             <div style="margin-left: 431px;margin-top: 30px;"><el-button type="danger" round @click="logout">退出登录</el-button></div>
           </div>
 
-          <div v-if="pageType===1" style="margin-bottom: 30px">
+          <div v-if="pageType===1&&scholars!=null" style="margin-bottom: 30px">
             <div style="margin-top: 20px">
               <span style="margin-left: 30px;font-size: 15px;color: #73767a">
                 关注的学者:
@@ -100,7 +100,12 @@
             />
           </div>
 
-          <div v-if="pageType===2" style="margin-bottom: 30px">
+          <div v-if="pageType===1&&scholars==null" style="margin-bottom: 10px;text-align: center">
+            您还没有关注学者哦！
+          </div>
+
+
+          <div v-if="pageType===2&&papers!=null" style="margin-bottom: 30px">
             <div style="margin-top: 20px">
               <span style="margin-left: 30px;font-size: 15px;color: #73767a">
                 收藏的论文:
@@ -115,6 +120,10 @@
             <el-pagination background layout="prev, pager, next,jumper" :total="this.pagePaperCount"  v-model:current-page="pagePaper" :page-size="6"
             />
           </div>
+
+        <div v-if="pageType===2&&papers==null" style="margin-bottom: 10px;text-align: center;">
+          您还没有收藏论文哦！
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -401,7 +410,7 @@ export default {
         method:'post',
         url:'paper/all-star'
       }).then((res) =>{
-        if(res.data.all_star!=null)
+        // if(res.data.all_star!=null)
         this.papers=res.data.all_star;
         console.log(res.data);
       })
@@ -409,7 +418,7 @@ export default {
         method:'post',
         url:'scholar/all-subscribe'
       }).then((res) =>{
-        if(res.data.all_subscribe!=null)
+        // if(res.data.all_subscribe!=null)
         this.scholars=res.data.all_subscribe;
         console.log(res.data);
       })
