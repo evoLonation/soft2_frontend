@@ -9,12 +9,13 @@
   <scholar-list style="margin-top: 30px;margin-left: 30px"
               :name="paperName" :institution="org" :paper_num="num" :type="1"
         ></scholar-list>
+
 </template>
 
 <script>
 import PaperShow from "@/components/paperShow";
-import searchType from "@/assets/searchType.json";
-import qs from "qs";
+// import searchType from "@/assets/searchType.json";
+// import qs from "qs";
 import ScholarList from "@/components/scholarList";
 export default {
   name: "testSearch",
@@ -31,7 +32,7 @@ export default {
   },
   methods:{
     JumpToSearch(){
-      this.$router.push({path:'/paperSearch',query:{searchType: qs.stringify(searchType.searchType[3]),content:"dname"}});
+      this.$router.push({name:'PaperSearch',query:{type:"1"}});
     }
   }
 }
