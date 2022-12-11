@@ -6,12 +6,13 @@
         <div class="logo">
           <div>
             <div class="main">金刚石学术</div>
-            <button @click="loginState.logout()">退出登录</button>
-            <div class="vice">找论文，学术分享，金刚石学术就够了！</div>
+<!--            <button @click="loginState.logout()">退出登录</button>-->
+            <div class="vice">在学术的海洋中探索宝藏</div>
           </div>
 
         </div>
         <div class="search-box">
+          <div style="width: 30px;height: 10px"></div>
           <search-box>
           </search-box>
         </div>
@@ -32,20 +33,25 @@
               :fetch-suggestions="querySearch"
           >
             <template #suffix>
-              <el-icon size="large" @click="gotoField"><search /></el-icon>
+              <el-icon size="large" @click="gotoField(fieldSearchContent)"><search /></el-icon>
             </template>
           </el-autocomplete>
         </div>
       </div>
       <div class="block" v-for="field in fieldInfos" :key="field">
         <div class="header">
-          物理科学与工程
+          <p class="big-field">
+            {{field.type}}
+          </p>
+          <div class="small-field">
+            相关领域： <div v-for="smallfield in field.fields" :key="smallfield" @click="gotoField(smallfield)"><span>{{ smallfield }}</span></div>
+          </div>
         </div>
         <div class="body">
           <div class="paper">
             <div class="header">热门论文</div>
             <div class="item" v-for="paper in field.papers" :key="paper">
-              <div class="title clickable">{{paper.name}}</div>
+              <div class="title clickable" @click="gotoPaper(paper.paper_id)">{{paper.name}}</div>
               <div class="foot other-info">
                 <div class="authors overflow">{{paperAuthorText(paper.authors)}}</div>
                 <div class="cite">{{paper.n_citation}}次被引</div>
@@ -56,14 +62,14 @@
             <div class="scholar">
               <div class="header">热门学者</div>
               <div class="item" v-for="scholar in field.scholars" :key="scholar">
-                <div class="name clickable overflow">{{scholar.name}}</div>
+                <div class="name clickable overflow" @click="gotoScholar(scholar.scholar_id)">{{scholar.name}}</div>
                 <div class="cite other-info" >总被引量：{{scholar.ref_num}}</div>
               </div>
             </div>
             <div class="journal">
               <div class="header">热门期刊</div>
               <div class="item" v-for="journal in field.journals" :key="journal">
-                <div class="clickable">{{journal}}</div>
+                <div class="clickable" @click="searchJournal(journal)">{{journal}}</div>
               </div>
             </div>
           </div>
@@ -81,6 +87,9 @@ import data from "@/assets/homedata.json";
 import {ref, onMounted, onBeforeUnmount} from "vue";
 import {loginStore, navigationStore} from "@/store";
 import {useRouter} from "vue-router";
+import searchType from "@/assets/searchType.json";
+import qs from "qs";
+import {paperScholarAxios} from "@/axios";
 export default {
   name: "HomePage",
   // components: {NavigationBar},
@@ -90,8 +99,9 @@ export default {
     const upArea = ref(null);
     const isHomeTop = ref(true);
     const setNavigationBar = (isOnTop) => {
-      navigationState.isOpacity = isOnTop;
-      navigationState.isDisplaySearchBox = !isOnTop;
+      navigationState.isOnTop = isOnTop;
+      // navigationState.isOpacity = isOnTop;
+      // navigationState.isDisplaySearchBox = !isOnTop;
     }
     setNavigationBar(true);
     const scrollListener = () => {
@@ -106,10 +116,18 @@ export default {
       }
     };
 
-
     const fieldSearchContent = ref('');
-    const gotoField = () => {
-      router.push({name : "Field", query: {content: fieldSearchContent.value,}})
+    const gotoField = (field) => {
+      router.push({name : "Field", query: {content: field,}})
+    }
+    const gotoPaper = (paperId) => {
+      router.push({name : "Paper", params: {paperId : paperId}})
+    }
+    const gotoScholar = (scholarId) => {
+      router.push({name : "Scholar", params: {scholarId : scholarId}})
+    }
+    const searchJournal = (journal) => {
+      router.push({name: "PaperSearch", query : {searchType : qs.stringify(searchType.searchType[5]), content: journal}})
     }
 
 
@@ -120,14 +138,21 @@ export default {
     const paperAuthorText = (authors) => {
       return authors.join(", ");
     }
-    const fieldInfos = ([data, data, data, data]);
+    let fieldInfos = ([data, data, data, data]);
+    paperScholarAxios.post("home/info", {
+      "paper_num" : 6,//每个大类显示的最多论文数量
+      "scholar_num" : 6,//每个大类显示的最多学者数量
+      "journal_num" : 6,//每个大类显示的最多期刊数量
+    }).then((res) => {
+      fieldInfos = res.data;
+    });
 
     window.addEventListener("scroll", scrollListener,true);
     onMounted(() => scrollListener());
     onBeforeUnmount(() => window.removeEventListener("scroll", scrollListener, true))
 
     const loginState = loginStore();
-    return{
+    return {
       upArea,
       isHomeTop,
       querySearch,
@@ -136,6 +161,9 @@ export default {
       fieldInfos,
       paperAuthorText,
       loginState,
+      gotoPaper,
+      gotoScholar,
+      searchJournal,
     }
   },
 
@@ -198,6 +226,7 @@ export default {
 
     }
     .search-box{
+      display: flex;
       margin-left: auto;
       margin-right: auto;
     }
@@ -232,14 +261,28 @@ export default {
     box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
     //border-bottom: 1px solid #b0b2b3;
     .header{
-      font-size: 30px;
       padding-bottom: 20px;
       border-bottom: 2px solid #b0b2b3;
       margin-bottom: 40px;
       font-weight: bold;
-      color: #87bdd8;
       //color: #79bbff;
-
+      .big-field{
+        font-size: 30px;
+        color: #87bdd8;
+      }
+      .small-field{
+        margin-top: 10px;
+        display: flex;
+        color: #8d9db6;
+        *{
+          margin-left: 0;
+          margin-right: 20px;
+        }
+        * :hover{
+          cursor: pointer;
+          color: #8d9db6aa;
+        }
+      }
     }
     .body{
       display: flex;
@@ -263,6 +306,7 @@ export default {
         text-overflow: ellipsis;
       }
       .header{
+        color: #454140;
         font-size: 25px;
         padding-bottom: 15px;
         border-bottom: 1px solid #b0b2b3;
