@@ -107,8 +107,8 @@
               </span>
             </div>
             <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;">
-              <paper-show :author="item.authors" :abstract="item.abstract" :org="item.publisher"
-                          :paper-name="item.title" :type="1" :num="item.n_citation"
+              <paper-show :author="item.author" :abstract="item.abstract" :org="item.publisher"
+                          :paper-name="item.paper_name" :type="1" :num="item.n_citation"
                           style="margin-left: auto;margin-top: 20px;"></paper-show>
               <el-divider  style="width: 100%; margin: 10px"/>
             </div>
@@ -137,10 +137,14 @@ export default {
         name:'Home',
       })
     }
+    const flash = (ava) =>{
+      store.avatarUrl=ava;
+    }
 
     return{
       store,
-      logout
+      logout,
+      flash
     }
   },
   data(){
@@ -213,97 +217,98 @@ export default {
       ],
       papers:[
         {
-          "title": "test0",
+          "paper_id":"0",
+          "paper_name": "test0",
           "abstract": "000",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test1",
+          "paper_name": "test1",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test2",
+          "paper_name": "test2",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test3",
+          "paper_name": "test3",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test4",
+          "paper_name": "test4",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test5",
+          "paper_name": "test5",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test6",
+          "paper_name": "test6",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test7",
+          "paper_name": "test7",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test8",
+          "paper_name": "test8",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test9",
+          "paper_name": "test9",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test10",
+          "paper_name": "test10",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
         },
         {
-          "title": "test11",
+          "paper_name": "test11",
           "abstract": "111",
-          "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
+          "author": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
           "year": 123, //发布年份
           "n_citation": 123, //被引量
           "publisher": "aaa", //期刊
@@ -367,23 +372,45 @@ export default {
             console.log(res);
             userAxios({
               method:'post',
-              url:'user/user-infor'
+              url:'user/user-info'
             }).then((res) =>{
-              this.userinfo=res.data.avatar_url;
-              that.$store.state.avatarUrl=res.data.avatar_url;
+              this.userPhoto=res.data.avatar_url;
+              that.flash(res.data.avatar_url);
               this.reload();
             })
           })
       }
     },
   },
-  created() {
+  mounted() {
       userAxios({
         method:"post",
-        url:'user/user-infor'
+        url:'user/user-info'
       }).then((res)=>{
+        this.userinfo.nickName=res.data.nickname;
+        this.userinfo.wealth=res.data.wealth;
+        this.userinfo.complaints=res.data.complaints;
+        this.userinfo.follows=res.data.follows;
+        this.userinfo.n_help=res.data.n_help;
+        this.userinfo.n_request=res.data.n_request;
+        this.userinfo.email=res.data.email;
+        this.userPhoto=res.data.avatar_url;
         console.log(res.data);
       });
+      userAxios({
+        method:'post',
+        url:'paper/all-star'
+      }).then((res) =>{
+        this.papers=res.data.all_star;
+        console.log(res.data);
+      })
+      userAxios({
+        method:'post',
+        url:'scholar/all-subscribe'
+      }).then((res) =>{
+        this.scholars=res.data.all_subscribe;
+        console.log(res.data);
+      })
 
   }
 }

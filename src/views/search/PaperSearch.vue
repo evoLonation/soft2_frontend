@@ -32,7 +32,7 @@
             />
           </el-select>
           <el-autocomplete v-model="inputValue[0]" tabindex="s"
-                           placeholder="Please input" clearable :fetch-suggestions="querySearch(0)" :trigger-on-focus="false"
+                           placeholder="Please input" clearable :fetch-suggestions="querySearch" :trigger-on-focus="false"
                            style="width: 800px; margin-left: 30px;margin-top: 30px"/>
           <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(0)">
             <template #icon>
@@ -69,7 +69,7 @@
                   :value="item.value"
               />
             </el-select>
-            <el-autocomplete v-model="inputValue[index-1]"  :fetch-suggestions="querySearch(index-1)" :trigger-on-focus="false"
+            <el-autocomplete v-model="inputValue[index-1]"  :fetch-suggestions="querySearch" @select="handleSelect" :trigger-on-focus="false"
                              placeholder="Please input" clearable style="width: 800px; margin-left: 30px;margin-top: 30px">
               <template #append>
                 <el-select v-model="exact[index-1]" placeholder="Select" style="width: 90px">
@@ -104,14 +104,14 @@
     </div>
     <div class="paper_main">
       <div class="paper_main_top">
-        <div style="display: inline-block;">
-          <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3">筛选</span>
+        <div style="width: 300px">
+          <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3;" >筛选</span>
         </div>
-        <div style="display:inline-block;margin-left: 21%">
+        <div style="margin-left: 50px;width: 900px">
           <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.paperNum}}条数据:</span>
         </div>
-        <div style="display: inline-block;width: 15%;margin-left: 53%;vertical-align: top">
-          <el-select  v-model="sortType"  @change="dealSort" placeholder="按相关性降序" style="width: 80%;border-radius: 4px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
+        <div style="flex: 1">
+          <el-select  v-model="sortType"  @change="dealSort" placeholder="按相关性降序" style="border-radius: 4px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
             <el-option
                 v-for="item in sorts"
                 :key="item.value"
@@ -145,7 +145,7 @@
         <div class="example-pagination-block">
           <div v-for="(item,index) in papers" :key="item">
             <paper-show :author="item.authors" :abstract="item.abstract" :org="item.publisher"
-                        :paper-name="item.title" :type="0" :num="item.n_citation" :paperid="item.id"
+                        :paper-name="item.title" :type="0" :num="item.n_citation" :paperId="item.id"
                         style="margin-left: 50px;margin-top: 10px;vertical-align: top" v-if="index<10"></paper-show>
           </div>
           <el-pagination background layout="prev, pager, next,jumper" :total="this.paperNum" @current-change="handleCurrentChange()" v-model:current-page="nowPage"
@@ -237,6 +237,7 @@ export default {
       ],
       papers:[
         {
+          "id":"1",
           "title": "test0",
           "abstract": "000",
           "authors": [{name: "a", id: "1"},{name: 'b',id:'2'},{name: "a", id: "1"},{name: "a", id: "1"},{name: "a", id: "1"},{name: "a", id: "1"}], //作者：[{名字，id}]，一作在前
@@ -245,6 +246,7 @@ export default {
           "publisher": "aaa", //期刊
         },
         {
+          "id":"2",
           "title": "test1",
           "abstract": "111",
           "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
@@ -253,6 +255,7 @@ export default {
           "publisher": "aaa", //期刊
         },
         {
+          "id":"3",
           "title": "test2",
           "abstract": "111",
           "authors": [{name: "a", id: "1"},], //作者：[{名字，id}]，一作在前
@@ -342,16 +345,16 @@ export default {
     }
   },
   methods:{
-    querySearch(index,queryString, cb) {
-      console.log("ssss");
+    querySearch(queryString, cb) {
+      console.log(queryString)
       let toSend={
-        search_type:this.toIntSearchType(this.value[index]),
+        search_type:0,
         text:queryString,
       };
       paperScholarAxios({
         method:'post',
         url:'search/auto-complete',
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res) =>{
         var toSuggest;
         for(let i=0;i<res.data.auto_completes.length;i++){
@@ -359,6 +362,9 @@ export default {
         }
         cb(toSuggest);
       })
+    },
+    handleSelect(item){
+      console.log(item)
     },
     showNormal() {
       this.searchType=false;
@@ -425,7 +431,7 @@ export default {
       paperScholarAxios({
         method:'post',
         url:"search/paper",
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res)=>{
         let response=res.data;
         that.papers=response.papers;
@@ -486,7 +492,7 @@ export default {
       paperScholarAxios({
         method:'post',
         url:"search/paper",
-        data:JSON.stringify(toSend)
+        data:toSend,
       }).then((res)=>{
         let response=res.data;
         that.paperNum=response.paper_num;
@@ -525,7 +531,7 @@ export default {
       paperScholarAxios({
         method:'post',
         url:"search/paper",
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res)=>{
         let response=res.data;
         that.paperNum=response.paper_num;
@@ -567,7 +573,7 @@ export default {
       paperScholarAxios({
         method:'post',
         url:"search/paper",
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res)=>{
         let response=res.data;
         that.paperNum=response.paper_num;
@@ -583,7 +589,7 @@ export default {
       paperScholarAxios({
         method:'post',
         url:"search/paper",
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res)=>{
         let response=res.data;
         that.papers=response.papers;
@@ -610,6 +616,7 @@ export default {
   height: 100%;
   min-height: 2300px;
   flex-direction: column;
+  margin: auto;
 }
 
 .top_search{
@@ -677,8 +684,9 @@ export default {
   /*box-shadow: 1px 1px 3px #888888;*/
   border-radius: 4px;
   /*height: 300px;*/
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1400px;
   /*margin-bottom: 20px;*/
 }
 
@@ -689,22 +697,27 @@ export default {
   /*box-shadow: 1px 1px 3px #888888;*/
   border-radius: 4px;
   /*height: 300px;*/
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1400px;
   /*margin-bottom: 20px;*/
 }
 
 .paper_main{
   /*border: 3px red solid;*/
-  margin-left: 4%;
-  margin-right: 4%;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 30px;
+  width: 1400px;
   height: 900px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .paper_main_top{
-  width: 100%;
+  width: 1400px;
   border: 3px white ;
+  display: flex;
 }
 
 
@@ -716,7 +729,7 @@ export default {
   vertical-align: top;
   display: inline-block;
   margin-top: 10px;
-  width: 20%;
+  width: 300px;
   height: 100%;
 }
 
@@ -725,10 +738,8 @@ export default {
   /*border-radius: 10px;*/
   /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   vertical-align: top;
-  /*margin-left: 3%;*/
-  /*margin-top: 10px;*/
   display: inline-block;
-  width: 77%;
+  flex: 1;
 }
 
 .example-pagination-block{
