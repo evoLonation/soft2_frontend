@@ -24,17 +24,20 @@
       </el-button>
       <el-button
           style="margin: auto 60px auto auto"
-          type="success"
+          id="subscribe_icon"
+          :type="sub_type"
+          @click="subscribe"
       >
-        学者订阅
+        {{ sub_content }}
       </el-button>
     </div>
   </div>
 </template>
 
 <script>
-import Tools from "@element-plus/icons-vue"
+import Tools from "@element-plus/icons-vue";
 import router from "@/router";
+import {userAxios} from "@/axios"
 
 export default {
   name: "MyOperator",
@@ -47,6 +50,8 @@ export default {
   data() {
     return {
       isMe: false,
+      sub_content: "学者订阅",
+      sub_type: "success",
     }
   },
   methods: {
@@ -55,6 +60,19 @@ export default {
         name: 'Identify',
         params: {
           scholarId: id,
+        }
+      })
+    },
+    subscribe() {
+      console.log(this.scholar_id);
+      userAxios.post('scholar/subscribe/', {
+        "scholar_id": this.scholar_id,
+      }).then((res) => {
+        let code = res.data.code;
+        if(code === 0) {
+          this.$message.success("订阅成功!");
+          this.sub_content = "取消订阅";
+          this.sub_type = "danger";
         }
       })
     }

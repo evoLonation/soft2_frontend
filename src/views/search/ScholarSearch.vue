@@ -103,18 +103,17 @@ export default {
       let toSend={
         name:this.inputName,
         institution:this.inputOrg,
-        start:this.nowPage*10,
-        end:(this.nowPage+1)*10
+        start:(this.nowPage-1)*10,
+        end:(this.nowPage)*10
       };
       paperScholarAxios({
         method:'post',
         url:'search/scholar',
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res)=>{
         let response=res.data;
         that.scholars=response.scholar;
         that.num=response.scholar_num;
-        that.nowPage=1;
         console.log(res.data);
       })
 
@@ -125,8 +124,14 @@ export default {
 
 <style scoped>
 .main_skeleton{
-  /*border: 3px mediumpurple solid;*/
-  /*height: 800px;*/
+  background-color: #f3f3f3;
+  position: relative;
+  width: 1690px;
+  min-width: 1500px;
+  height: 100%;
+  min-height: 2300px;
+  flex-direction: column;
+  margin: auto;
 }
 
 .main_title{
@@ -146,6 +151,8 @@ export default {
   /*border: 3px green solid;*/
   margin-top: 20px;
   /*height: 500px;*/
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .scholar_searched{
