@@ -102,7 +102,8 @@
           </el-button>
         </div>
     </div>
-    <div class="paper_main">
+
+    <div class="paper_main" v-if="searchBegin">
       <div class="paper_main_top">
         <div style="width: 300px">
           <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3;" >筛选</span>
@@ -166,6 +167,7 @@ export default {
   components: {PaperShow},
   data(){
     return{
+      searchBegin:false,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3'],
       nowPage:1,
@@ -503,6 +505,7 @@ export default {
         that.yearsCheck=[];
         that.nowPage=1;
         console.log(res.data);
+        that.searchBegin=true;
       })
     },
     getSearchList(page){
@@ -542,6 +545,7 @@ export default {
         that.yearsCheck=[];
         that.nowPage=1;
         console.log(res.data);
+        that.searchBegin=true;
       })
     },
     //todo:筛选
