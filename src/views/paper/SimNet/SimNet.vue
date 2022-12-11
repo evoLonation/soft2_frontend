@@ -85,6 +85,7 @@ export default {
         this.graph.render()
         this.graph.initListener()
         this.loading = false
+        console.log(res.data)
       }).catch(e=>{
         console.log(e)
         this.graph.loadData(Data.data)

@@ -16,7 +16,7 @@
       <el-menu-item index="5">系统</el-menu-item>
     </el-menu>
     <el-table
-      :data="this.curMessages" table-layout="fixed" :key="this.flush">
+      :data="this.curMessages" table-layout="fixed" :key="this.flush" empty-text="暂无消息">
       <template #empty>
         <h1 style="margin:20px auto;">暂无消息</h1>
       </template>
