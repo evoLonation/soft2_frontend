@@ -401,6 +401,7 @@ export default {
         method:'post',
         url:'paper/all-star'
       }).then((res) =>{
+        if(res.data.all_star!=null)
         this.papers=res.data.all_star;
         console.log(res.data);
       })
@@ -408,6 +409,7 @@ export default {
         method:'post',
         url:'scholar/all-subscribe'
       }).then((res) =>{
+        if(res.data.all_subscribe!=null)
         this.scholars=res.data.all_subscribe;
         console.log(res.data);
       })
