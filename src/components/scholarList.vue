@@ -29,12 +29,13 @@ export default {
   props:[
       'name','paper_num','institution','id','type'
   ],
+  inject:['reload'],
   data(){
     return{
       src:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
     }
   },
-  setup(props){
+  setup(props,inject){
     const router = useRouter();
     const gotoScholar = () => {
       router.push({
@@ -48,6 +49,7 @@ export default {
       let toSend={
         scholar_id:props.id
       }
+      console.log(props.id);
       userAxios({
         method:'post',
         url:'scholar/delete-subscribe',
@@ -55,6 +57,7 @@ export default {
       }).then((res)=>{
         if(res.data.code==="0")this.$message('success',"取关成功");
         else this.$message('error',"取关失败");
+        inject.reload();
       })
     }
     return{

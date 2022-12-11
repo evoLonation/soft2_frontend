@@ -91,7 +91,8 @@
               </span>
             </div>
             <div v-for="(item,index) in scholars.slice((pageScholar-1)*6,pageScholar*6)" :key="index" style="display: inline-block;margin-left: 72px;margin-top: 20px;">
-              <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :type="1"
+              <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :id="item.scholar_id"
+                              :type="1"
                             ></scholar-list>
               <el-divider  style="width: 100%; margin: 10px"/>
             </div>
@@ -162,31 +163,31 @@ export default {
       },
       scholars:[
         {
-          "scholar_id":"",
+          "scholar_id":"1",
           "scholar_name":"刘伟",
           "org":"安全",
           "paper_num":111,
         },
         {
-          "scholar_id":"",
+          "scholar_id":"1",
           "scholar_name":"张本",
           "org":"不安全",
           "paper_num":111,
         },
         {
-          "scholar_id":"",
+          "scholar_id":"1",
           "scholar_name":"蒋子",
           "org":"无敌",
           "paper_num":111,
         },
         {
-          "scholar_id":"",
+          "scholar_id":"1",
           "scholar_name":"翔子",
           "org":"摆烂",
           "paper_num":111,
         },
         {
-          "scholar_id":"",
+          "scholar_id":"1",
           "scholar_name":"桑杰",
           "org":"质疑",
           "paper_num":111,
