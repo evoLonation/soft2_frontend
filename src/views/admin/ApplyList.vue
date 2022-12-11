@@ -1,6 +1,7 @@
 <template>
   <div class="list">
     <h1 style="text-align: center; padding-bottom: 30px">学者认证列表</h1>
+
     <el-table  :data="records" style="width: 69%; margin-left: 200px" >
       <el-table-column fixed align="center" prop="scholar_name" label="姓名" width="160"/>
       <el-table-column align="center"  label="申请方式" width="160" >
