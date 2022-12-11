@@ -149,8 +149,10 @@ export default {
       paperScholarAxios.defaults.headers.common['Authorization'] = token;
       fileAxios.defaults.headers.common['Authorization'] = token;
       testAxios.defaults.headers.common['Authorization'] = token;
+      console.log("set header auth down, key:")
+      console.log(token)
     }
-    setHeaderAuth();
+    setHeaderAuth(store.token);
 
     // true为登录，false为注册
     const viewType = ref(true);
