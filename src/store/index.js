@@ -108,8 +108,9 @@ export const paperStore = defineStore('paper', {
 
 export const navigationStore = defineStore('navigation', {
     state: () =>( {
-        isOpacity : false,
-        isDisplaySearchBox : true,
+        isOnTop : false,
+        // isOpacity : false,
+        // isDisplaySearchBox : true,
     }),
 });
 export default pinia;

@@ -8,25 +8,24 @@
           :fetch-suggestions="querySearch"
       >
         <template #suffix>
-          <el-icon size="large" @click="normalSearch" ><search /></el-icon>
+          <el-icon size="large" @click="normalSearch" style="cursor: pointer"><search /></el-icon>
         </template>
         <template #prepend>
-          <el-select v-model="selectedType" key="" placeholder="Select" size="large" style="width: 120px">
+          <el-select v-model="selectedTypeId" key="" placeholder="Select" size="large" style="width: 120px">
             <el-option
                 v-for="item in searchTypes"
                 :key="item.id"
                 :label="item.type"
+                :value="item.id"
             />
           </el-select>
         </template>
       </el-autocomplete>
       <div style="display: flex;flex-direction: column;margin-right: auto;">
-        <div class="other-option" id="option1" @click="toScholarSearch">检索学者</div>
-        <div class="other-option" id="option2" @click="toAdvancedSearch">高级检索</div>
+        <div :class="{'other-option-home' : store.isOnTop, 'other-option' : !store.isOnTop}" id="option1" @click="toScholarSearch">检索学者</div>
+        <div :class="{'other-option-home' : store.isOnTop, 'other-option' : !store.isOnTop}" id="option2" @click="toAdvancedSearch">高级检索</div>
       </div>
     </div>
-
-
 
 </template>
 
@@ -34,57 +33,45 @@
 import {ref} from "vue";
 import searchType from "@/assets/searchType.json"
 import {useRouter} from "vue-router"
-
+import {navigationStore} from "@/store";
+import qs from "qs";
 export default {
   name: "SearchBox",
   setup(){
+    const store = navigationStore();
     const router = useRouter();
     const input = ref("");
-    const searchTypes = ref(searchType.searchType);
-    const selectedType = ref(searchTypes.value[0].type);
     const content = ref("");
 
-    const typeIdMap = {};
-    for (let type of searchTypes.value) {
-      typeIdMap[type.type] = type.id;
-    }
-    const findTypeId = (type) => {
-      return typeIdMap[type];
-    }
 
     const querySearch = (queryString , cb) => {
       const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
       cb(results)
     }
-
-    const getPageParam = (type, content) => {
-      return {
-        "content" : content,
-        "searchType" : findTypeId(type),
-      }
-    }
-
+    const searchTypes = searchType.searchType;
+    const selectedTypeId = ref(0);
     const normalSearch = () => {
-      router.push({name : "search", params : getPageParam(selectedType, content)});
+      router.push({name : "PaperSearch", query:{
+          searchType: qs.stringify(searchType.searchType[selectedTypeId.value]),
+          content: input.value}});  //搜索内容});
     }
     const toScholarSearch = () =>{
-      router.push({name : "scholarSearch"});
+      router.push({name : "ScholarSearch"});
     }
     const toAdvancedSearch = () => {
-      router.push({name : "search"});
+      router.push({name : "Search"});
     }
-
 
     return{
       input,
       querySearch,
       searchTypes,
-      selectedType,
+      selectedTypeId,
       content,
       normalSearch,
       toScholarSearch,
       toAdvancedSearch,
-
+      store,
     }
   }
 }
@@ -95,6 +82,15 @@ export default {
   font-size: 13px;
   color: #667292;
 }
+.other-option-home{
+  font-size: 13px;
+  color: #ffffff;
+}
+.other-option-home:hover{
+  color: #ffffffaa;
+  cursor: pointer;
+}
+
 .other-option:hover{
   color: #8692b2;
   cursor: pointer;
