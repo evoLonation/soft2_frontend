@@ -34,7 +34,7 @@ export class Graph {
                 type: 'force',
                 preventOverlap: true,
                 nodeSize: 100,
-                linkDistance: 150,
+                linkDistance: 50,
             },
             modes: {
                 default: [
