@@ -2,7 +2,8 @@
   <div class="show_scholar">
     <div class="scholar_name">
       <el-icon ><User /></el-icon>
-      <div style="display: inline-block; padding-left: 10px; font-size: 20px; font-weight: bold">{{this.name}}</div> <br/>
+      <div style="display: inline-block; padding-left: 10px; font-size: 20px; font-weight: bold" @click="gotoScholar">
+        {{this.name}}</div> <br/>
     </div>
 
     <div style="display: flex;">
@@ -20,11 +21,26 @@
 </template>
 
 <script>
+import {useRouter} from "vue-router";
 export default {
   name: "ScholarShow",
   props:[
-    'name', 'n_paper', 'n_citation', 'weight'
+    'name', 'n_paper', 'n_citation', 'weight', 'scholar_id'
   ],
+  setup(props) {
+    const router = useRouter();
+    const gotoScholar = () => {
+      router.push({
+        name:'Scholar',
+        params:{
+          scholarId: props.scholar_id
+        }
+      })
+    }
+    return {
+      gotoScholar
+    }
+  }
 }
 </script>
 

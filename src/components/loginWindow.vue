@@ -32,6 +32,7 @@
           class="input"
           v-model="loginInput.password"
           size="large"
+          type="password"
           placeholder="密码"
           input-style="height: 50px;"
       >
@@ -58,6 +59,7 @@
           v-model="registerInput.password1"
           size="large"
           placeholder="密码"
+          type="password"
           class="input"
           input-style="height: 50px;"
       >
@@ -69,6 +71,7 @@
           v-model="registerInput.password2"
           size="large"
           placeholder="确认密码"
+          type="password"
           class="input"
           input-style="height: 50px;"
 

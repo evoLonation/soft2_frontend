@@ -33,7 +33,7 @@
     </el-col>
     </el-row>
     <el-row class="op" v-for="url in this.urls" :key="url">
-      <el-link :href="url" type="primary" style="font-size: medium; color: #7682a2">{{"原文链接" + (this.urls.indexOf(url)+1)}}</el-link>
+      <el-link :href="url" type="primary" style="font-size: medium; color: #87bdd8">{{"原文链接" + (this.urls.indexOf(url)+1)}}</el-link>
     </el-row>
   </div>
 
@@ -44,6 +44,7 @@
       :default-active="'1'"
       class="el-menu-demo"
       mode="horizontal"
+      active-text-color="#87bdd8"
       @select="this.changeCite"
       >
       <el-menu-item index="1">GB/T 7714</el-menu-item>
@@ -53,9 +54,11 @@
       <el-menu-item index="5">CAJ-CD</el-menu-item>
       </el-menu>
     </template>
-    <div>{{this.citation}}</div>
+    <template #default>
+      {{this.citation}}
+    </template>
     <template #footer>
-      <el-button style="float: right; margin-right: 20px;" @click="this.copyCitation()" circle size="large"  color=" #66b1ff"><el-icon color="#FFFFFF"><DocumentCopy /></el-icon></el-button>
+      <el-button style="float: bottom" @click="this.copyCitation()" circle size="large"  color="#87bdd8"><el-icon color="#FFFFFF"><DocumentCopy /></el-icon></el-button>
     </template>
   </el-dialog>
 <!--  认领文献对话框-->
@@ -64,7 +67,7 @@
     <el-input v-model="this.input" placeholder="您的学者ID"></el-input>
     <template #footer>
       <el-button circle @click="this.showClaim=false" style="float: left" size="large"><el-icon><Close></Close></el-icon></el-button>
-      <el-button circle @click="this.adopt;this.showClaim=false" size="large" color=" #66b1ff"><el-icon color="#FFFFFF"><Check></Check></el-icon></el-button>
+      <el-button circle @click="this.adopt;this.showClaim=false" size="large" color="#87bdd8"><el-icon color="#FFFFFF"><Check></Check></el-icon></el-button>
     </template>
   </el-dialog>
 <!--  是否申诉对话框-->
@@ -72,7 +75,7 @@
     文献的同名作者已经被关联到其他学者，是否发起申诉？
     <template #footer>
       <el-button round @click="this.showGrievance=false">取消</el-button>
-      <el-button round @click="this.grievance" color=" #66b1ff" style="color: #ffffff">确定</el-button>
+      <el-button round @click="this.grievance" color="#87bdd8" style="color: #ffffff" >确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -139,8 +142,8 @@ export default {
         'id': this.store.paperId
       }).then(res=>{
         this.citations = res.data
+        this.citation = this.citations.gb
       })
-      this.citation = this.citations.gb
     },
     changeCite(key){
       switch (key) {
@@ -262,8 +265,8 @@ export default {
 </style>
 <style>
 .dialog{
-  width: 600px;
-  min-height: 200px;
+  width: 650px;
+  min-height: 230px;
   border-radius: 5px;
   box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
