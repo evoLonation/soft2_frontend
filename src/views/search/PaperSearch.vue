@@ -491,7 +491,7 @@ export default {
       //todo:axios 页面变换 !
       // console.log(this.nowPage)
       let that=this;
-      let toSend=this.getSearchList(this.nowPage);
+      let toSend=this.getFilter(this.nowPage);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -688,7 +688,7 @@ export default {
         that.searchBegin=true;
       })
     },
-    getFilter(){
+    getFilter(page){
       var toSend={
         query:this.toProfession(false),
         start_year:this.beginYear,
@@ -696,8 +696,8 @@ export default {
         years:[],
         themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:0,
-        end:10,
+        start:10*(page-1),
+        end:10*page,
       };
       for(let i=0;i<this.themesCheck.length;i++){
         if(this.themesCheck[i]===true){
@@ -714,7 +714,7 @@ export default {
     //todo:筛选
     dealFilter(){
       let that=this;
-      var toSend=this.getFilter();
+      var toSend=this.getFilter(1);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -729,7 +729,7 @@ export default {
     },
     dealSort(val){
       let that=this;
-      let toSend=this.getFilter();
+      let toSend=this.getFilter(1);
       toSend.sort_type=this.toIntSortType(val);
       paperScholarAxios({
         method:'post',
