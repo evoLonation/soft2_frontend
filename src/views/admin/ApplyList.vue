@@ -65,14 +65,14 @@ export default {
     getList() {
       let got = false
       applyAxios.post('admin/get-scholar-apply', {
-        "start": '',
-        "end": ''
+        "start": 0,
+        "end": 10
       }).then(res=>{
         this.records = res.data.records
         got = true
       })
       if(!got) {
-        console.log('未能获取，使用本地数据')
+        console.log('获取失败')
         this.records = Records.Records
       }
     },
