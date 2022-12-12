@@ -122,6 +122,7 @@ export default {
       }
       messageAxios.post('message/get-all-messages',{
       }).then(res=>{
+        console.log(res.data)
         this.messages = this.curMessages = res.data.messages
         this.flush++;
       })

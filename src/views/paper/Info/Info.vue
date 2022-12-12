@@ -74,16 +74,16 @@ export default {
         this.info.year = '年份未知'
       }
       if (this.info.publisher === ''){
-        this.info.publisher = '发布者未知'
+        this.info.publisher = '版号未知'
       }
       if (this.info.doi === ''){
-        this.info.doi = 'doi未知'
+        this.info.doi = '未知'
       }
       if (this.info.isbn === ''){
-        this.info.isbn = 'isbn未知'
+        this.info.isbn = '未知'
       }
       if (this.info.n_citation === ''){
-        this.info.n_citation = '被引量未知'
+        this.info.n_citation = '未知'
       }
       if (this.info.starred === ''){
         this.info.starred = 1;

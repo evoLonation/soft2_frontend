@@ -26,7 +26,7 @@
           <el-autocomplete v-model="inputValue[0]" tabindex="s"
                            placeholder="Please input" clearable :fetch-suggestions="querySearch" :trigger-on-focus="false"
                            style="width: 800px; margin-left: 30px;margin-top: 30px"/>
-          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(0)">
+          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(1)">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
@@ -87,14 +87,14 @@
               style="width: 130px; margin-left: 5px"
           />
 
-          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px;color: white" color="#79B4F1" @click="toProfession">
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px;color: white" color="#79B4F1" @click="toProfession(true)">
             <template #icon>
               <el-icon size="15px" ><Switch/></el-icon>
             </template>
             生成检索式
           </el-button>
 
-          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch(0)">
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
@@ -124,7 +124,7 @@
                 placeholder="Pick a year"
                 style="width: 130px; margin-left: 5px"
             />
-            <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch(0)">
+            <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch">
               <template #icon>
                 <el-icon size="15px" ><Search/></el-icon>
               </template>
@@ -270,7 +270,7 @@ export default {
           value:'按时间降序'
         }
       ],
-      inputValue:['',''],
+      inputValue:[''],
       ANvalue:['AND','AND','AND'],
       ANoptions:[
         {
@@ -491,7 +491,7 @@ export default {
       //todo:axios 页面变换 !
       // console.log(this.nowPage)
       let that=this;
-      let toSend=this.getSearchList(this.nowPage);
+      let toSend=this.getFilter(this.nowPage);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -520,8 +520,69 @@ export default {
           return 6;
       }
     },
-    toProfession(){
-
+    proSwitch(str){
+      switch (str){
+        case '标题':
+          return "title";
+        case '摘要':
+          return "abstract";
+        case '关键字':
+          return "keywords";
+        case 'DOI':
+          return "doi";
+        case '作者单位':
+          return "authors.org";
+        case '作者':
+          return "authors.name";
+        case '期刊':
+          return "venue";
+      }
+    },
+    dealTextArea(str,isExact){
+      let strs=str.split(' ');
+      if(strs.length===1){
+        return str;
+      }
+      else {
+        if(isExact){
+          return "\""+str+"\"";
+        }
+        let ans='(';
+        for(let i=0;i<strs.length;i++){
+          ans+=strs[i]+'~';
+          if(i!==strs.length-1){
+            ans+=' AND ';
+          }
+        }
+        ans+=')';
+        return ans;
+      }
+    },
+    toProfession(jump){
+      let ans='';
+      for(let i=0;i<this.inputValue.length;i++){
+        if(i===0){
+          ans+=this.proSwitch(this.value[0])+':';
+          ans+=this.dealTextArea(this.inputValue[0],this.exact[0]==='精确');
+        }
+        else {
+          if(this.ANvalue[i]==='NOT'){
+            ans+=' AND NOT ';
+          }
+          else {
+            ans+=' '+this.ANvalue[i]+' ';
+          }
+          ans+=this.proSwitch(this.value[i])+':';
+          ans+=this.dealTextArea(this.inputValue[i],this.exact[i]==='精确');
+        }
+      }
+      if(jump){
+        this.inputProfession=ans;
+        this.showProfession();
+      }
+      else {
+        return ans;
+      }
     },
     toIntExact(str){
       return (str==='精确')?0:1;
@@ -542,19 +603,14 @@ export default {
     NormalSearch(page){
       let that=this;
       var toSend={
-        searchContent:[
-          {
-            type:this.toIntType(this.ANvalue[0]),
-            search_type:this.toIntSearchType(this.value[0]),
-            content:this.inputValue[0],
-            is_exact:this.toIntExact(this.exact[0])
-          }
-        ],
+        query:this.toProfession(false),
         start_year:0,
         end_year:0,
+        years:[],
+        themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:10*(page-1),
+        end:10*page,
       };
       paperScholarAxios({
         method:'post',
@@ -573,28 +629,17 @@ export default {
         that.searchBegin=true;
       })
     },
-    getSearchList(page){
+    AdvanceSearch(){
       var toSend={
-        searchContent:[],
+        query:this.toProfession(false),
         start_year:this.beginYear,
         end_year:this.end_year,
+        years:[],
+        themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:0,
+        end:10,
       };
-      for(let i=0;i<this.searchNum;i++){
-        let search={
-          type:this.toIntType(this.ANvalue[i]),
-          search_type:this.toIntSearchType(this.value[i]),
-          content:this.inputValue[i],
-          is_exact:this.toIntExact(this.exact[i])
-        };
-        toSend.searchContent.push(search);
-      }
-      return toSend;
-    },
-    AdvanceSearch(page){
-      let toSend=this.getSearchList(page);
       let that=this;
       paperScholarAxios({
         method:'post',
@@ -614,35 +659,62 @@ export default {
       })
     },
     //todo:专业检索
-    ProfessionSearch(page){
-      console.log(page);
+    ProfessionSearch(){
+      var toSend={
+        query:this.inputProfession,
+        start_year:this.beginYear,
+        end_year:this.end_year,
+        years:[],
+        themes:[],
+        sort_type:this.toIntSortType(this.sortType),
+        start:0,
+        end:10,
+      };
+      let that=this;
+      paperScholarAxios({
+        method:'post',
+        url:"search/paper",
+        data:toSend
+      }).then((res)=>{
+        let response=res.data;
+        that.paperNum=response.paper_num;
+        that.papers=response.papers;
+        that.themes=response.themes;
+        that.years=response.years;
+        that.themesCheck=[];
+        that.yearsCheck=[];
+        that.nowPage=1;
+        console.log(res.data);
+        that.searchBegin=true;
+      })
+    },
+    getFilter(page){
+      var toSend={
+        query:this.toProfession(false),
+        start_year:this.beginYear,
+        end_year:this.end_year,
+        years:[],
+        themes:[],
+        sort_type:this.toIntSortType(this.sortType),
+        start:10*(page-1),
+        end:10*page,
+      };
+      for(let i=0;i<this.themesCheck.length;i++){
+        if(this.themesCheck[i]===true){
+          toSend.themes.push(this.themes[i].name);
+        }
+      }
+      for(let i=0;i<this.yearsCheck.length;i++){
+        if(this.yearsCheck[i]===true){
+          toSend.years.push(this.years[i].name);
+        }
+      }
+      return toSend;
     },
     //todo:筛选
     dealFilter(){
       let that=this;
-        let toSend=this.getSearchList(0);
-        for(let i=0;i<this.themesCheck.length;i++){
-          if(this.themesCheck[i]===true){
-            let search={
-              type:0,
-              search_type:2,
-              content:this.themes[i].name,
-              is_exact:0
-            };
-            toSend.searchContent.push(search);
-          }
-        }
-      for(let i=0;i<this.yearsCheck.length;i++){
-        if(this.themesCheck[i]===true){
-          let search={
-            type:0,
-            search_type:7,
-            content:this.years[i].name,
-            is_exact:0
-          };
-          toSend.searchContent.push(search);
-        }
-      }
+      var toSend=this.getFilter(1);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -657,7 +729,7 @@ export default {
     },
     dealSort(val){
       let that=this;
-      let toSend=this.getSearchList(0);
+      let toSend=this.getFilter(1);
       toSend.sort_type=this.toIntSortType(val);
       paperScholarAxios({
         method:'post',
