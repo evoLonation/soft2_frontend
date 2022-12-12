@@ -1,23 +1,29 @@
 <template>
   <div class="list">
-    <el-table :data="complaintList" style="width: 100%">
+    <h1 style="text-align: center; padding-bottom: 30px">应助申诉列表</h1>
+    <el-table :data="complaintList" style="width: 1100px; margin-left: 150px">
       <el-table-column prop="time" label="求助时间" width="180" />
       <el-table-column prop="title" label="标题" width="300" />
-      <el-table-column prop="content" label="求助描述" width="500" />
+      <el-table-column prop="content" label="申诉理由" width="300" >
 
-      <el-table-column>
+      </el-table-column>
 
-        <el-button  @click="download">
-          下载文件
-        </el-button>
+      <el-table-column width="">
 
-        <el-button type="primary" @click="pass">
-          申诉通过
-        </el-button>
+        <template #default="scope">
+            <el-button  @click="download(scope)" size="small" >
+              下载文件
+            </el-button>
 
-        <el-button type="danger" @click="fail">
-          申诉退回
-        </el-button>
+            <el-button type="primary" @click="pass" size="small" >
+              申诉通过
+            </el-button>
+
+            <el-button type="danger" @click="fail" size="small" >
+              申诉退回
+            </el-button>
+        </template>
+
 
       </el-table-column>
     </el-table>
@@ -71,7 +77,7 @@ export default {
 </script>
 
 <style scoped>
-.list {
+.list{
   min-width: 1350px;
   max-width: 1350px;
   min-height: 700px;

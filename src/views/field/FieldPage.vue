@@ -21,12 +21,12 @@
       <div v-for="(item, index) in PaperList" :key="index">
         <div>
           <list
-              :type="item.type"
-              :author="item.author"
+              :type=4
+              :author="item.authors"
               :abstract="item.abstract"
-              :num="item.num"
-              :org="item.org"
-              :paperName="item.paperName"
+              :num="item.n_citation"
+              :org="item.publisher"
+              :paperName="item.title"
           />
           <el-divider  style="width: 100%;"/>
         </div>
@@ -46,6 +46,7 @@
             :n_citation="item.n_citation"
             :n_paper="item.n_paper"
             :weight="item.weight"
+            :scholar_id="item.scholar_id"
           />
       </div>
       <div class="loading">
@@ -74,80 +75,68 @@ export default {
       field_name: "机器学习",
       input: "",
       start1: 0,
-      end1: 9,
+      end1: 5,
       start2: 0,
-      end2: 9,
+      end2: 5,
       loading1: true,
       loading2: true,
-      PaperList: [
-        {
-          type: 4,
-          author: "赵正阳",
-          abstract: "游戏发生在一个被称作“提瓦特”的幻想世界，在这里，被神选中的人将被授予“神之眼”，导引元素之力。",
-          num: "114514",
-          org: "北京工地大学软件安装学院",
-          paperName: "深度分析鲁迅《论他妈的》中的文学风骨",
-        },
-        {
-          type: 4,
-          author: "赵正阳",
-          abstract: "不知不觉间，今年的最后一个新番季已经过去一半了，也是时候开始关注明年一月番的消息了",
-          num: "11",
-          org: "北京工地大学软件安装学院",
-          paperName: "浅谈近年日本番剧清一色异世界龙傲天后宫厕纸剧情的内在驱动力",
-        },
-
-      ],
-      ScholarList: [
-        {
-          name: 'Ameame',
-          n_paper: 8,
-          n_citation: 20,
-          weight: '70%'
-        },
-      ]
+      PaperList: [],
+      ScholarList: [],
     }
   },
   methods: {
     getPaperList() {
-      console.log(this.field_name, this.start1, this.end1)
+      console.log('paper:',this.field_name, this.start1, this.end1)
       paperScholarAxios.post('field/paper', {
         "field": this.field_name,
-        "start": "1",
-        "end": "5",
+        "start": this.start1,
+        "end": this.end1,
       }).then(res=>{
         console.log('获取论文成功',res.data.paper_num)
-
+        console.log(res.data.papers)
         this.paper_num = res.data.paper_num
-        this.PaperList = res.data.papers
-        this.start1 = this.start1 + 9
-        this.end1 = this.end1 + 9
+        for(let i = 0; i < res.data.papers.length; i++) {
+          this.PaperList.push(res.data.papers[i])
+        }
+        console.log(this.PaperList)
+        this.start1 = this.start1 + 5
+        this.end1 = this.end1 + 5
+      }).catch(e=>{
+        console.log(e)
       })
     },
     getScholarList() {
+      console.log('scholar:',this.field_name, this.start2, this.end2)
       paperScholarAxios.post('field/scholar', {
         "field": this.field_name,
         "start": this.start2,
         "end": this.end2,
       }).then(res=>{
+        console.log('获取学者成功',res.data.scholar_num)
         this.scholar_num = res.data.scholar_num
-        this.ScholarList = res.data.scholars
-        this.start2 = this.start2 + 9
-        this.end2 = this.end2 + 9
+        for(let i = 0; i < res.data.scholars.length; i++) {
+          this.ScholarList.push(res.data.scholars[i])
+        }
+        this.start2 = this.start2 + 5
+        this.end2 = this.end2 + 5
       })
     },
     gotoField() {
-      this.$router.push({name : "Field", query: {content: this.input}})
+      this.$router.push({name : "Field", query: {content: this.input,}})
     },
     scrollFn() {
       console.log('1滚动')
-      // let st1 = document.getElementById("paper").scrollTop;
+      let windowHeight = window.innerHeight;
+      let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      let sectionTop1 = document.getElementById("paper").offsetTop;//card_section距离顶部的偏移高度（card_section为你的照片或div元素ID）
+      let sectionHeight1 = document.getElementById("paper").offsetHeight;//card_section的高度
+      let sectionTop2 = document.getElementById("scholar").offsetTop;//card_section距离顶部的偏移高度（card_section为你的照片或div元素ID）
+      let sectionHeight2 = document.getElementById("scholar").offsetHeight;//card_section的高度
+      console.log('窗口高度', windowHeight,st, sectionTop1, sectionHeight1)
       let docHeight1 = document.getElementById("paper").scrollHeight;
       let winHeight1 = document.getElementById("paper").offsetHeight
-      // let st2 = document.getElementById("scholar").scrollTop;
       let docHeight2 = document.getElementById("scholar").scrollHeight;
       let winHeight2 = document.getElementById("scholar").offsetHeight
-      let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
       document.getElementById("paper").style.height = docHeight1 + "px"
       document.getElementById("scholar").style.height = docHeight2+ "px"
@@ -156,7 +145,7 @@ export default {
       console.log(height)
       let tmp1 = height - docHeight1
       let tmp2 = height - docHeight2
-      console.log(docHeight1, st, winHeight1)
+      console.log(docHeight1, st, winHeight1, winHeight2)
       console.log(tmp1, tmp2)
 
       if(this.loading1 === false) {
@@ -165,50 +154,30 @@ export default {
       if(this.loading2 === false) {
         document.getElementById("scholar").style.top = tmp2 + "px"
       }
-
-      if(winHeight1 + st >= docHeight1) {
+      if(sectionHeight1 + sectionTop1 - 50 < st + windowHeight) {
+      // if(winHeight1 + st >= docHeight1) {
         console.log('1触底了')
         console.log('1st', st)
-        if(this.PaperList.length >= 14) {
+        if(this.PaperList.length >= this.paper_num) {
+          console.log('论文数目', this.paper_num)
           console.log('1需要固定')
           this.loading1 = false
         }
         else {
-          //TODO: 调用加载函数
-          // this.getPaperList()
-          let h1 = docHeight1 + 140
-          document.getElementById("paper").style.height = h1 + "px"
-
-          this.PaperList.push(
-              {
-                type: 4,
-                author: "刘禹宏",
-                abstract: "蓝色妖姬是一种加工花卉，由月季和蔷薇多种杂交及研制所得。它通常是用一种染色剂和助染剂调合成着色剂，将鲜花喷染成型，最早来自荷兰",
-                num: "0",
-                org: "红色风暴",
-                paperName: "历史风云（3）————蓝色妖姬与她的黄金切尔西",
-              }
-          )
+          this.getPaperList()
         }
       }
-      if(winHeight2 + st >= docHeight2) {
+      console.log('2滚动')
+      if(sectionHeight2 + sectionTop2 - 50 < st + windowHeight) {
+      // if(winHeight2 + st >= docHeight2) {
         console.log('2触底了')
         console.log('2st', st)
-        if(this.ScholarList.length >= 20) {
+        if(this.ScholarList.length >= this.scholar_num) {
           this.loading2 = false
           console.log('2需要固定')
         }
         else {
-          //TODO: 调用加载函数
           this.getScholarList()
-          let h2 = docHeight2 + 140
-          document.getElementById("scholar").style.height = h2 + "px"
-          this.ScholarList.push({
-            name: '赵正阳',
-            n_paper: 0,
-            n_citation: 1,
-            weight: '2%'
-          })
         }
       }
     },

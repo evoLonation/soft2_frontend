@@ -82,6 +82,7 @@ export default {
       ach_num: '',
       h_index: '',
       url: '',
+      tags: '',
     }
   },
   methods: {

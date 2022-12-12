@@ -1,4 +1,16 @@
 import G6 from "@antv/g6";
+
+const f2 = {
+    type: 'force2',
+    animate: true,
+    // distanceThresholdMode: 'max',
+    damping: 0.5,
+    gravity: 15,
+    preventOverlap: true,
+    nodeSize: 70,
+    linkDistance: 25,
+}
+
 export class Graph {
     graph
     data
@@ -30,12 +42,7 @@ export class Graph {
             defaultEdge: {
               type: 'can-running',
             },
-            layout: {
-                type: 'force',
-                preventOverlap: true,
-                nodeSize: 100,
-                linkDistance: 50,
-            },
+            layout: f2,
             modes: {
                 default: [
                     'drag-canvas',
@@ -58,9 +65,7 @@ export class Graph {
     }
 
     async setLayout() {
-        this.graph.updateLayout({
-            type: 'force'
-        })
+        this.graph.updateLayout({type: 'force2'})
     }
 
     setAnimate(){

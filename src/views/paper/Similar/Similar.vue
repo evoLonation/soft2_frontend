@@ -1,10 +1,8 @@
 <template>
   <div class="wrap-ref">
     <div class="part-ref">相似文献</div>
-    <el-table :data="this.similars" class="table" @row-click="this.openPaper">
-      <template #empty>
-        <h1 style="margin:20px auto;">无相似文献</h1>
-      </template>
+    <el-table :data="this.similars" class="table" @row-click="this.openPaper"
+              empty-text="无相似文献">
       <el-table-column prop="title" style="cursor: pointer" min-width="300px"></el-table-column>
       <el-table-column prop="author" style="cursor: pointer"></el-table-column>
       <el-table-column prop="year" style="cursor: pointer"></el-table-column>
