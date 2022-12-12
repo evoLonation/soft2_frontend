@@ -87,7 +87,7 @@ import {DeleteFilled, Promotion, Star, StarFilled} from "@element-plus/icons";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {paperStore, loginStore} from "@/store";
-import {paperScholarAxios, userAxios} from "@/axios";
+import {userAxios} from "@/axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -150,7 +150,7 @@ export default {
   methods: {
     getCommentsAPI() {
       console.log('cmt, id:', this.paperStore1.paperInfo.id)
-      paperScholarAxios.post('paper/comment/get-comment', {
+      userAxios.post('paper/get-comment', {
         "paper_id": this.paperStore1.paperInfo.id
       }).then(res => {
         this.comments = res.data.comments
@@ -213,13 +213,14 @@ export default {
         ElMessage('评论不能为空')
         return
       }
+      console.log('id: ', this.paperStore1.paperId, 'cnt: ', this.commentText)
       userAxios.post('paper/comment', {
-        'paper_id': this.comment.id,
+        'paper_id': this.paperStore1.paperId,
         'content': this.commentText
       }).then(() => {
         setTimeout(() => {
           this.getCommentsAPI()
-        }, 500)
+        }, 1000)
       }).catch(e => {
         console.log(e)
         ElMessage('操作失败')

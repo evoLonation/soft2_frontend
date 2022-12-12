@@ -23,7 +23,7 @@
             <el-icon class="button-icon"><Help /></el-icon></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="认领" placement="top">
-          <el-button circle class="button" size="large" @click="this.showClaim=true" >
+          <el-button circle class="button" size="large" @click="this.adopt" >
             <el-icon class="button-icon"><Avatar /></el-icon></el-button>
         </el-tooltip>
       </el-row>
@@ -87,6 +87,7 @@ import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
 import {userAxios} from "@/axios";
 import {paperScholarAxios} from "@/axios";
+import qs from "qs";
 import {ref} from "vue";
 
 export default {
@@ -155,7 +156,7 @@ export default {
         case '1': this.citation = this.citations.gb; break;
         case '2': this.citation = this.citations.mla; break;
         case '3': this.citation = this.citations.apa; break;
-        case '4': this.citation = this.citations.bibtex; break;
+        case '4': this.citation = this.citations.bibix; break;
         case '5': this.citation = this.citations.caj_cd; break;
         default: console.log("err")
       }
@@ -175,37 +176,40 @@ export default {
       }).then(res=>{
         const code = res.data.code
         console.log(code)
-        if (code === '0'){
+        if (code === 0) {
+          this.starred = 0
           ElMessage('收藏成功')
         }else {
-          ElMessage('发生错误，已经收藏过')
+          ElMessage('已经收藏过')
         }
       })
     },
     deStar(){
       userAxios.post('paper/star/cancel', {
-        'id': this.store.paperId
+        'paper_id': this.store.paperId
       }).then(res=>{
         const code = res.data.code
         console.log(code)
-        if (code === '0'){
+        if (code === 0){
           ElMessage('取消了')
+          this.starred = 1
         }else {
-          ElMessage('发生错误，没有收藏过')
+          ElMessage('没有收藏过')
         }
       })
     },
     help(){ //跳转到互助
       this.$router.push({
-        name: 'createRequest',
-        params: {
+        name: 'CreateRequest',
+        query: {
           title: this.title,
-          author: this.author,
+          author: qs.stringify(this.author),
           magazine: this.magazine
         }
       })
     },
     adopt(){
+      userAxios
       userAxios.post('paper/claim', {
         "paper_id": this.store.paperId,
         "scholar_id": this.input,
