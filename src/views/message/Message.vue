@@ -42,7 +42,7 @@
               <el-button link type="primary" @click="this.openAuthor(scope.row.uid)" class="msg-op">学者页</el-button>
             </el-col>
             <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
-              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">打开互助</el-button>
+              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">互助中心</el-button>
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='4' && !scope.row.read">
               <el-popconfirm

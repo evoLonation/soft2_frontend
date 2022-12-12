@@ -1,4 +1,5 @@
 import G6 from "@antv/g6";
+
 export class Graph {
     graph
     data
@@ -32,6 +33,7 @@ export class Graph {
             layout: {
                 type: 'concentric',
                 linkDistance: 30,         // 可选，边长
+                animate: true,
                 preventOverlap: true,     // 可选，必须配合 nodeSize
                 nodeSize: 70,             // 可选
                 sweep: 10,                // 可选

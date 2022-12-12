@@ -102,7 +102,13 @@ export default {
     }
   },
   mounted() {// 从state获取信息
-    this.getInfo()
+    paperStore().$onAction(({name, store, args, after, onError})=>{
+      console.log(name, store, args, onError)
+      after(() => {
+        console.log('info updated')
+        this.getInfo()
+      })
+    })
   },
   data(){
     return{
@@ -239,7 +245,6 @@ export default {
 <style scoped>
 .wrap-op {
   padding: 10px 20px 15px 15px;
-  max-height: 500px;
   background-color: white;
   margin-left: 25px;
   width: auto;

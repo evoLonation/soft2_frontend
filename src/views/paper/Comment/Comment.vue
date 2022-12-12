@@ -7,9 +7,7 @@
           <div style="color: #7682a2; font-weight: bold">更多</div>
         </el-button>
       </el-col>
-    </el-row>
-    <h1 v-if="this.comments.length===0" style="margin:20px auto;">暂无评论</h1>
-    <el-card shadow="never" v-if="this.comment !== null">
+    </el-row><el-card shadow="never" v-if="this.comment !== null">
       <el-row>
         <el-col :span="2" class="user">{{ this.comment.userName }}:</el-col>
         <el-col :span="0.5" :offset="17" class="date-like">
@@ -114,21 +112,21 @@ export default {
               comments.forEach(cmt => {
                 cmt.liked = 1
               })
-              return;
-            }
-            userAxios.post('paper/comment-liked', {
-              "paper_id": paperStore1.paperId
-            }).then(res => {
-              const comment_liked = res.data.comment_liked
-              for (let i = 0; i < this.comments.length; i++) {
-                comments[i].liked = comment_liked[i].is_liked
-              }
-            }).catch(() => {
-              console.log('未获取，默认全false')
-              comments.forEach(cmt => {
-                cmt.liked = 1
+            } else {
+              userAxios.post('paper/comment-liked', {
+                "paper_id": paperStore1.paperId
+              }).then(res => {
+                const comment_liked = res.data.comment_liked
+                for (let i = 0; i < this.comments.length; i++) {
+                  comments[i].liked = comment_liked[i].is_liked
+                }
+              }).catch(() => {
+                console.log('未获取，默认全false')
+                comments.forEach(cmt => {
+                  cmt.liked = 1
+                })
               })
-            })
+            }
           })
         }
     )
@@ -142,8 +140,14 @@ export default {
     }
   },
   mounted() {
-    this.getComments();
-    this.getLiked();
+    paperStore().$onAction(({name, store, args, after, onError})=>{
+      console.log(name, store, args, onError)
+      after(() => {
+        console.log('info updated')
+        this.getCommentsAPI()
+      })
+    })
+
   },
   data() {
     return {
@@ -152,21 +156,13 @@ export default {
     }
   },
   methods: {
-    getComments() { //这个地方是从store拿，更新后从接口拿
-      this.comments = this.paperStore1.paperInfo.comments
-      this.comment = this.comments[0]
-    },
     getCommentsAPI() {
       paperScholarAxios.post('paper/comment/get-comment', {
         "paper_id": this.paperStore1.paperInfo.id
       }).then(res => {
         this.comments = res.data.comments
-        //store的comments也要更新：
-        this.paperStore1.paperInfo.comments = this.comments
-      }).catch(() => {
-        console.log('评论更新失败，从本地获取')
-        this.getComments()
       })
+      this.getLiked()
     },
     getLiked() {
       if (!this.loginStore1.isLogin) {
