@@ -131,28 +131,25 @@ export default {
       this.$router.push({name : "Field", query: {content: this.input,}})
     },
     scrollFn() {
-      console.log('1滚动')
       let windowHeight = window.innerHeight;
       let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
       let sectionTop1 = document.getElementById("paper").offsetTop;//card_section距离顶部的偏移高度（card_section为你的照片或div元素ID）
       let sectionHeight1 = document.getElementById("paper").offsetHeight;//card_section的高度
       let sectionTop2 = document.getElementById("scholar").offsetTop;//card_section距离顶部的偏移高度（card_section为你的照片或div元素ID）
       let sectionHeight2 = document.getElementById("scholar").offsetHeight;//card_section的高度
-      console.log('窗口高度', windowHeight,st, sectionTop1, sectionHeight1)
+      // console.log('窗口高度', windowHeight,st, sectionTop1, sectionHeight1)
       let docHeight1 = document.getElementById("paper").scrollHeight;
-      let winHeight1 = document.getElementById("paper").offsetHeight
       let docHeight2 = document.getElementById("scholar").scrollHeight;
-      let winHeight2 = document.getElementById("scholar").offsetHeight
 
       document.getElementById("paper").style.height = docHeight1 + "px"
       document.getElementById("scholar").style.height = docHeight2+ "px"
 
       let height = document.documentElement.clientHeight
-      console.log(height)
+      // console.log(height)
       let tmp1 = height - docHeight1
       let tmp2 = height - docHeight2
-      console.log(docHeight1, st, winHeight1, winHeight2)
-      console.log(tmp1, tmp2)
+      // console.log(docHeight1, st, winHeight1, winHeight2)
+      // console.log(tmp1, tmp2)
 
       if(this.loading1 === false) {
         document.getElementById("paper").style.top = tmp1 + "px"
@@ -162,25 +159,25 @@ export default {
       }
       if(sectionHeight1 + sectionTop1 - 50 < st + windowHeight) {
       // if(winHeight1 + st >= docHeight1) {
-        console.log('1触底了')
-        console.log('1st', st)
+      //   console.log('1触底了')
+      //   console.log('1st', st)
         if(this.PaperList.length >= this.paper_num) {
-          console.log('论文数目', this.paper_num)
-          console.log('1需要固定')
+          // console.log('论文数目', this.paper_num)
+          // console.log('1需要固定')
           this.loading1 = false
         }
         else {
           this.getPaperList()
         }
       }
-      console.log('2滚动')
+      // console.log('2滚动')
       if(sectionHeight2 + sectionTop2 - 50 < st + windowHeight) {
       // if(winHeight2 + st >= docHeight2) {
-        console.log('2触底了')
-        console.log('2st', st)
+      //   console.log('2触底了')
+      //   console.log('2st', st)
         if(this.ScholarList.length >= this.scholar_num) {
           this.loading2 = false
-          console.log('2需要固定')
+          // console.log('2需要固定')
         }
         else {
           this.getScholarList()

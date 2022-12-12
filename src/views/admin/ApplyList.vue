@@ -17,21 +17,6 @@
             <el-button round @click="download(scope.row.url)" style="align-items: center">
               下载图片
             </el-button>
-<!--            <el-dialog-->
-<!--                v-model="dialogVisible"-->
-<!--                title="图片详情"-->
-<!--                width="50%"-->
-<!--                :before-close="handleClose"-->
-<!--            >-->
-<!--              <img :src="scope.row.url"/>-->
-<!--              <template #footer>-->
-<!--                <span class="dialog-footer">-->
-<!--                  <el-button type="primary" @click="dialogVisible = false">-->
-<!--                    关闭-->
-<!--                  </el-button>-->
-<!--                </span>-->
-<!--              </template>-->
-<!--            </el-dialog>-->
           </div>
 
           <div v-else style="text-align: center">{{scope.row.email}}</div>
@@ -51,7 +36,6 @@
 </template>
 
 <script>
-import Records from './Data'
 import {applyAxios} from "@/axios";
 export default {
   name: "ApplyList",
@@ -63,38 +47,44 @@ export default {
   },
   methods: {
     getList() {
-      let got = false
       applyAxios.post('admin/get-scholar-apply', {
         "start": 0,
         "end": 10
       }).then(res=>{
+        console.log(res.data.records)
         this.records = res.data.records
-        got = true
+      }).catch(e=> {
+        console.log(e)
       })
-      if(!got) {
-        console.log('获取失败')
-        this.records = Records.Records
-      }
     },
     download(url) {
-      let fileURL = window.URL.createObjectURL(new Blob([url], {type: 'image/png'}));
-      let fileLink = document.createElement('a');
-      fileLink.href = fileURL;
-      fileLink.setAttribute('download', '图片认证' );
-      document.body.appendChild(fileLink);
-      console.log();
-      fileLink.click();
+      window.open(url)
+      // let fileURL = window.URL.createObjectURL(new Blob([url], {type: 'application/zip'}));
+      // let fileLink = document.createElement('a');
+      //
+      // console.log(fileURL)
+      // fileLink.href = fileURL;
+      // fileLink.setAttribute('download', '图片认证' );
+      // document.body.appendChild(fileLink);
+      // console.log();
+      // fileLink.click();
     },
     agree(id) {
       applyAxios.post('admin/deal-scholar-apply', {
         "apply_id": id,
         "is_agree": true
+      }).then(res=>{
+        console.log(res)
+        this.getList()
       })
     },
     disagree(id) {
       applyAxios.post('admin/deal-scholar-apply', {
         "apply_id": id,
         "is_agree": false
+      }).then(res=>{
+        console.log(res)
+        this.getList()
       })
     }
   },
