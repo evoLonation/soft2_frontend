@@ -26,7 +26,7 @@
           <el-autocomplete v-model="inputValue[0]" tabindex="s"
                            placeholder="Please input" clearable :fetch-suggestions="querySearch" :trigger-on-focus="false"
                            style="width: 800px; margin-left: 30px;margin-top: 30px"/>
-          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(0)">
+          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(1)">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
@@ -94,7 +94,7 @@
             生成检索式
           </el-button>
 
-          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch(0)">
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
@@ -124,7 +124,7 @@
                 placeholder="Pick a year"
                 style="width: 130px; margin-left: 5px"
             />
-            <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch(0)">
+            <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch">
               <template #icon>
                 <el-icon size="15px" ><Search/></el-icon>
               </template>
@@ -609,8 +609,8 @@ export default {
         years:[],
         themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:10*(page-1),
+        end:10*page,
       };
       paperScholarAxios({
         method:'post',
@@ -629,7 +629,7 @@ export default {
         that.searchBegin=true;
       })
     },
-    AdvanceSearch(page){
+    AdvanceSearch(){
       var toSend={
         query:this.toProfession(false),
         start_year:this.beginYear,
@@ -637,8 +637,8 @@ export default {
         years:[],
         themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:0,
+        end:10,
       };
       let that=this;
       paperScholarAxios({
@@ -659,7 +659,7 @@ export default {
       })
     },
     //todo:专业检索
-    ProfessionSearch(page){
+    ProfessionSearch(){
       var toSend={
         query:this.inputProfession,
         start_year:this.beginYear,
@@ -667,8 +667,8 @@ export default {
         years:[],
         themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:0,
+        end:10,
       };
       let that=this;
       paperScholarAxios({
