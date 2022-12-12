@@ -1,5 +1,5 @@
 <template>
-  <div id="charts-contianer" class="charts-container" v-show="show"/>
+  <div id="charts-contianer" class="charts-container" v-if="show"/>
 </template>
 
 <script>
@@ -12,9 +12,6 @@ export default {
   data() {
     return {
       show: true,
-      years: [],
-      achievements: [],
-      references: [],
     };
   },
   mounted() {
@@ -31,175 +28,160 @@ export default {
 
       //基于准备好的dom，初始化chart实例
       let myChart = echarts.init(document.getElementById('charts-contianer'));
-
-      let CalxAxis = function () {
-        let arr = [];
-        for(let index = 2003; index <= 2022; index ++) {
-          arr.push(index);
-        }
-        return arr;
-      };
-
-      let CalData1 = function () {
-        let arr = [];
-        var num = 1;
-        for(let index = 1; index <= 20; index++) {
-          arr.push(num);
-          num = num + 5;
-          if(num > 20) {
-            num = num % 2;
-            num = Math.round(num * (Math.random() % 5));
+      console.log("init is on!");
+      let tmp = [];
+      let years = [];
+      let achievements = [];
+      let references = [];
+      paperScholarAxios.post('scholar/barchart/', {
+        "scholar_id": this.scholarId,
+      }).then((res) => {
+        tmp = res.data.statistic;
+        tmp.sort((a, b) => a.year < b.year ? 1 : a.year > b.year ? -1 : 0);
+        for(let i = 0; i < tmp.length; i++) {
+          years.push(tmp[i].year);
+          achievements.push(tmp[i].achievements);
+          references.push(tmp[i].references);
+          if((i < i - 1) && (tmp[i].year - tmp[i + 1].year > 1)) {
+            for(let j = tmp[i].year - 1; j >= tmp[i + 1].year + 1; j--) {
+              years.push(j);
+              achievements.push(0);
+              references.push(0);
+            }
           }
         }
-        return arr;
-      };
-
-      let CalData2 = function() {
-        let arr = [];
-        var num = 3;
-        for(let index = 1; index <= 20; index++) {
-          arr.push(num);
-          num = num + 7;
-          if(num > 100) {
-            num = num % 4;
-            num = Math.round(num * (Math.random() % 5));
-          }
+        if(years.length === 0) {
+          this.show = false;
         }
-        return arr;
-      };
+        let xAxisData = years.reverse();
+        let data1 = achievements.reverse();
+        let data2 = references.reverse();
+        let data1_max = data1.sort().reverse()[0];
+        let data2_max = data2.sort().reverse()[0];
 
-      let CalMax = function (arr) {
-        return arr.max;
-      }
-
-      var xAxisData = CalxAxis();
-      var data1 = CalData1();
-      var data2 = CalData2();
-      var data1_max = CalMax(data1);
-      var data2_max = CalMax(data2);
-
-      var option={
-        legend: {
-          data: ['历年成果数', '历年被引量']
-        },
-        toolbox: {},
-        tooltip: {},
-        // color: ['#409EFF', '#67C23A'],
-        xAxis: {
-          data: xAxisData,
-          splitLine: {
-            show: false
-          }
-        },
-        dataZoom: [{
-          type: 'slider',
-          show: true,
-          height: 15,
-          left: '10%',
-          right: '10%',
-          bottom: '2%',
-          start: 60,
-          end: 100,
-          zoomLoxk: true,
-          xAxisIndex: [0],
-          showDataShadow: false,
-        }, {
-          type: 'inside'
-        }],
-        yAxis: [
-          {
-            type: 'value',
-            name: "历年成果数",
-            position: 'left',
-            min: 0,
-            max: data1_max,
-            splitNumber: 5,
-            axisLine: {
-              show: true
-            },
-            axisTick: {
-              show: true,
-              interval: (data2_max-0)/5,
-            },
-            axisLabel: {
-              textStyle: {
-                color: "#999"
-              },
-              formatter: function(v) {
-                return v;
-              }
-            },
+        var option={
+          legend: {
+            data: ['历年成果数', '历年被引量']
+          },
+          toolbox: {},
+          tooltip: {},
+          // color: ['#409EFF', '#67C23A'],
+          xAxis: {
+            data: xAxisData,
             splitLine: {
-              show: false,
-              lineStyle: {
-                type: "dashed"
-              }
+              show: false
             }
           },
-          {
-            type: 'value',
-            name: "历年被引量",
-            position: "right",
-            min: 0,
-            max: data2_max,
-            splitNumber: 5,
-            axisLine: {
-              show: true
-            },
-            axisTick: {
-              show: true,
-              interval: (data2_max-0)/5,
-            },
-            axisLabel: {
-              textStyle: {
-                color: "#999"
+          dataZoom: [{
+            type: 'slider',
+            show: true,
+            height: 15,
+            left: '10%',
+            right: '10%',
+            bottom: '2%',
+            start: 60,
+            end: 100,
+            zoomLoxk: true,
+            xAxisIndex: [0],
+            showDataShadow: false,
+          }, {
+            type: 'inside'
+          }],
+          yAxis: [
+            {
+              type: 'value',
+              name: "历年成果数",
+              position: 'left',
+              min: 0,
+              max: data1_max,
+              splitNumber: 5,
+              axisLine: {
+                show: true
               },
-              formatter: function(v) {
-                return v;
+              axisTick: {
+                show: true,
+                interval: Math.ceil((data1_max-0)/5),
+              },
+              axisLabel: {
+                textStyle: {
+                  color: "#999"
+                },
+                formatter: function(v) {
+                  return v;
+                }
+              },
+              splitLine: {
+                show: false,
+                lineStyle: {
+                  type: "dashed"
+                }
               }
             },
-            splitLine: {
-              show: false,
-              lineStyle: {
-                type: "dashed"
+            {
+              type: 'value',
+              name: "历年被引量",
+              position: "right",
+              min: 0,
+              max: data2_max,
+              splitNumber: 5,
+              axisLine: {
+                show: true
+              },
+              axisTick: {
+                show: true,
+                interval: Math.ceil((data2_max-0)/5),
+              },
+              axisLabel: {
+                textStyle: {
+                  color: "#999"
+                },
+                formatter: function(v) {
+                  return v;
+                }
+              },
+              splitLine: {
+                show: false,
+                lineStyle: {
+                  type: "dashed"
+                }
               }
             }
-          }
-        ],
-        series: [
-          {
-            name: '历年成果数',
-            type: 'bar',
-            data: data1,
-            left: 0,
-            emphasis: {
-              focus: 'series'
+          ],
+          series: [
+            {
+              name: '历年成果数',
+              type: 'bar',
+              data: data1,
+              left: 0,
+              emphasis: {
+                focus: 'series'
+              },
+              animationDelay: function (idx) {
+                return idx * 10;
+              }
             },
-            animationDelay: function (idx) {
-              return idx * 10;
+            {
+              name: '历年被引量',
+              type: 'bar',
+              data: data2,
+              left: 0,
+              yAxisIndex: 1,
+              emphasis: {
+                focus: 'series'
+              },
+              animationDelay: function (idx) {
+                return idx * 10 + 100;
+              }
             }
-          },
-          {
-            name: '历年被引量',
-            type: 'bar',
-            data: data2,
-            left: 0,
-            yAxisIndex: 1,
-            emphasis: {
-              focus: 'series'
-            },
-            animationDelay: function (idx) {
-              return idx * 10 + 100;
-            }
+          ],
+          animationEasing: 'elasticOut',
+          animationDelayUpdate: function (idx) {
+            return idx * 5;
           }
-        ],
-        animationEasing: 'elasticOut',
-        animationDelayUpdate: function (idx) {
-          return idx * 5;
-        }
-      };
-      myChart.setOption(option);
-      window.addEventListener('resize', function () {myChart.resize();});
+        };
+        myChart.setOption(option);
+        window.addEventListener('resize', function () {myChart.resize();});
+      })
      },
     getData() {
       let tmp = [];
@@ -207,16 +189,25 @@ export default {
         "scholar_id": this.scholarId,
       }).then((res) => {
         tmp = res.data.statistic;
-        console.log(tmp);
+        tmp.sort((a, b) => a.year < b.year ? 1 : a.year > b.year ? -1 : 0);
+        for(let i = 0; i < tmp.length; i++) {
+          this.years.push(tmp[i].year);
+          this.achievements.push(tmp[i].achievements);
+          this.references.push(tmp[i].references);
+          if((i < i - 1) && (tmp[i].year - tmp[i + 1].year > 1)) {
+            for(let j = tmp[i].year - 1; j >= tmp[i + 1].year + 1; j--) {
+              this.years.push(j);
+              this.achievements.push(0);
+              this.references.push(0);
+            }
+          }
+        }
+        if(this.years.length === 0) {
+          this.show = false;
+        }
       })
     }
   },
-  created() {
-    this.getData();
-    if(this.years.length === 0) {
-      this.show = false;
-    }
-  }
 }
 
 export class ChartView {
