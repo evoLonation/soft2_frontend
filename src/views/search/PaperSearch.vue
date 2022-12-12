@@ -602,10 +602,16 @@ export default {
       })
     },
   },
-  created() {
+  mounted() {
     let searchType=qs.parse(this.$route.query.searchType);
     this.inputValue[0]=this.$route.query.content;
     this.value[0]=searchType.type;
+    if(this.$route.query.type==null){
+      this.showNormal();
+    }
+    else {
+      this.showAdvance();
+    }
   },
 }
 

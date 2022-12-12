@@ -1,23 +1,23 @@
 <template>
-  <div class="navigation-bar-root" :class="{opacity: navigationState.isOpacity, 'no-opacity': !navigationState.isOpacity}">
+  <div class="navigation-bar-root" :class="{opacity: navigationState.isOnTop, 'no-opacity': !navigationState.isOnTop}">
     <div class="valid-content">
       <div class="left-area" @click="toHomeView" >
-        <p style="font-size: 20px;line-height: 25px;margin: 0;color:#337ecc" v-if="navigationState.isDisplaySearchBox">金刚石学术</p>
+        <p style="font-size: 20px;line-height: 25px;margin: 0;color:#337ecc" v-if="!navigationState.isOnTop">金刚石学术</p>
       </div>
       <div class="mid-area">
-        <search-box v-if="navigationState.isDisplaySearchBox"></search-box>
+        <search-box v-if="!navigationState.isOnTop"></search-box>
       </div>
       <div class="right-area" >
         <div  class="avatar">
           <el-avatar v-if="store.isLogin" :size="40" :src="store.avatarUrl"></el-avatar>
         </div>
-        <div @click="toUserView" :class="{'opacity-text': navigationState.isOpacity, 'no-opacity-text' : !navigationState.isOpacity}">
+        <div @click="toUserView" :class="{'opacity-text': navigationState.isOnTop, 'no-opacity-text' : !navigationState.isOnTop}">
           {{nickname}}
         </div>
-        <div @click="toHelpView" :class="{'opacity-text': navigationState.isOpacity, 'no-opacity-text' : !navigationState.isOpacity}">
+        <div @click="toHelpView" :class="{'opacity-text': navigationState.isOnTop, 'no-opacity-text' : !navigationState.isOnTop}">
           文献互助
         </div>
-        <div @click="toMessageView" :class="{'opacity-text': navigationState.isOpacity, 'no-opacity-text' : !navigationState.isOpacity}">
+        <div @click="toMessageView" :class="{'opacity-text': navigationState.isOnTop, 'no-opacity-text' : !navigationState.isOnTop}">
           消息通知
         </div>
       </div>
@@ -33,9 +33,6 @@ import {ref} from "vue";
 export default {
   name: "NavigationBar",
   components: {},
-  props: {
-    isHomeTop : Boolean,
-  },
   setup(){
     const store = loginStore();
 
