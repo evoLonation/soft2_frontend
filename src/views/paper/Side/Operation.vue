@@ -105,7 +105,6 @@ export default {
     paperStore().$onAction(({name, store, args, after, onError})=>{
       console.log(name, store, args, onError)
       after(() => {
-        console.log('info updated')
         this.getInfo()
       })
     })

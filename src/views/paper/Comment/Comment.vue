@@ -99,13 +99,7 @@ export default {
     const paperStore1 = paperStore()
     let comments = []
     const checkLike = loginStore1.$onAction(
-        ({
-           name,
-           store,
-           args,
-           after,
-           onError,
-         }) => {
+        ({name, store, args, after, onError,}) => {
           console.log(name, store, args, onError)
           after(() => {
             if (!loginStore1.isLogin) {
@@ -143,11 +137,9 @@ export default {
     paperStore().$onAction(({name, store, args, after, onError})=>{
       console.log(name, store, args, onError)
       after(() => {
-        console.log('info updated')
         this.getCommentsAPI()
       })
     })
-
   },
   data() {
     return {
@@ -157,6 +149,7 @@ export default {
   },
   methods: {
     getCommentsAPI() {
+      console.log('cmt, id:', this.paperStore1.paperInfo.id)
       paperScholarAxios.post('paper/comment/get-comment', {
         "paper_id": this.paperStore1.paperInfo.id
       }).then(res => {
@@ -169,21 +162,21 @@ export default {
         this.comments.forEach(cmt => {
           cmt.liked = 1
         })
-        return;
-      }
-      userAxios.post('paper/comment-liked', {
-        "paper_id": this.paperStore1.paperId
-      }).then(res => {
-        const comment_liked = res.data.comment_liked
-        for (let i = 0; i < this.comments.length; i++) {
-          this.comments[i].liked = comment_liked[i].is_liked
-        }
-      }).catch(() => {
-        console.log('未获取，默认全false')
-        this.comments.forEach(cmt => {
-          cmt.liked = 1
+      }else {
+        userAxios.post('paper/comment-liked', {
+          "paper_id": this.paperStore1.paperId
+        }).then(res => {
+          const comment_liked = res.data.comment_liked
+          for (let i = 0; i < this.comments.length; i++) {
+            this.comments[i].liked = comment_liked[i].is_liked
+          }
+        }).catch(() => {
+          console.log('未获取，默认全false')
+          this.comments.forEach(cmt => {
+            cmt.liked = 1
+          })
         })
-      })
+      }
     },
     like(id) {
       userAxios.post('paper/comment/like', {

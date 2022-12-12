@@ -30,8 +30,6 @@
 
 <script>
 import {paperStore} from "@/store"
-import searchType from "@/assets/searchType"
-import qs from "qs";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -45,7 +43,6 @@ export default {
     store.$onAction(({name, store, args, after, onError}) => {
         console.log(name, store, args, onError)
         after(() => {
-          console.log('info updated')
           this.info = store.paperInfo
           this.processInfo()
         })
@@ -96,15 +93,7 @@ export default {
       }
     },
     openAuthor(author){
-      if (author.hasId){
-        this.$router.push({name:'Scholar', params:{scholarId: author.id}});
-      }else {
-        this.$router.push({
-          name:'PaperSearch',  //跳转路由
-          query:{
-            searchType: qs.stringify(searchType.searchType[1]), //json类型先转码，num代表的类型可以在searchType.josn中查看
-            content:author.name}});  //搜索内容
-      }
+      this.$router.push({name:'Scholar', params:{scholarId: author.id}});
     },
   },
 }

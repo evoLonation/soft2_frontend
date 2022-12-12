@@ -83,12 +83,7 @@ export default {
     const loginStore1 = loginStore()
     let messages , curMessages
     const checkGet = loginStore1.$onAction(
-        ({
-          name,
-          store,
-          args,
-          after,
-          onError
+        ({name, store, args, after, onError
         })=>{
           console.log(name,store,args,onError)
           after(()=>{

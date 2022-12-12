@@ -98,7 +98,9 @@ export const paperStore = defineStore('paper', {
     state: () => {
         return {
             paperId: '',
-            paperInfo: null,
+            paperInfo: {
+                starred: 1,
+            },
         }
     },
     actions: {
