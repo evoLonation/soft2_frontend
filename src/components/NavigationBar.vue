@@ -90,8 +90,8 @@ export default {
 
     const navigationState = navigationStore();
     router.beforeEach(() => {
-      navigationState.isDisplaySearchBox = true;
-      navigationState.isOpacity = false;
+      navigationState.isOnTop = false;
+      // navigationState.isOpacity = false;
     });
 
     return {
