@@ -2,8 +2,8 @@
   <div class="list">
     <h1 style="text-align: center; padding-bottom: 30px">应助申诉列表</h1>
     <el-table :data="complaintList" style="width: 1100px; margin-left: 150px">
-      <el-table-column prop="time" label="求助时间" width="180" />
-      <el-table-column prop="title" label="标题" width="300" />
+      <el-table-column prop="request_time" label="求助时间" width="180" />
+      <el-table-column prop="request_title" label="标题" width="300" />
       <el-table-column prop="content" label="申诉理由" width="300" >
 
       </el-table-column>
@@ -11,15 +11,15 @@
       <el-table-column width="">
 
         <template #default="scope">
-            <el-button  @click="download(scope)" size="small" >
-              下载文件
+            <el-button  @click="download(scope.row.url)" size="small" >
+              查看文件
             </el-button>
 
-            <el-button type="primary" @click="pass" size="small" >
+            <el-button type="primary" @click="deal(scope.row.request_id, 0)" size="small" >
               申诉通过
             </el-button>
 
-            <el-button type="danger" @click="fail" size="small" >
+            <el-button type="danger" @click="deal(scope.row.request_id, 1)" size="small" >
               申诉退回
             </el-button>
         </template>
@@ -31,47 +31,63 @@
 </template>
 
 <script>
+import {helpAxios} from '@/axios'
+import {ElMessage} from 'element-plus'
+
 export default {
   name: "ComplainList",
   data(){
     return {
-      complaintList: [
-        {
-          request_id: "",
-          time: "2022-11-09 14:18",
-          title: "劳动伦理的基本内涵及其当代形态3",
-          content: "sdfasodfjasodfasdfjo;saidjf o;ij",
-        },
-        {
-          request_id: "",
-          time: "2022-11-09 14:18",
-          title: "劳动伦理的基本内涵及其当代形态3",
-          content: "Vue (发音为 /vjuː/，类似 view) 是一款用于构建用户界面的 JavaScript 框架。它基于标准 HTML、CSS 和 JavaScript 构建，并提供了一套声明式的、组件化的编程模型，帮助你高效地开发用户界面。无论是简单还是复杂的界面，Vue 都可以胜任",
-        },
-        {
-          request_id: "",
-          time: "2022-11-09 14:18",
-          title: "劳动伦理的基本内涵及其当代形态3",
-          content: "sdfasodfjasodfasdfjo;saidjf o;ij",
-        }
-
-
-      ]
-
-
+      complaintList: []
     }
   },
   methods: {
-    download(){
-
+    download(url){
+      window.open(url)
     },
-    pass(){
-
+    deal(id, res){
+      helpAxios.post('admin/complait-deal', {
+        "request_id": id,
+        "res": res,
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        ElMessage({
+          message: '处理成功',
+          type: 'success',
+        })
+        this.getComplait()
+      }).catch((e)=>{
+        ElMessage({
+          message: '处理失败',
+          type: 'error',
+        })
+        console.log(e)
+      })
     },
-    fail(){
-
+    getComplait(){
+      helpAxios.post('admin/complait-list', {
+        "start": 0,
+        "end": 100,
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        this.complaintList = res.data.list;
+        ElMessage({
+          message: '获取成功',
+          type: 'success',
+        })
+      }).catch((e)=>{
+        ElMessage({
+          message: '获取失败',
+          type: 'error',
+        })
+        console.log(e)
+      })
     }
-
+  },
+  created() {
+    this.getComplait()
   }
 }
 </script>

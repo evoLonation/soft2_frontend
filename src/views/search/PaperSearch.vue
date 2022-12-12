@@ -397,20 +397,25 @@ export default {
   },
   methods:{
     querySearch(queryString, cb) {
-      console.log(queryString)
+      // console.log(queryString)
       let toSend={
-        search_type:0,
         text:queryString,
+        size:5
       };
       paperScholarAxios({
         method:'post',
         url:'search/auto-complete',
         data:toSend
       }).then((res) =>{
-        var toSuggest;
+        console.log("auto");
+        console.log(res);
+        var toSuggest=[];
         for(let i=0;i<res.data.auto_completes.length;i++){
-          toSuggest[i].value=res.data.auto_completes[i];
+          toSuggest.push({
+            value:res.data.auto_completes[i]
+          });
         }
+        console.log(toSuggest);
         cb(toSuggest);
       })
     },

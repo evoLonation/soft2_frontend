@@ -24,7 +24,7 @@
 
             </el-input>
 
-            <el-breadcrumb separator="/">
+            <el-breadcrumb separator="/" style="margin-top: 10px">
               <el-breadcrumb-item @click="orderByTime">
                 按时间排序
               </el-breadcrumb-item>
@@ -38,7 +38,7 @@
 
         <el-main
           style="
-          margin-top: 20px;
+          margin-top: 40px;
           min-height: 100%;
           position: relative">
 
