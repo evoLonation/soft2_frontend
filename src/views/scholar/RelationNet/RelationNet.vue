@@ -33,7 +33,7 @@ export default {
     })
   },
   mounted() {
-    this.initData()
+    this.initGraph()
     window.addEventListener('message', (e) => {
       console.log('catch: ',e.data)
       this.openAuthor(e.data)
@@ -48,6 +48,11 @@ export default {
       value: '合作关系',
       showNet: false,
     }
+  },
+  watch: {
+    '$route'() {
+      this.$router.go(0);
+    },
   },
   methods: {
     openAuthor(id){
@@ -79,15 +84,15 @@ export default {
     },
     initCo(){
       this.co_net = new Graph(
-          450,
-          400,
+          750,
+          550,
           document.getElementById("co_net")
       );
     },
     initCi(){
       this.ci_net = new Graph(
-          450,
-          400,
+          750,
+          550,
           document.getElementById("ci_net")
       );
     }
@@ -109,7 +114,7 @@ export default {
 <style>
 .dialog{
   border-radius: 10px;
-  height: 500px;
-  width: 500px;
+  height: 700px;
+  width: 800px;
 }
 </style>
