@@ -16,7 +16,7 @@
       <el-menu-item index="5">系统</el-menu-item>
     </el-menu>
     <el-table
-      :data="this.curMessages" table-layout="fixed" :key="this.flush" empty-text="暂无消息">
+      :data="this.curMessages" table-layout="fixed" :key="this.flush">
       <template #empty>
         <h1 style="margin:20px auto;">暂无消息</h1>
       </template>
@@ -118,16 +118,12 @@ export default {
   methods:{
     getMessages(){
       if (!this.loginStore1.isLogin){
-        this.messages = this.curMessages = Messages.Messages
         return
       }
       messageAxios.post('message/get-all-messages',{
       }).then(res=>{
         this.messages = this.curMessages = res.data.messages
         this.flush++;
-      }).catch(()=>{
-        console.log('未能获取，使用本地数据')
-        this.messages = this.curMessages = Messages.Messages
       })
     },
     changeType(key){

@@ -85,7 +85,7 @@
 import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar, Close, Check} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
 import {paperStore} from "@/store";
-import {userAxios} from "@/axios";
+import {applyAxios, userAxios} from "@/axios";
 import {paperScholarAxios} from "@/axios";
 import qs from "qs";
 import {ref} from "vue";
@@ -209,24 +209,27 @@ export default {
       })
     },
     adopt(){
-      userAxios
-      userAxios.post('paper/claim', {
-        "paper_id": this.store.paperId,
-        "scholar_id": this.input,
+      applyAxios.post('scholar/check-scholar', {
       }).then(res=>{
-        if (!res.status === 200){
-          ElMessage('认领失败，没有您的关联信息')
-        }
-        else {
-          const code = res.data.code
-          if (code === '0'){
-            ElMessage('认领成功')
-          }else if (code === '1'){
-            this.griScholarId = res.data.scholar_id
-            this.showGrievance = true
-          }
+        if (res.data.code === 1){
+          ElMessage(res.data.msg)
+        }else {
+          const scholar_id = res.data.scholar_id;
+          userAxios.post('paper/claim', {
+            "paper_id": this.store.paperId,
+            "scholar_id": scholar_id,
+          }).then(res=>{
+            const code = res.data.code
+            if (code === 0){
+              ElMessage('认领成功')
+            }else if (code === 1){
+              this.griScholarId = res.data.scholar_id
+              this.showGrievance = true
+            }
+          })
         }
       })
+
     },
     grievance(){
       let got = false

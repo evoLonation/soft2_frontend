@@ -153,6 +153,7 @@ export default {
       userAxios.post('paper/get-comment', {
         "paper_id": this.paperStore1.paperInfo.id
       }).then(res => {
+        console.log('cmts:', res.data.comments)
         this.comments = res.data.comments
       })
       this.getLiked()
@@ -172,9 +173,10 @@ export default {
           }
         }).catch(() => {
           console.log('未获取，默认全false')
-          this.comments.forEach(cmt => {
-            cmt.liked = 1
-          })
+          if (this.comments.length>0)
+            this.comments.forEach(cmt => {
+              cmt.liked = 1
+            })
         })
       }
     },

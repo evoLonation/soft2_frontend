@@ -33,7 +33,6 @@ export default {
     })
   },
   mounted() {
-    this.initGraph()
     window.addEventListener('message', (e) => {
       console.log('catch: ',e.data)
       this.openAuthor(e.data)
