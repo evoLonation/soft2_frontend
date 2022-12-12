@@ -46,6 +46,7 @@
             :n_citation="item.n_citation"
             :n_paper="item.n_paper"
             :weight="item.weight"
+            :scholar_id="item.scholar_id"
           />
       </div>
       <div class="loading">
