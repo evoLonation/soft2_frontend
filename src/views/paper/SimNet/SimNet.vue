@@ -45,9 +45,15 @@ export default {
     }
   },
   mounted() {
-    this.initGraph()
-    this.info = this.store.paperInfo
     this.paperId = this.store.paperId
+    this.initGraph()
+    paperStore().$onAction(({name, store, args, after, onError})=>{
+      console.log(name, store, args, onError)
+      after(() => {
+        console.log('info updated')
+        this.info = this.store.paperInfo
+      })
+    })
     window.addEventListener('message', (e) => {
       if (e.data[0] === 'sim')
         this.showInfo(e.data[1])

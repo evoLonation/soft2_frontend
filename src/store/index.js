@@ -99,9 +99,17 @@ export const paperStore = defineStore('paper', {
         return {
             paperId: '',
             paperInfo: null,
-            paperRelationNet: null,
-            scholarCoNet: null,
-            scholarCiNet: null,
+        }
+    },
+    actions: {
+        storeId(id){
+            this.paperId = id;
+        },
+        storeInfo(info){
+            this.paperInfo = info;
+        },
+        storeStar(star){
+            this.paperInfo.starred = star;
         }
     }
 });
