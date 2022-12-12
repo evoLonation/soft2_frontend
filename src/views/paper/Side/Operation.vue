@@ -73,6 +73,7 @@
 <!--  是否申诉对话框-->
   <el-dialog v-model="this.showGrievance" custom-class="dialog" title="发起申诉" center style="max-width: 500px">
     文献的同名作者已经被关联到其他学者，是否发起申诉？
+    申诉请求将先由已绑定的学者审核，您也可以联系管理员进行核实
     <template #footer>
       <el-button round @click="this.showGrievance=false">取消</el-button>
       <el-button round @click="this.grievance" color="#87bdd8" style="color: #ffffff" >确定</el-button>
@@ -215,7 +216,8 @@ export default {
           ElMessage(res.data.msg)
         }else {
           const scholar_id = res.data.scholar_id;
-          userAxios.post('paper/claim', {
+          console.log(this.store.paperId, scholar_id)
+          paperScholarAxios.post('scholar/claim', {
             "paper_id": this.store.paperId,
             "scholar_id": scholar_id,
           }).then(res=>{

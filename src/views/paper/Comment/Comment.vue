@@ -7,7 +7,7 @@
           <div style="color: #7682a2; font-weight: bold">更多</div>
         </el-button>
       </el-col>
-    </el-row><el-card shadow="never" v-if="this.comment !== null" :key="this.key">
+    </el-row><el-card shadow="never" v-if="this.comment.username!=='username'" :key="this.key">
       <el-row :key="this.key">
         <el-col :span="2" class="user">{{ this.comment.username }}:</el-col>
         <el-col :span="0.5" :offset="17" class="date-like">
@@ -28,7 +28,7 @@
         <el-col>{{ this.comment.content }}</el-col>
       </el-row>
     </el-card>
-    <div v-else style="padding: 20px 20px 20px 20px">暂无评论</div>
+    <div v-else style="padding: 20px 20px 20px 20px; margin: auto">暂无评论</div>
   </div>
   <!--右侧评论区-->
   <el-drawer v-model="this.showComment"
@@ -49,34 +49,36 @@
     </el-row>
     <el-row style="height: 20px"></el-row>
     <div :key="this.key">
-      <el-card v-for="cmt in this.comments" :key="cmt" shadow="hover" custom-class="card">
-        <el-row>
-          <el-col :span="3" class="user">{{ cmt.username }}:</el-col>
-          <el-col :span="3" style="float:right;" :offset="10" class="date-like">
-            <el-button round size="small" v-if="cmt.is_liked===0" @click="dislike(cmt.comment_id)" style="cursor: pointer" :key="this.key">
-              <el-icon color=" #66b1ff" size="large">
-                <StarFilled/>
-              </el-icon><div style="margin-left: 5px">{{ cmt.likes }}</div>
-            </el-button>
-            <el-button round size="small" v-else @click="this.like(cmt.comment_id)" style="cursor: pointer" :key="this.key">
-              <el-icon color=" #66b1ff" size="large">
-                <Star/>
-              </el-icon><div style="margin-left: 5px">{{ cmt.likes }}</div>
-            </el-button>
-          </el-col>
-          <el-col :span="6" class="date">{{ cmt.date }}</el-col>
-          <el-col :span="1" class="delete" v-if="cmt.user_id === this.loginStore1.userId" :key="this.key">
-            <el-button circle size="small" @click="this.del(cmt.comment_id)">
-              <el-icon color=" #b25252">
-                <DeleteFilled/>
-              </el-icon>
-            </el-button>
-          </el-col>
-        </el-row>
-        <el-row class="content">
-          <el-col>{{ cmt.content }}</el-col>
-        </el-row>
-      </el-card>
+      <div v-for="cmt in this.comments" :key="cmt">
+        <el-card shadow="hover" custom-class="card" v-if="cmt.username!=='username'">
+          <el-row>
+            <el-col :span="3" class="user">{{ cmt.username }}:</el-col>
+            <el-col :span="3" style="float:right;" :offset="10" class="date-like">
+              <el-button round size="small" v-if="cmt.is_liked===0" @click="dislike(cmt.comment_id)" style="cursor: pointer" :key="this.key">
+                <el-icon color=" #66b1ff" size="large">
+                  <StarFilled/>
+                </el-icon><div style="margin-left: 5px">{{ cmt.likes }}</div>
+              </el-button>
+              <el-button round size="small" v-else @click="this.like(cmt.comment_id)" style="cursor: pointer" :key="this.key">
+                <el-icon color=" #66b1ff" size="large">
+                  <Star/>
+                </el-icon><div style="margin-left: 5px">{{ cmt.likes }}</div>
+              </el-button>
+            </el-col>
+            <el-col :span="6" class="date">{{ cmt.date }}</el-col>
+            <el-col :span="1" class="delete" v-if="cmt.user_id === this.loginStore1.userId" :key="this.key">
+              <el-button circle size="small" @click="this.del(cmt.comment_id)">
+                <el-icon color=" #b25252">
+                  <DeleteFilled/>
+                </el-icon>
+              </el-button>
+            </el-col>
+          </el-row>
+          <el-row class="content">
+            <el-col>{{ cmt.content }}</el-col>
+          </el-row>
+        </el-card>
+      </div>
     </div>
   </el-drawer>
 </template>
@@ -114,11 +116,6 @@ export default {
                 for (let i = 0; i < this.comments.length; i++) {
                   comments[i].is_liked = comments_liked[i].is_liked
                 }
-              }).catch(() => {
-                console.log('未获取，默认全false')
-                comments.forEach(cmt => {
-                  cmt.is_liked = 1
-                })
               })
             }
           })
@@ -164,7 +161,7 @@ export default {
         }
         else {
           console.log('no cmt')
-          this.comments = []
+          this.comments = [{username: 'username'}]
           this.key++
         }
       })
