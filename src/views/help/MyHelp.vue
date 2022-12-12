@@ -35,8 +35,39 @@
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题"  width="300"/>
-      <el-table-column prop="request_content" label="描述" />
+      <el-table-column prop="request_content">
+        <template #default="scope">
+          <el-button @click="preInfo(scope.row)">
+            查看详情
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
+
+    <el-dialog v-model="infoDialog" title="求助详情">
+      <el-descriptions
+          :column="2"
+      >
+        <el-descriptions-item label="标题">
+          {{showInfo.title}}
+        </el-descriptions-item>
+        <el-descriptions-item >
+        </el-descriptions-item>
+        <el-descriptions-item label="求助时间">
+          {{showInfo.request_time}}
+        </el-descriptions-item>
+        <el-descriptions-item label="财富值">
+          {{showInfo.wealth}}
+        </el-descriptions-item>
+        <el-descriptions-item label="备注">
+          {{showInfo.request_content}}
+        </el-descriptions-item>
+      </el-descriptions>
+
+      <el-button type="primary" style="margin-left: 300px" @click="infoDialog = false">
+        确定
+      </el-button>
+    </el-dialog>
 
   </el-card>
 
@@ -53,6 +84,8 @@ export default {
     return {
       listFilter: "0",
       helpList: [],
+      showInfo: "",
+      infoDialog: false,
     }
   },
 
@@ -63,6 +96,10 @@ export default {
   },
 
   methods: {
+    preInfo(item){
+      this.showInfo = item;
+      this.infoDialog = true;
+    },
     getHelp(){
       helpAxios.post('help/user-help', {
         "start": -1,

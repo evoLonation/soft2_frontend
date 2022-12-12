@@ -35,16 +35,6 @@
     </el-card>
 
 
-    <div >
-
-      <div style=" float: left; margin: auto 0">
-
-      </div>
-
-
-    </div>
-
-
     <div style="
       width: 80%;
       min-width: 1200px;
