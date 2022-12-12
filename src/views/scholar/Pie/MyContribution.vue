@@ -39,6 +39,9 @@ export default {
       ],
     }
   },
+  props: {
+    tags: Object
+  },
   mounted() {
     for(var i = 0; i < this.Areas.length; i++) {
       this.init(i + 1);
@@ -104,6 +107,9 @@ export default {
       };
       myPie.setOption(option);
     },
+  },
+  created() {
+    console.log("contri is on!");
   }
 }
 </script>

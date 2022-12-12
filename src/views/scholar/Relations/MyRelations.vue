@@ -1,11 +1,11 @@
 <template>
-  <div class="relations" v-show="rel">
+  <div class="relations" v-if="rel">
     <div class="rel_title">
       <p>合作学者：</p>
-      <NetView/>
+      <NetView :id="this.scholarId"/>
     </div>
     <div class="rel_content" v-for="(item, index) in coopList" :key="item">
-      <div class="rel_item">
+      <div class="rel_item" @click="goTo(item)">
         <el-avatar
             :src="urls.at(index)"
             :size="50"
@@ -29,6 +29,7 @@
 <script>
 import NetView from "../RelationNet/RelationNet"
 import {paperScholarAxios} from "@/axios";
+import router from "@/router";
 
 export default {
   name: "MyRelations",
@@ -49,30 +50,37 @@ export default {
     getCoopList() {
       paperScholarAxios.post("scholar/coop-list/", {
         "scholar_id": this.scholarId,
-      }).then((res) => {
-        if(res.data.coop_list !== null) {
+      }).then(async (res) => {
+        if (res.data.coop_list !== null) {
           this.coopList = res.data.coop_list;
         }
-        for(var i = 0; i < this.coopList.length; i++) {
+        for (var i = 0; i < this.coopList.length; i++) {
           let url;
-          paperScholarAxios.post('scholar/get-avatar', {
+          await paperScholarAxios.post('scholar/get-avatar', {
             "scholar_id": this.coopList[i].id,
           }).then((res) => {
             url = res.data.url;
             this.urls.push(url);
           })
         }
-        console.log(this.coopList);
-        console.log(this.urls);
+        if(this.coopList.length === 0) {
+          // eslint-disable-next-line no-unused-vars
+          this.rel = false;
+        }
+      })
+    },
+    goTo(item) {
+      console.log(item.id);
+      router.push({
+        name: 'Scholar',
+        params: {
+          scholarId: item.id,
+        }
       })
     }
   },
   created() {
     this.getCoopList();
-    if(this.coopList.length === 0) {
-      // eslint-disable-next-line no-unused-vars
-      this.rel = false;
-    }
   }
 }
 </script>

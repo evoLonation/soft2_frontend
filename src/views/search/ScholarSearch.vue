@@ -1,10 +1,10 @@
 <template>
   <!--  顶部栏-->
   <div class="main_skeleton">
-    <p class="main_title">
+    <p class="main_title" id="title">
         学者主页
     </p>
-    <div class="main_search">
+    <div class="main_search" id="search">
       <el-input v-model="inputName" placeholder="请输入要搜索的学者名"  size="large"  style=" width: 20%;
                margin-left: 20%;">
         <template #prepend>学者名</template>
@@ -18,7 +18,8 @@
       </el-input>
 
     </div>
-    <div class="main_result">
+
+    <div class="main_result" v-if="searched==true">
         <div style="margin-top: 10px;margin-left: 5%"><span style="font-size: 20px">为您检索到{{ this.num }}条结果：</span></div>
         <div class="scholar_searched">
             <div v-for="(item,index) in scholars.slice(0,6)" :key="index"
@@ -41,60 +42,12 @@ export default {
   components: {ScholarList},
   data(){
     return{
+      searched:false,
       inputOrg:'',
       inputName:'',
-      num:120,
+      num:0,
       nowPage:1,
-      scholars:[
-        {
-          "id":"1",
-          "name":"刘伟",
-          "institution":"安全",
-          "paper_num":111,
-        },
-        {
-          "id":"1",
-          "name":"张本",
-          "institution":"不安全",
-          "paper_num":111,
-        },
-        {
-          "id":"",
-          "name":"蒋子",
-          "institution":"无敌",
-          "paper_num":111,
-        },
-        {
-          "id":"",
-          "name":"翔子",
-          "institution":"摆烂",
-          "paper_num":111,
-        },
-        {
-          "id":"",
-          "name":"桑杰",
-          "institution":"质疑",
-          "paper_num":111,
-        },
-        {
-          "id":"",
-          "name":"桑杰",
-          "institution":"质疑",
-          "paper_num":111,
-        },
-        {
-          "id":"",
-          "name":"桑杰",
-          "institution":"质疑",
-          "paper_num":111,
-        },
-        {
-          "id":"",
-          "name":"桑杰",
-          "institution":"质疑",
-          "paper_num":111,
-        },
-      ]
+      scholars:[]
     }
   },
   methods:{
@@ -115,7 +68,14 @@ export default {
         that.scholars=response.scholar;
         that.num=response.scholar_num;
         console.log(res.data);
+
+        document.getElementById("title").style.marginTop="47px";
+        document.getElementById("title").style.fontSize="21px";
+        document.getElementById("search").style.marginTop="0px";
+        that.searched=true;
       })
+
+
 
     }
   }
@@ -136,11 +96,25 @@ export default {
 
 .main_title{
   /*border: 3px red solid;*/
-  margin-top: 47px;
+  /*margin-top: 47px;*/
+  /*margin-bottom: 26px;*/
+  /*height: 32.24px;*/
+  /*font-size: 21px;*/
+  /*text-align: center;*/
+}
+
+#title{
+  margin-top: 140px;
   margin-bottom: 26px;
   height: 32.24px;
-  font-size: 21px;
+  font-size: 30px;
   text-align: center;
+  transition: all 1s;
+}
+
+#search{
+  margin-top: 150px;
+  transition: all 1s;
 }
 
 .main_search{

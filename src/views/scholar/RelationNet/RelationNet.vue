@@ -21,7 +21,6 @@
 
 <script>
 import {Graph} from "@/views/scholar/RelationNet/Graph";
-import Data from "@/views/scholar/RelationNet/Data"
 import {paperScholarAxios} from "@/axios";
 
 export default {
@@ -34,7 +33,6 @@ export default {
     })
   },
   mounted() {
-    this.initData()
     window.addEventListener('message', (e) => {
       console.log('catch: ',e.data)
       this.openAuthor(e.data)
@@ -50,53 +48,52 @@ export default {
       showNet: false,
     }
   },
+  watch: {
+    '$route'() {
+      this.$router.go(0);
+    },
+  },
   methods: {
     openAuthor(id){
-      //TODO: push到学者主页
       this.$router.push({name: "Scholar", params:{id: id
         }})
     },
     initData(){
-      let got = false;
+      console.log('id: ', this.id)
       paperScholarAxios.post('scholar/relation-net', {
         "scholar_id": this.id
       }).then(res=>{
         this.co_net_data = res.data.co_net;
         this.ci_net_data = res.data.ci_net;
-        got = true
+        this.co_net.loadData(this.co_net_data)
+        this.co_net.render()
+        this.co_net.initListener()
+        this.ci_net.loadData(this.ci_net_data)
+        this.ci_net.render()
+        this.ci_net.initListener()
       })
-      if (!got){
-        console.log("未获取到关系网，使用本地数据")
-        this.co_net_data = Data.co_net
-        this.ci_net_data = Data.ci_net
-      }
     },
     initGraph(){
       this.showNet = true
       setTimeout(()=>{
         this.initCo()
         this.initCi()
+        this.initData()
       },100)
     },
     initCo(){
       this.co_net = new Graph(
-          450,
-          400,
+          750,
+          550,
           document.getElementById("co_net")
       );
-      this.co_net.loadData(this.co_net_data)
-      this.co_net.render()
-      this.co_net.initListener()
     },
     initCi(){
       this.ci_net = new Graph(
-          450,
-          400,
+          750,
+          550,
           document.getElementById("ci_net")
       );
-      this.ci_net.loadData(this.ci_net_data)
-      this.ci_net.render()
-      this.ci_net.initListener()
     }
   }
 }
@@ -116,7 +113,7 @@ export default {
 <style>
 .dialog{
   border-radius: 10px;
-  height: 500px;
-  width: 500px;
+  height: 700px;
+  width: 800px;
 }
 </style>

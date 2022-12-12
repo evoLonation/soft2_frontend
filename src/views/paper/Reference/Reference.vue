@@ -2,8 +2,8 @@
   <div class="wrap-ref">
     <div class="part-ref">参考文献</div>
     <el-table :data="this.references" class="table" @row-click="this.openPaper"
-              empty-text="无参考文献">
-      <el-table-column prop="title" style="cursor: pointer" min-width="300px"></el-table-column>
+              empty-text="无参考文献" max-height="700px">
+      <el-table-column prop="title" style="cursor: pointer" min-width="500px"></el-table-column>
       <el-table-column prop="author" style="cursor: pointer"></el-table-column>
       <el-table-column prop="year" style="cursor: pointer"></el-table-column>
     </el-table>
@@ -17,7 +17,12 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Reference",
   mounted() {
-    this.getRefs()
+    paperStore().$onAction(({name, store, args, after, onError})=>{
+      console.log(name, store, args, onError)
+      after(() => {
+        this.getRefs()
+      })
+    })
   },
   data(){
     return{

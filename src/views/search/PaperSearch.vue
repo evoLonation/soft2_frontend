@@ -1,28 +1,20 @@
 <template>
   <div class="home_root">
     <div class="top_search">
-      <div class="top_search_img">
-  <!--      可能的logo-->
-      </div>
       <div class="top_search_mid" >
-          <div style="width: 40% ;margin-left: 30%;margin-top: 70px">
-            <div class = "right-head-choose-tab" id="normal-search-btn" @click="showNormal">
-              <span class = "font-1"> 普通检索</span>
+            <div class = "right-head-choose-tab"  @click="showNormal">
+              <span class = "font-1" id="normal-search-btn" style="margin: 100px"> 普通检索</span>
             </div>
-            <div class = "right-head-choose-tab" id="advanced-search-btn" style="margin-left: 220px" @click="showAdvance">
-              <span class = "font-1"> 高级检索</span>
+            <div class = "right-head-choose-tab"  @click="showAdvance">
+              <span class = "font-1" id="advanced-search-btn" style="margin: 100px"> 高级检索</span>
             </div>
-          </div>
-      </div>
-      <div class="top_search_right">
-  <!--      <el-avatar-->
-  <!--          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"-->
-  <!--          style="margin-left: 30%;margin-top: 10%"-->
-  <!--      />-->
+            <div class = "right-head-choose-tab"  @click="showProfession">
+              <span class = "font-1" id="profession-search-btn" style="margin: 100px"> 专业检索</span>
+            </div>
       </div>
     </div>
     <div class="search_main">
-        <div class="normal_search" v-if="this.searchType===false">
+        <div class="normal_search" v-if="this.searchType===0">
           <el-select v-model="value[0]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-left: 110px ">
             <el-option
                 v-for="item in options"
@@ -43,7 +35,7 @@
 
         </div>
 
-        <div class="advance_search" v-else>
+        <div class="advance_search" v-else-if="searchType===1">
           <div v-for="index in searchNum" :key="index">
             <el-select v-if="index===1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
               <el-option
@@ -94,12 +86,68 @@
               placeholder="Pick a year"
               style="width: 130px; margin-left: 5px"
           />
-          <el-button style="margin-left: 200px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch(0)">
+
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px;color: white" color="#79B4F1" @click="toProfession">
+            <template #icon>
+              <el-icon size="15px" ><Switch/></el-icon>
+            </template>
+            生成检索式
+          </el-button>
+
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch(0)">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
             搜索
           </el-button>
+        </div>
+
+        <div class="profession_search" v-else-if="searchType===2">
+          <div class="profession_search_left">
+            <el-input
+                v-model="inputProfession"
+                :rows="8"
+                type="textarea"
+                placeholder="请输入检索式"
+                style="width: 800px;margin-left: 100px;margin-top: 10px"
+            />
+            <div style="display: inline-block;margin-left: 100px;margin-top: 30px;">年份范围</div>
+            <el-date-picker
+                v-model="beginYear"
+                type="year"
+                placeholder="Pick a year"
+                style="width: 130px; margin-left: 40px"
+            /> ----
+            <el-date-picker
+                v-model="endYear"
+                type="year"
+                placeholder="Pick a year"
+                style="width: 130px; margin-left: 5px"
+            />
+            <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch(0)">
+              <template #icon>
+                <el-icon size="15px" ><Search/></el-icon>
+              </template>
+              搜索
+            </el-button>
+          </div>
+          <div class="profession_search_right">
+              <div style="margin-top: 20px"><span style="font-size: 20px;margin-left: 20px;margin-top: 20px">专业检索规则:</span></div>
+              <el-divider style="margin:10px auto;width: 90%"></el-divider>
+              <div style="width:296px;margin: auto">
+                <el-scrollbar height="224px">
+                  <div><span style="font-size: 18px">可检索字段：</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">SU%=主题,TKA=篇关摘,TI=题名,KY=关键词,AB=摘要,FT=全文,AU=作者,FI=第一责任人,RP=通讯作者,AF=机构,JN=文献来源, RF=参考文献,YE=年,FU=基金,CLC=分类号,SN=ISSN,CN=统一刊号,IB=ISBN,CF=被引频次</span></div>
+                  <div style="margin-top: 20px"><span style="font-size: 18px">示例：</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">
+                    1）TI='生态' and KY='生态文明' and (AU % '陈'+'王' ) 可以检索到篇名包括“生态”并且关键词包括“生态文明”并且作者为“陈”姓和“王”姓的所有文章；
+                    <br/>
+                    2）SU='北京'*'奥运' and FT='环境保护' 可以检索到主题包括“北京”及“奥运”并且全文中包括“环境保护”的信息；
+                    <br/>
+                    3）SU=('经济发展'+'可持续发展')*'转变'-'泡沫' 可检索“经济发展”或“可持续发展”有关“转变”的信息，并且可以去除与“泡沫”有关的部分内容。</span></div>
+                </el-scrollbar>
+              </div>
+          </div>
         </div>
     </div>
 
@@ -167,6 +215,7 @@ export default {
   components: {PaperShow},
   data(){
     return{
+      inputProfession:'',
       searchBegin:false,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3'],
@@ -348,20 +397,25 @@ export default {
   },
   methods:{
     querySearch(queryString, cb) {
-      console.log(queryString)
+      // console.log(queryString)
       let toSend={
-        search_type:0,
         text:queryString,
+        size:5
       };
       paperScholarAxios({
         method:'post',
         url:'search/auto-complete',
         data:toSend
       }).then((res) =>{
-        var toSuggest;
+        console.log("auto");
+        console.log(res);
+        var toSuggest=[];
         for(let i=0;i<res.data.auto_completes.length;i++){
-          toSuggest[i].value=res.data.auto_completes[i];
+          toSuggest.push({
+            value:res.data.auto_completes[i]
+          });
         }
+        console.log(toSuggest);
         cb(toSuggest);
       })
     },
@@ -369,14 +423,22 @@ export default {
       console.log(item)
     },
     showNormal() {
-      this.searchType=false;
+      this.searchType=0;
       document.getElementById("normal-search-btn").style.borderBottom = "4px solid lightblue";
       document.getElementById("advanced-search-btn").style.borderBottom = "0px solid white";
+      document.getElementById("profession-search-btn").style.borderBottom = "0px solid white";
     },
     showAdvance() {
-      this.searchType=true;
+      this.searchType=1;
       document.getElementById("advanced-search-btn").style.borderBottom = "4px solid lightblue";
       document.getElementById("normal-search-btn").style.borderBottom = "0px solid white";
+      document.getElementById("profession-search-btn").style.borderBottom = "0px solid white";
+    },
+    showProfession() {
+      this.searchType=2;
+      document.getElementById("profession-search-btn").style.borderBottom = "4px solid lightblue";
+      document.getElementById("normal-search-btn").style.borderBottom = "0px solid white";
+      document.getElementById("advanced-search-btn").style.borderBottom = "0px solid white";
     },
     decreaseNum(index){
       this.inputValue.splice(index,1);
@@ -457,6 +519,9 @@ export default {
         case '作者单位':
           return 6;
       }
+    },
+    toProfession(){
+
     },
     toIntExact(str){
       return (str==='精确')?0:1;
@@ -548,6 +613,10 @@ export default {
         that.searchBegin=true;
       })
     },
+    //todo:专业检索
+    ProfessionSearch(page){
+      console.log(page);
+    },
     //todo:筛选
     dealFilter(){
       let that=this;
@@ -633,35 +702,31 @@ export default {
   /*background-color: lavender;*/
 }
 
-.top_search_img{
-  vertical-align:top;
-  display: inline-block;
-  width: 20%;
-  text-align: center;
-  height: 100px;
-}
 
 .top_search_mid{
   vertical-align:top;
-  display: inline-block;
-  width: 60%;
-  height: 100px;
+  display: flex;
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 900px;
+  /*height: 100px;*/
 }
 
 .right-head-choose-tab {
   height: 37px;
-  margin-left: 2%;
-  display: inline-block;
-  position: absolute;
   font-size: 22px;
-  color: firebrick;
+  width: 300px;
+  margin: auto;
+  color: #7F8488;
   transition: all 0.25s;
 }
 .right-head-choose-tab:hover {
-  background-color: aliceblue;
+  background-color: white;
   border-radius: 4px;
+  margin: auto;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 25px;
 }
 #normal-search-btn{
   border-bottom: 4px solid lightblue;
@@ -670,6 +735,10 @@ export default {
 #advanced-search-btn{
   transition: all 0.5s;
 }
+#profession-search-btn{
+  transition: all 0.5s;
+}
+
 .font-1 {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
 }
@@ -711,6 +780,39 @@ export default {
   margin-right: auto;
   width: 1400px;
   /*margin-bottom: 20px;*/
+}
+
+.profession_search{
+  /*background-color: white;*/
+  /*border: 1px white solid;*/
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
+  /*border-radius: 4px;*/
+  /*height: 300px;*/
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: auto;
+  width: 1400px;
+  /*margin-bottom: 20px;*/
+}
+.profession_search_left{
+  padding: 20px;
+  background-color: white;
+  border: 1px white solid;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 1px 1px 3px #888888;*/
+  border-radius: 4px;
+  width: 1000px;
+}
+
+.profession_search_right{
+  background-color: white;
+  border: 1px white solid;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 1px 1px 3px #888888;*/
+  border-radius: 4px;
+  margin-left: 20px;
+  flex: 1;
 }
 
 .paper_main{

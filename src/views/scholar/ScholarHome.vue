@@ -30,7 +30,7 @@
 
     <el-main class="wrap-paper" @scroll="this.handleScroll">
       <div class="style_need">
-        <InfoView name="part" style="margin-top: 10px" :scholar_id="scholar_id"/>
+        <InfoView ref="info" name="part" style="margin-top: 10px" :scholar_id="scholar_id"/>
         <OpView style="margin-top: 10px" :scholar_id="scholar_id"/>
       </div>
       <div class="style_need">

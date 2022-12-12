@@ -23,8 +23,6 @@
 import {Graph} from "@/views/paper/RefNet/Graph";
 import Data from "@/views/paper/RefNet/Data";
 import {paperStore} from "@/store";
-import qs from "qs";
-import searchType from "@/assets/searchType.json";
 import {paperScholarAxios} from "@/axios";
 
 export default {
@@ -45,9 +43,15 @@ export default {
     }
   },
   mounted() {
-    this.initGraph()
-    this.info = this.store.paperInfo
+    paperStore().$onAction(({name, store, args, after, onError})=>{
+      console.log(name, store, args, onError)
+      after(() => {
+        console.log('info updated')
+        this.showInfo(this.store.paperInfo)
+      })
+    })
     this.paperId = this.store.paperId
+    this.initGraph()
     window.addEventListener('message', (e) => {
       if (e.data[0] === 'ref')
         this.showInfo(e.data[1])
@@ -106,15 +110,7 @@ export default {
       this.$router.push({path: `/paper/${id}`})
     },
     openAuthor(author){
-      if (author.hasId){
-        this.$router.push({name:'Scholar', params:{scholarId: author.id}});
-      }else {
-        this.$router.push({
-          name:'PaperSearch',  //跳转路由
-          query:{
-            searchType: qs.stringify(searchType.searchType[1]), //json类型先转码，num代表的类型可以在searchType.josn中查看
-            content:author.name}});  //搜索内容
-      }
+      this.$router.push({name:'Scholar', params:{scholarId: author.id}});
     },
   },
   watch: {

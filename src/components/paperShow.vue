@@ -239,6 +239,17 @@ export default {
   margin-right: 48px;
   font-size: 16px;
   color: #b0b2b3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -moz-box;
+  -moz-line-clamp: 2;
+  -moz-box-orient: vertical;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
 }
 
 
@@ -250,9 +261,24 @@ export default {
   color: #b0b2b3;
 }
 
+.author_name{
+  vertical-align: bottom;
+  display: inline-block;
+  max-width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .author_name:hover{
+  vertical-align: bottom;
+  display: inline-block;
+  max-width: 100px;
   color: #79bbff;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .button_cancel{

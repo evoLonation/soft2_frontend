@@ -7,10 +7,10 @@
       <el-col  class="abstract">{{this.info.abstract}}</el-col>
     </el-row>
     <el-row>
-      <el-col :span="2" class="keyword" v-for="keyword in this.info.keywords" :key="keyword">{{keyword}}</el-col>
+      <el-col :span="4" class="keyword" v-for="keyword in this.info.keywords" :key="keyword">{{keyword}}</el-col>
     </el-row>
     <el-row>
-      <el-col :span="author.name.length<6?2:24/this.info.authors.length" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
+      <el-col :span="4" class="author" v-for="author in this.info.authors" :key="author" @click="this.openAuthor(author)">{{author.name}}</el-col>
     </el-row>
     <el-row>
       <el-col  class="org">{{this.info.org}}</el-col>
@@ -30,8 +30,6 @@
 
 <script>
 import {paperStore} from "@/store"
-import searchType from "@/assets/searchType"
-import qs from "qs";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -41,8 +39,14 @@ export default {
   setup(){
   },
   mounted(){
-    this.getInfo()
-    this.processInfo()
+    let store = paperStore()
+    store.$onAction(({name, store, args, after, onError}) => {
+        console.log(name, store, args, onError)
+        after(() => {
+          this.info = store.paperInfo
+          this.processInfo()
+        })
+    })
   },
   data(){
     return{
@@ -50,10 +54,6 @@ export default {
     }
   },
   methods: {
-    getInfo(){ // 从state获取文献信息
-      const store = paperStore()
-      this.info = store.paperInfo
-    },
     processInfo(){
       if (this.info.title === ''){
         this.info.title = '无标题'
@@ -93,15 +93,7 @@ export default {
       }
     },
     openAuthor(author){
-      if (author.hasId){
-        this.$router.push({name:'Scholar', params:{scholarId: author.id}});
-      }else {
-        this.$router.push({
-          name:'PaperSearch',  //跳转路由
-          query:{
-            searchType: qs.stringify(searchType.searchType[1]), //json类型先转码，num代表的类型可以在searchType.josn中查看
-            content:author.name}});  //搜索内容
-      }
+      this.$router.push({name:'Scholar', params:{scholarId: author.id}});
     },
   },
 }
@@ -133,8 +125,8 @@ export default {
 }
 .keyword {
   margin-top: 5px;
-  font-size: 15px;
-  line-height: 2;
+  font-size: 12px;
+  line-height: 1.25;
   font-weight: bold;
 }
 .org {
