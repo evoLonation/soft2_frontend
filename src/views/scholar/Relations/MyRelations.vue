@@ -2,7 +2,7 @@
   <div class="relations">
       <div class="rel_title">
         <p>合作学者：</p>
-        <NetView/>
+        <NetView :id="scholarId"/>
       </div>
     <div v-if="rel">
       <div class="rel_content" v-for="(item, index) in coopList" :key="item">
