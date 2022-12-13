@@ -669,6 +669,7 @@ export default {
     },
     NormalSearch(page){
       this.isLoading=true;
+      console.log(this.isLoading);
       let that=this;
       var toSend={
         need_filter_statistics:true,
@@ -683,6 +684,7 @@ export default {
         start:10*(page-1),
         end:10*page,
       };
+      that.searchBegin=true;
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -701,12 +703,13 @@ export default {
         that.institutionsCheck=[];
         that.nowPage=1;
         // console.log(res.data);
-        that.searchBegin=true;
+
         that.isLoading=false;
       })
     },
     AdvanceSearch(){
       this.isLoading=true;
+      this.searchBegin=true;
       var toSend={
         need_filter_statistics:true,
         query:this.toProfession(false),
@@ -740,13 +743,14 @@ export default {
         that.institutionsCheck=[];
         that.nowPage=1;
         // console.log(res.data);
-        that.searchBegin=true;
+
         that.isLoading=false;
       })
     },
     //todo:专业检索
     ProfessionSearch(){
       this.isLoading=true;
+      this.searchBegin=true;
       var toSend={
         query:this.inputProfession,
         start_year:parseInt(this.beginYear),
@@ -777,8 +781,7 @@ export default {
         that.venuesCheck=[];
         that.institutionsCheck=[];
         that.nowPage=1;
-        // console.log(res.data);
-        that.searchBegin=true;
+        // console.log(res.data)
         that.isLoading=false;
       })
     },
@@ -862,7 +865,7 @@ export default {
     if(this.$route.query.type==null){
       this.showNormal();
       if(this.inputValue[0]!=='')
-      this.NormalSearch(1);
+        this.NormalSearch(1);
     }
     else {
       this.showAdvance();
