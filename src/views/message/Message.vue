@@ -49,8 +49,8 @@
                   cancel-button-text="拒绝"
                   icon-color="#626AEF"
                   title="建议核实信息"
-                  @confirm="this.accept(scope.row.gid)"
-                  @cancel="this.refuse(scope.row.gid)">
+                  @confirm="this.accept(scope.row.gid, scope.row.id)"
+                  @cancel="this.refuse(scope.row.gid, scope.row.id)">
                 <template #reference>
                   <el-button round size="small" @click="this.showConfirm=true">审批</el-button>
                 </template>
@@ -229,7 +229,6 @@ export default {
       })
     },
     openHelp(id){
-      //TODO: 跳转到那条互助页
       console.log(id)
       this.$router.push({name: 'HelpCenter'})
     },
@@ -257,27 +256,22 @@ export default {
         this.del(m.id)
       })
     },
-    accept(id){
+    accept(gid, id){
       userAxios.post('grievance/accept', {
-        "grievance_id": id
+        "grievance_id": gid
       }).then(()=>{
           ElMessage('已同意')
+        this.read(id)
         this.flush++;
-      }).catch(e=>{
-        ElMessage('操作失败，发生错误')
-        console.log(e)
       })
-
     },
-    refuse(id){
+    refuse(gid, id){
       userAxios.post('grievance/refuse', {
         "grievance_id": id
       }).then(()=>{
         ElMessage('已拒绝')
+        this.read(id)
         this.flush++;
-      }).catch(e=>{
-        ElMessage('操作失败，发生错误')
-        console.log(e)
       })
     },
   }
