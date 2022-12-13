@@ -119,7 +119,7 @@ export default {
       author: [],
       magazine: "",
       urls: null,
-      starred: false,
+      starred: 1,
       citations: {
         gb: "gb", //GB/T 7714格式
         mla: "mla",//MLA格式
@@ -158,7 +158,7 @@ export default {
         case '1': this.citation = this.citations.gb; break;
         case '2': this.citation = this.citations.mla; break;
         case '3': this.citation = this.citations.apa; break;
-        case '4': this.citation = this.citations.bibix; break;
+        case '4': this.citation = this.citations.bibtex; break;
         case '5': this.citation = this.citations.caj_cd; break;
         default: console.log("err")
       }

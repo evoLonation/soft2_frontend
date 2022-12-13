@@ -36,6 +36,7 @@ export default {
         "scholar_id": this.scholarId,
       }).then((res) => {
         tmp = res.data.statistic;
+        console.log(res.data.statistic);
         tmp.sort((a, b) => a.year < b.year ? 1 : a.year > b.year ? -1 : 0);
         for(let i = 0; i < tmp.length; i++) {
           years.push(tmp[i].year);
