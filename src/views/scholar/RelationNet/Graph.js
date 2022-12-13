@@ -1,5 +1,14 @@
 import G6 from "@antv/g6";
-
+const f2 = {
+    type: 'force2',
+    animate: true,
+    // distanceThresholdMode: 'max',
+    damping: 0.5,
+    gravity: 15,
+    preventOverlap: true,
+    nodeSize: 70,
+    linkDistance: 25,
+}
 export class Graph {
     graph
     data
@@ -30,19 +39,7 @@ export class Graph {
             defaultEdge: {
                 type: 'can-running',
             },
-            layout: {
-                type: 'concentric',
-                linkDistance: 30,         // 可选，边长
-                animate: true,
-                preventOverlap: true,     // 可选，必须配合 nodeSize
-                nodeSize: 70,             // 可选
-                sweep: 10,                // 可选
-                equidistant: false,       // 可选
-                startAngle: 0,            // 可选
-                clockwise: false,         // 可选
-                maxLevelDiff: 10,         // 可选
-                sortBy: 'size',          // 可选
-            },
+            layout: f2,
             modes: {
                 default: [
                     {
@@ -68,10 +65,7 @@ export class Graph {
 
     async setLayout() {
         this.graph.updateLayout({
-            type: 'concentric',
-            linkDistance: 50,
-            sortBy: 'size',
-            minNodeSpacing: 60,
+            type: 'force2'
         })
     }
 
