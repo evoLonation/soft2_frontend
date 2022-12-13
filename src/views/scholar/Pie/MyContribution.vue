@@ -49,8 +49,13 @@ export default {
         // data变量，用来记录相关情况
         let data = [];
         let l = tags.length <= 5 ? tags.length: 5;
+        // 统计前五领域的比例
+        let sum = 0;
         for(let i = 0; i < l; i++) {
-          data.push({value: tags[i].w, name: tags[i].t});
+          sum += tags[i].w;
+        }
+        for(let i = 0; i < l; i++) {
+          data.push({value: Math.round(tags[i].w / sum * 100), name: tags[i].t});
         }
 
         var option = {
@@ -58,7 +63,7 @@ export default {
             trigger: 'item',
             show: true,
             formatter: function (params) {
-              return params.data.name + "&nbsp;&nbsp;" + params.data.value;
+              return params.data.name + "&nbsp;&nbsp;" + params.data.value + "%";
             }
           },
           series: [

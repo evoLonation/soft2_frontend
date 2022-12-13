@@ -49,11 +49,6 @@
                       {{userinfo.nickName}}
                     </span>
                   </el-form-item>
-                  <el-form-item label="email:">
-                    <span style="margin-left: 30px">
-                      {{userinfo.email}}
-                    </span>
-                  </el-form-item>
                   <el-form-item label="求助次数:">
                     <span style="margin-left: 30px">
                       {{userinfo.n_request}}

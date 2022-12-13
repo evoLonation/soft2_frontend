@@ -38,7 +38,7 @@ export default {
       // src:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
     }
   },
-  setup(props,inject){
+  setup(props){
     const src=ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
     const router = useRouter();
     const gotoScholar = () => {
@@ -59,6 +59,7 @@ export default {
         url:'scholar/delete-subscribe',
         data:toSend
       }).then((res)=>{
+        router.go();
         if(res.data.code===0)
           ElMessage({
           message: '取关成功！',
@@ -68,7 +69,7 @@ export default {
           message: '取关失败！',
           type: 'error',
         });
-        inject.reload();
+
       })
     }
     const getAva = () =>{
