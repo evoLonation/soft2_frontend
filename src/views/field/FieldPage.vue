@@ -1,17 +1,19 @@
 <template>
 
   <div class="field" style="position: relative; text-align: center">
-    <h1 style="text-align: center; padding: 10px">{{field_name === undefined ? "-下方输入领域查询哦-" : field_name}}</h1>
+    <h1 style="text-align: center; padding: 20px 0">{{field_name === undefined ? "-下方输入领域查询哦-" : field_name}}</h1>
 
-    <el-input
+    <el-autocomplete
         v-model="input"
-        style="width: 500px; padding-top: 20px; align-items: center"
-        placeholder="请输入搜索领域"
+        class=""
+        style="width: 450px;margin-right: 12px;"
+        placeholder="输入特定领域..."
+        :fetch-suggestions="querySearch"
     >
       <template #suffix>
-        <el-icon size="large" @click="gotoField" ><search /></el-icon>
+        <el-icon size="large" @click="gotoField()"><search /></el-icon>
       </template>
-    </el-input>
+    </el-autocomplete>
   </div>
   <div class="show">
 
@@ -46,8 +48,9 @@
             :name="item.name"
             :n_citation="item.n_citation"
             :n_paper="item.n_paper"
-            :weight="item.weight"
+            :weight="Math.round(item.weight * 1000)"
             :scholar_id="item.scholar_id"
+            style="padding: 18px 18px"
           />
       </div>
       <div class="loading">
@@ -69,6 +72,21 @@ export default {
   components: {
     list, list2
   },
+  setup() {
+    const querySearch = (queryString , cb) => {
+      paperScholarAxios.post("search/auto-complete", {
+        search_type : 2,
+        text : queryString,
+      }).then((res) => {
+        cb(res.data.auto_completes.map((value) => {return {value : value}}))
+      })
+      // const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
+      // cb(results);
+    }
+    return {
+      querySearch
+    }
+  },
   data() {
     return {
       paper_num: 0, //领域总文献数
@@ -76,9 +94,9 @@ export default {
       field_name: "",
       input: "",
       start1: 0,
-      end1: 5,
+      end1: 8,
       start2: 0,
-      end2: 5,
+      end2: 8,
       loading1: true,
       loading2: true,
       PaperList: [],
@@ -103,8 +121,8 @@ export default {
           this.PaperList.push(res.data.papers[i])
         }
         console.log(this.PaperList)
-        this.start1 = this.start1 + 5
-        this.end1 = this.end1 + 5
+        this.start1 = this.start1 + 8
+        this.end1 = this.end1 + 8
       }).catch(e=>{
         console.log(e)
       })
@@ -124,14 +142,14 @@ export default {
         for(let i = 0; i < res.data.scholars.length; i++) {
           this.ScholarList.push(res.data.scholars[i])
         }
-        this.start2 = this.start2 + 5
-        this.end2 = this.end2 + 5
+        this.start2 = this.start2 + 8
+        this.end2 = this.end2 + 8
       })
     },
     gotoField() {
       this.$router.push({name : "Field", query: {content: this.input,}})
     },
-    scrollFn() {
+    async scrollFn() {
       let windowHeight = window.innerHeight;
       let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
       let sectionTop1 = document.getElementById("paper").offsetTop;//card_section距离顶部的偏移高度（card_section为你的照片或div元素ID）
@@ -146,11 +164,8 @@ export default {
       document.getElementById("scholar").style.height = docHeight2+ "px"
 
       let height = document.documentElement.clientHeight
-      // console.log(height)
       let tmp1 = height - docHeight1
       let tmp2 = height - docHeight2
-      // console.log(docHeight1, st, winHeight1, winHeight2)
-      // console.log(tmp1, tmp2)
 
       if(this.loading1 === false) {
         document.getElementById("paper").style.top = tmp1 + "px"
@@ -158,33 +173,38 @@ export default {
       if(this.loading2 === false) {
         document.getElementById("scholar").style.top = tmp2 + "px"
       }
-      if(sectionHeight1 + sectionTop1 - 50 < st + windowHeight) {
+      console.log(sectionHeight1 + sectionTop1, st + windowHeight)
+      console.log(sectionHeight2 + sectionTop2, st + windowHeight)
+      if((sectionHeight1 + sectionTop1  < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
       // if(winHeight1 + st >= docHeight1) {
-      //   console.log('1触底了')
-      //   console.log('1st', st)
         if(this.PaperList.length >= this.paper_num) {
-          // console.log('论文数目', this.paper_num)
-          // console.log('1需要固定')
           this.loading1 = false
         }
         else {
-          this.getPaperList()
+          if((sectionHeight2 + sectionTop2 -500 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
+            this.getPaperList()
+          }
         }
       }
-      // console.log('2滚动')
-      if(sectionHeight2 + sectionTop2 - 50 < st + windowHeight) {
-      // if(winHeight2 + st >= docHeight2) {
-      //   console.log('2触底了')
-      //   console.log('2st', st)
-        if(this.ScholarList.length >= this.scholar_num) {
+      if((sectionHeight2 + sectionTop2 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
+        // if(winHeight2 + st >= docHeight2) {
+        if (this.ScholarList.length >= this.scholar_num) {
           this.loading2 = false
-          // console.log('2需要固定')
         }
         else {
-          this.getScholarList()
+          if((sectionHeight1 + sectionTop1 -500 < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
+            this.getScholarList()
+          }
         }
       }
     },
+    wait (time) {
+      return new Promise(resolve => {
+      setTimeout(() => {
+      resolve()
+    }, time)
+  })
+}
   },
   mounted() {
     this.field_name = this.$route.query.content
@@ -234,7 +254,7 @@ export default {
 }
 
 .scholar {
-  width: 420px;
+  width: 400px;
   position: sticky;
   display: block;
   margin-left: 80px;

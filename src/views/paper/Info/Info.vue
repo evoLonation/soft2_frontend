@@ -17,7 +17,7 @@
     </el-row>
     <el-row>
       <el-col  :span="5" class="doi-isbn">doi: {{this.info.doi}}</el-col>
-      <el-col  :span="5" class="doi-isbn">isbn: {{this.info.isbn}}</el-col>
+      <el-col  :span="5" class="doi-isbn">issn: {{this.info.issn}}</el-col>
     </el-row>
     <el-row>
       <el-col  class="year">被引量: {{this.info.n_citation}}</el-col>
@@ -79,8 +79,8 @@ export default {
       if (this.info.doi === ''){
         this.info.doi = '未知'
       }
-      if (this.info.isbn === ''){
-        this.info.isbn = '未知'
+      if (this.info.issn === ''){
+        this.info.issn = '未知'
       }
       if (this.info.n_citation === ''){
         this.info.n_citation = '未知'
