@@ -25,7 +25,7 @@
         <span v-if="index===3">...-</span>
       </span>
 
-        {{this.org}}  -  被引量:{{this.num}}</div>
+      <span class="org_name">{{this.org}}</span>  -  被引量:{{this.num}}</div>
     <div class="paper_author" style="margin-bottom: 10px" v-else>
       作者不详-
       {{this.org}}  -  被引量:{{this.num}}</div>
@@ -286,6 +286,15 @@ export default {
   max-width: 100px;
   color: #79bbff;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.org_name{
+  vertical-align: bottom;
+  display: inline-block;
+  max-width: 400px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

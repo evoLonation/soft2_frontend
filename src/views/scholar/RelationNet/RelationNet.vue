@@ -14,8 +14,8 @@
         </el-switch>
       </el-tooltip>
     </template>
-    <div id="co_net" class="g6-graph" v-if="this.showNet" v-show="this.value==='合作关系'"></div>
-    <div id="ci_net" class="g6-graph" v-if="this.showNet" v-show="this.value==='引用关系'"></div>
+    <div v-loading="this.loading_co" element-loading-text="合作关系网计算中..." id="co_net" class="g6-graph" v-if="this.showNet" v-show="this.value==='合作关系'"></div>
+    <div v-loading="this.loading_ci" element-loading-text="引用关系网计算中..." id="ci_net" class="g6-graph" v-if="this.showNet" v-show="this.value==='引用关系'"></div>
   </el-dialog>
 </template>
 
@@ -46,6 +46,8 @@ export default {
       ci_net_data: null,
       value: '合作关系',
       showNet: false,
+      loading_co: true,
+      loading_ci: true,
     }
   },
   watch: {
@@ -55,11 +57,10 @@ export default {
   },
   methods: {
     openAuthor(id){
-      this.$router.push({name: "Scholar", params:{id: id
+      this.$router.push({name: "Scholar", params:{scholarId: id
         }})
     },
     initData(){
-      console.log('id: ', this.id)
       paperScholarAxios.post('scholar/relation-net', {
         "scholar_id": this.id
       }).then(res=>{
@@ -68,9 +69,11 @@ export default {
         console.log(this.ci_net_data)
         this.co_net.loadData(this.co_net_data)
         this.co_net.render()
+        this.loading_co = false
         this.co_net.initListener()
         this.ci_net.loadData(this.ci_net_data)
         this.ci_net.render()
+        this.loading_ci = false
         this.ci_net.initListener()
       })
     },

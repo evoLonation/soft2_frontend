@@ -176,95 +176,106 @@ export default {
       ElMessage("已复制")
     },
     star(){
-      if (!this.loginStore1.checkLogin){
-        ElMessage('请先登录')
-        return
-      }
-      userAxios.post('paper/star', {
-        'paper_id': this.paperStore1.paperId
-      }).then(res=>{
-        const code = res.data.code
-        console.log(code)
-        if (code === 0) {
-          this.starred = 0
-          ElMessage('收藏成功')
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          userAxios.post('paper/star', {
+            'paper_id': this.paperStore1.paperId
+          }).then(res=>{
+            const code = res.data.code
+            console.log(code)
+            if (code === 0) {
+              this.starred = 0
+              ElMessage('收藏成功')
+            }else {
+              ElMessage('已经收藏过')
+            }
+          })
         }else {
-          ElMessage('已经收藏过')
+          ElMessage('请先登录')
         }
       })
     },
     deStar(){
-      if (!this.loginStore1.checkLogin){
-        ElMessage('请先登录')
-        return
-      }
-      userAxios.post('paper/star/cancel', {
-        'paper_id': this.paperStore1.paperId
-      }).then(res=>{
-        const code = res.data.code
-        console.log(code)
-        if (code === 0){
-          ElMessage('取消收藏')
-          this.starred = 1
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          userAxios.post('paper/star/cancel', {
+            'paper_id': this.paperStore1.paperId
+          }).then(res=>{
+            const code = res.data.code
+            console.log(code)
+            if (code === 0){
+              ElMessage('取消收藏')
+              this.starred = 1
+            }else {
+              ElMessage('没有收藏过')
+            }
+          })
         }else {
-          ElMessage('没有收藏过')
+          ElMessage('请先登录')
         }
       })
     },
     help(){ //跳转到互助
-      if (!this.loginStore1.checkLogin){
-        ElMessage('请先登录')
-        return
-      }
-      console.log(this.title, qs.stringify(this.author), this.magazine)
-      this.$router.push({
-        name: 'CreateRequest',
-        query: {
-          title: this.title,
-          author: qs.stringify(this.author),
-          magazine: this.magazine
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          this.$router.push({
+            name: 'CreateRequest',
+            query: {
+              title: this.title,
+              author: qs.stringify(this.author),
+              magazine: this.magazine
+            }
+          })
+        }else {
+          ElMessage('请先登录')
+        }
+      })
+
+    },
+    adopt(){
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          applyAxios.post('scholar/check-scholar', {
+          }).then(res=>{
+            if (res.data.code === 1){
+              ElMessage(res.data.msg)
+            }else {
+              const scholar_id = res.data.scholar_id;
+              console.log(this.paperStore1.paperId, scholar_id)
+              paperScholarAxios.post('scholar/claim', {
+                "paper_id": this.paperStore1.paperId,
+                "scholar_id": scholar_id,
+              }).then(res=>{
+                const code = res.data.code
+                if (code === 0){
+                  ElMessage('认领成功')
+                }else if (code === 1){
+                  this.griScholarId = res.data.scholar_id
+                  this.showGrievance = true
+                }
+              })
+            }
+          })
+        }else {
+          ElMessage('请先登录')
         }
       })
     },
-    adopt(){
-      if (!this.loginStore1.checkLogin){
-        ElMessage('请先登录')
-        return
-      }
+    grievance(){
       applyAxios.post('scholar/check-scholar', {
       }).then(res=>{
         if (res.data.code === 1){
           ElMessage(res.data.msg)
         }else {
-          const scholar_id = res.data.scholar_id;
-          console.log(this.paperStore1.paperId, scholar_id)
-          paperScholarAxios.post('scholar/claim', {
+          userAxios.post('paper/grievance',{
             "paper_id": this.paperStore1.paperId,
-            "scholar_id": scholar_id,
-          }).then(res=>{
-            const code = res.data.code
-            if (code === 0){
-              ElMessage('认领成功')
-            }else if (code === 1){
-              this.griScholarId = res.data.scholar_id
-              this.showGrievance = true
-            }
+            "scholar_id": this.griScholarId,
+          }).then(()=>{
+            ElMessage('发起成功')
           })
         }
       })
 
-    },
-    grievance(){
-      if (!this.loginStore1.checkLogin){
-        ElMessage('请先登录')
-        return
-      }
-      userAxios.post('paper/grievance',{
-        "paper_id": this.paperStore1.paperId,
-        "scholar_id": this.griScholarId,
-      }).then(()=>{
-        ElMessage('发起成功')
-      })
     }
   }
 }

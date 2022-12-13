@@ -64,9 +64,7 @@ export class Graph {
     }
 
     async setLayout() {
-        this.graph.updateLayout({
-            type: 'force2'
-        })
+        this.graph.updateLayout(f2)
     }
 
     setAnimate(){

@@ -19,10 +19,11 @@
 <!--      </div>-->
       <el-main class="main_right">
 
-          <div v-if="pageType===0" style="margin-bottom: 30px">
+          <div v-if="pageType===0" style="margin-bottom: 30px;">
               <div class="main_right_inform_top">
                 <el-icon size="30" style="color: lightgrey;vertical-align: bottom;margin-right: 10px"><InfoFilled /></el-icon>
                 <span style="color:midnightblue;font-family: 幼圆;">个人信息</span>
+                <div v-if="isScholar" style="transform: rotate(45deg);width: 183px;text-align: center;font-size: 20px;float: right;margin-right: -57px;background-color: lavender;"><el-icon size="26" style="vertical-align: bottom"><CircleCheck /></el-icon>已认证学者</div>
               </div>
               <div class="main_right_inform_left">
                 <el-avatar :size="160" :src="userPhoto" />
@@ -76,7 +77,13 @@
                   </el-form-item>
                 </el-form>
               </div>
-            <div style="margin-left: 431px;margin-top: 30px;"><el-button type="danger" round @click="logout">退出登录</el-button></div>
+            <div style="display: flex" v-if="isScholar">
+              <div style="margin-top: 30px;margin-left: 300px"><el-button type="primary" round @click="goToScholarPage">前往学者主页</el-button></div>
+              <div style="margin-top: 30px;margin-left: 120px"><el-button type="danger" round @click="logout">退出登录</el-button></div>
+            </div>
+            <div style="" v-else>
+              <div style="margin-top: 30px;margin-left: 450px"><el-button type="danger" round @click="logout">退出登录</el-button></div>
+            </div>
           </div>
 
           <div v-if="pageType===1&&scholars!=null" style="margin-bottom: 30px;min-height: 560px">
@@ -90,7 +97,7 @@
                 <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :id="item.scholar_id"
                               :type="1"
                 ></scholar-list>
-                <el-divider  style="width: 100%; margin: 10px"/>
+                <el-divider  style="width: 100%; margin: 10px;margin-left: 0px"/>
               </div>
             </div>
 
@@ -132,7 +139,7 @@
 </template>
 
 <script>
-import {userAxios,fileAxios} from "@/axios/index";
+import {userAxios,fileAxios,applyAxios} from "@/axios/index";
 import {loginStore} from "@/store"
 import {useRouter} from "vue-router";
 export default {
@@ -159,6 +166,8 @@ export default {
   },
   data(){
     return{
+      isScholar:false,
+      scholar_id:'',
       form:[],
       pagePaper:1,
       pagePaperCount:12,
@@ -352,6 +361,14 @@ export default {
       document.getElementById('scholar').style.color='#000000';
       document.getElementById('paper').style.color='#007dfa'
     },
+    goToScholarPage(){
+      this.$router.push({
+        name:'Scholar',
+        params:{
+          scholarId:this.scholar_id
+        }
+      })
+    },
     handleAvatarSuccess(res, file) {
       console.log(res, file)
       // this.value = URL.createObjectURL(file.raw)// 可以获取一段data:base64的字符串
@@ -426,7 +443,20 @@ export default {
         this.pageScholarCount=res.data.all_subscribe.length;
         console.log(res.data);
       })
-
+      applyAxios({
+        method:'post',
+        url:'scholar/check-scholar'
+      }).then((res) =>{
+        if(res.data.code===0){
+          console.log(res.data);
+          this.isScholar=true;
+          this.scholar_id=res.data.scholar_id;
+          console.log(this.scholar_id);
+        }
+        else {
+          this.isScholar=false;
+        }
+      })
   }
 }
 </script>
@@ -472,6 +502,7 @@ export default {
   margin-top: 2%;
   margin-left: 15%;
   margin-right: 15%;
+  overflow: hidden;
   /*height: 1000px;*/
 }
 

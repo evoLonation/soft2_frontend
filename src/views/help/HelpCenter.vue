@@ -365,7 +365,7 @@ export default {
           console.log(res.data.requests)
           this.requestList = res.data.requests
           this.requestLength = res.data.requests_num
-          ElMessage('已更新数据')
+          ElMessage('已获得最新数据')
         }).catch(e=>{
           ElMessage('获取失败，发生错误')
           console.log(e)
@@ -389,7 +389,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     this.getRequest();
     helpAxios.post('help/user-info', {
     }).then(res =>{

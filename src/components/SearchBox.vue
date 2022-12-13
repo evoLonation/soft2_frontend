@@ -5,7 +5,7 @@
           class=""
           style="width: 600px;margin-right: 12px;margin-left: auto"
           placeholder="输入你要检索的..."
-          :fetch-suggestions="querySearch"
+          :fetch-suggestions="autoComplete"
       >
         <template #suffix>
           <el-icon size="large" @click="normalSearch" style="cursor: pointer"><search /></el-icon>
@@ -35,6 +35,7 @@ import searchType from "@/assets/searchType.json"
 import {useRouter} from "vue-router"
 import {navigationStore} from "@/store";
 import qs from "qs";
+import {paperScholarAxios} from "@/axios";
 export default {
   name: "SearchBox",
   setup(){
@@ -44,9 +45,14 @@ export default {
     const content = ref("");
 
 
-    const querySearch = (queryString , cb) => {
-      const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
-      cb(results)
+    const autoComplete = (queryString , cb) => {
+      paperScholarAxios.post("/search/auto-complete", {
+        "text" : queryString,
+        "size" : 5,
+      }).then((res) => {
+        cb(res.data.auto_completes.map((value) => {return {value : value}}))
+      })
+      // const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
     }
     const searchTypes = searchType.searchType;
     const selectedTypeId = ref(0);
@@ -59,12 +65,14 @@ export default {
       router.push({name : "ScholarSearch"});
     }
     const toAdvancedSearch = () => {
-      router.push({name : "Search"});
+      router.push({name : "PaperSearch", query:{
+          type:"1"
+        }});
     }
 
     return{
       input,
-      querySearch,
+      autoComplete,
       searchTypes,
       selectedTypeId,
       content,

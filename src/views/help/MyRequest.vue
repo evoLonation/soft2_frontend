@@ -260,7 +260,7 @@ export default {
       })
     }
   },
-  created() {
+  mounted() {
     this.getRequest()
   }
 }
