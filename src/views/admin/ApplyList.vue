@@ -9,7 +9,7 @@
           {{scope.row.apply_type === 1 ? "邮箱认证" : "图片认证"}}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="institution" label="申请机构" width="160"/>
+      <el-table-column align="center" prop="institution" label="所属机构" width="160"/>
 
       <el-table-column  align="center" label="查看详情" width="250">
         <template #default="scope">
@@ -64,10 +64,9 @@ export default {
       //
       // console.log(fileURL)
       // fileLink.href = fileURL;
-      // fileLink.setAttribute('download', '图片认证' );
-      // document.body.appendChild(fileLink);
-      // console.log();
+      // fileLink.download = "图片认证"
       // fileLink.click();
+
     },
     agree(id) {
       applyAxios.post('admin/deal-scholar-apply', {

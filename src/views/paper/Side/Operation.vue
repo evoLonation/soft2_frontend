@@ -32,8 +32,9 @@
         <el-icon class="icon"><Link /></el-icon>
     </el-col>
     </el-row>
-    <el-row class="op" v-for="url in this.urls" :key="url">
-      <el-link :href="url" type="primary" style="font-size: medium; color: #87bdd8">{{"原文链接" + (this.urls.indexOf(url)+1)}}</el-link>
+    <el-form></el-form>
+    <el-row class="op" v-for="u in this.urls" :key="u">
+        <el-link :href="u.url" type="primary" style="font-size: 10px; color: #87bdd8">{{u.name}}</el-link>
     </el-row>
   </div>
 
@@ -72,8 +73,7 @@
   </el-dialog>
 <!--  是否申诉对话框-->
   <el-dialog v-model="this.showGrievance" custom-class="dialog" title="发起申诉" center style="max-width: 500px">
-    文献的同名作者已经被关联到其他学者，是否发起申诉？
-    申诉请求将先由已绑定的学者审核，您也可以联系管理员进行核实
+    文献的同名作者已经被关联到其他学者，是否发起申诉？ (申诉请求将先由已绑定的学者审核，您也可以联系管理员进行核实)
     <template #footer>
       <el-button round @click="this.showGrievance=false">取消</el-button>
       <el-button round @click="this.grievance" color="#87bdd8" style="color: #ffffff" >确定</el-button>
@@ -118,7 +118,7 @@ export default {
       title: "",
       author: [],
       magazine: "",
-      urls: null,
+      urls: [],
       starred: 1,
       citations: {
         gb: "gb", //GB/T 7714格式
@@ -135,7 +135,10 @@ export default {
   },
   methods: {
     getInfo(){
-      this.urls = this.paperStore1.paperInfo.urls
+      this.urls = []
+      this.paperStore1.paperInfo.urls.forEach(u=>{
+        this.urls.push({url: u, name: u.split('/')[2]})
+      })
       this.starred = this.paperStore1.paperInfo.starred
       this.title = this.paperStore1.paperInfo.title
       const authors = this.paperStore1.paperInfo.authors
@@ -201,7 +204,7 @@ export default {
         const code = res.data.code
         console.log(code)
         if (code === 0){
-          ElMessage('取消了')
+          ElMessage('取消收藏')
           this.starred = 1
         }else {
           ElMessage('没有收藏过')
@@ -213,6 +216,7 @@ export default {
         ElMessage('请先登录')
         return
       }
+      console.log(this.title, qs.stringify(this.author), this.magazine)
       this.$router.push({
         name: 'CreateRequest',
         query: {
@@ -271,7 +275,7 @@ export default {
   padding: 10px 20px 15px 15px;
   background-color: white;
   margin-left: 25px;
-  width: auto;
+  max-width: 205px;
   border-radius: 5px;
   box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
