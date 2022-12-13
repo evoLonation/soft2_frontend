@@ -60,7 +60,6 @@ export default {
       })
     },
     async idIdentify(formList) {
-      console.log(formList)
       await fileAxios.post('scholar/file-identify/', formList);
       this.activate();
     },

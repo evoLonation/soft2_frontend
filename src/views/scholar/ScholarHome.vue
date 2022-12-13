@@ -30,16 +30,20 @@
 
     <el-main class="wrap-paper" @scroll="this.handleScroll">
       <div class="style_need">
-        <InfoView ref="info" name="part" style="margin-top: 10px" :scholar_id="scholar_id"/>
+        <InfoView ref="info"
+                  name="part"
+                  style="margin-top: 10px"
+                  :scholar_id="scholar_id"
+        />
         <OpView style="margin-top: 10px" :scholar_id="scholar_id"/>
       </div>
       <div class="style_need">
         <ChartView :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
-        <RelView :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
+        <RelView @activate="goTo" :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
       </div>
       <div class="style_need">
-        <PaperView name="part" style="margin-top: 30px"/>
-        <PieView name="part" style="margin-top: 30px"/>
+        <PaperView :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
+        <PieView :scholar-id="this.scholar_id" name="part" style="margin-top: 30px"/>
       </div>
     </el-main>
   </el-container>
@@ -53,9 +57,11 @@ import RelView from "./Relations/MyRelations"
 import PieView from "./Pie/MyContribution"
 import PaperView from "./Paper/PaperList"
 import {Reading, TrendCharts, Aim, Histogram} from "@element-plus/icons";
+import router from "@/router";
 
 export default {
   name: "ScholarHome",
+  inject: ['reload'],
   components: {
     Histogram,
     Reading,
@@ -94,6 +100,19 @@ export default {
         behavior:"smooth",
         block: "start"
       })
+    },
+    goTo(item) {
+      router.push({
+        name: 'Scholar',
+        params: {
+          scholarId: item.id,
+        }
+      });
+    }
+  },
+  watch: {
+    '$route'() {
+      this.$router.go(0);
     },
   },
   created() {

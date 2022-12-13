@@ -1,35 +1,37 @@
 <template>
-  <div class="relations" v-if="rel">
-    <div class="rel_title">
-      <p>合作学者：</p>
-      <NetView/>
-    </div>
-    <div class="rel_content" v-for="(item, index) in coopList" :key="item">
-      <div class="rel_item" @click="goTo(item)">
-        <el-avatar
-            :src="urls.at(index)"
-            :size="50"
-            shape="circle"
-            :fit="'cover'"
-            style="margin: auto 15px auto 32px"
-        />
-        <div class="name-insti">
-          <div class="name">
-            <p>{{ item.name }}</p>
-          </div>
-          <div class="insti">
-            <p>{{ item.institution[0] }}</p>
+  <div class="relations">
+      <div class="rel_title">
+        <p>合作学者：</p>
+        <NetView/>
+      </div>
+    <div v-if="rel">
+      <div class="rel_content" v-for="(item, index) in coopList" :key="item">
+        <div class="rel_item" @click="goTo(item)">
+          <el-avatar
+              :src="urls.at(index)"
+              :size="50"
+              shape="circle"
+              :fit="'cover'"
+              style="margin: auto 15px auto 32px"
+          />
+          <div class="name-insti">
+            <div class="name">
+              <p>{{ item.name }}</p>
+            </div>
+            <div class="insti">
+              <p>{{ item.institution[0] }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <el-empty v-if="rel === false"/>
   </div>
 </template>
 
 <script>
 import NetView from "../RelationNet/RelationNet"
 import {paperScholarAxios} from "@/axios";
-import router from "@/router";
 
 export default {
   name: "MyRelations",
@@ -70,13 +72,7 @@ export default {
       })
     },
     goTo(item) {
-      console.log(item.id);
-      router.push({
-        name: 'Scholar',
-        params: {
-          scholarId: item.id,
-        }
-      })
+      this.$emit('activate', item);
     }
   },
   created() {

@@ -28,7 +28,6 @@ export default {
 
       //基于准备好的dom，初始化chart实例
       let myChart = echarts.init(document.getElementById('charts-contianer'));
-      console.log("init is on!");
       let tmp = [];
       let years = [];
       let achievements = [];
@@ -53,11 +52,12 @@ export default {
         if(years.length === 0) {
           this.show = false;
         }
+
         let xAxisData = years.reverse();
         let data1 = achievements.reverse();
         let data2 = references.reverse();
-        let data1_max = data1.sort().reverse()[0];
-        let data2_max = data2.sort().reverse()[0];
+        let data1_max = Math.max(...data1);
+        let data2_max = Math.max(...data2);
 
         var option={
           legend: {
@@ -100,7 +100,7 @@ export default {
               },
               axisTick: {
                 show: true,
-                interval: Math.ceil((data1_max-0)/5),
+                interval: Math.ceil((data1_max)/5),
               },
               axisLabel: {
                 textStyle: {
@@ -129,7 +129,7 @@ export default {
               },
               axisTick: {
                 show: true,
-                interval: Math.ceil((data2_max-0)/5),
+                interval: Math.ceil((data2_max)/5),
               },
               axisLabel: {
                 textStyle: {
@@ -182,31 +182,7 @@ export default {
         myChart.setOption(option);
         window.addEventListener('resize', function () {myChart.resize();});
       })
-     },
-    getData() {
-      let tmp = [];
-      paperScholarAxios.post('scholar/barchart/', {
-        "scholar_id": this.scholarId,
-      }).then((res) => {
-        tmp = res.data.statistic;
-        tmp.sort((a, b) => a.year < b.year ? 1 : a.year > b.year ? -1 : 0);
-        for(let i = 0; i < tmp.length; i++) {
-          this.years.push(tmp[i].year);
-          this.achievements.push(tmp[i].achievements);
-          this.references.push(tmp[i].references);
-          if((i < i - 1) && (tmp[i].year - tmp[i + 1].year > 1)) {
-            for(let j = tmp[i].year - 1; j >= tmp[i + 1].year + 1; j--) {
-              this.years.push(j);
-              this.achievements.push(0);
-              this.references.push(0);
-            }
-          }
-        }
-        if(this.years.length === 0) {
-          this.show = false;
-        }
-      })
-    }
+     }
   },
 }
 
