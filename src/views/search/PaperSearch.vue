@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <div class="paper_main" v-if="searchBegin">
+    <div class="paper_main" v-if="searchBegin" v-loading="isLoading">
       <div class="paper_main_top">
         <div style="width: 300px">
           <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3;" >筛选</span>
@@ -174,6 +174,7 @@
           </el-select>
         </div>
       </div>
+
       <div class="paper_main_left">
         <el-collapse style="margin-left: 30px;margin-right: 20px" v-model="activeNames">
           <el-collapse-item name="1">
@@ -194,7 +195,12 @@
               <span style="font-size: 15px">会议/期刊</span>
             </template>
             <div v-for="index in venues.length" :key="index">
-              <el-checkbox v-model="venuesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.venues[index-1].name }}</el-checkbox>
+              <el-checkbox v-model="venuesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
+                <div style="display: inline-block">
+                  {{ this.venues[index-1].name }}
+                </div>
+                <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.venues[index-1].count}})</div>
+              </el-checkbox>
             </div>
           </el-collapse-item>
           <el-collapse-item name="3">
@@ -202,7 +208,12 @@
               <span style="font-size: 15px">机构</span>
             </template>
             <div v-for="index in institutions.length" :key="index">
-              <el-checkbox v-model="institutionsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.institutions[index-1].name }}</el-checkbox>
+              <el-checkbox v-model="institutionsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
+                <div style="display: inline-block">
+                  {{ this.institutions[index-1].name }}
+                </div>
+                <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.institutions[index-1].count}})</div>
+              </el-checkbox>
             </div>
           </el-collapse-item>
           <el-collapse-item name="4">
@@ -210,7 +221,12 @@
               <span style="font-size: 15px">年份</span>
             </template>
             <div v-for="index in years.length" :key="index">
-              <el-checkbox v-model="yearsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.years[index-1].name }}</el-checkbox>
+              <el-checkbox v-model="yearsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
+                <div style="display: inline-block">
+                  {{ this.years[index-1].name }}
+                </div>
+                <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.years[index-1].count}})</div>
+              </el-checkbox>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -240,8 +256,9 @@ export default {
   components: {PaperShow},
   data(){
     return{
+      isLoading:false,
       inputProfession:'',
-      searchBegin:true,
+      searchBegin:false,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3','4'],
       nowPage:1,
@@ -651,6 +668,7 @@ export default {
       }
     },
     NormalSearch(page){
+      this.isLoading=true;
       let that=this;
       var toSend={
         need_filter_statistics:true,
@@ -684,9 +702,11 @@ export default {
         that.nowPage=1;
         // console.log(res.data);
         that.searchBegin=true;
+        that.isLoading=false;
       })
     },
     AdvanceSearch(){
+      this.isLoading=true;
       var toSend={
         need_filter_statistics:true,
         query:this.toProfession(false),
@@ -721,10 +741,12 @@ export default {
         that.nowPage=1;
         // console.log(res.data);
         that.searchBegin=true;
+        that.isLoading=false;
       })
     },
     //todo:专业检索
     ProfessionSearch(){
+      this.isLoading=true;
       var toSend={
         query:this.inputProfession,
         start_year:parseInt(this.beginYear),
@@ -757,6 +779,7 @@ export default {
         that.nowPage=1;
         // console.log(res.data);
         that.searchBegin=true;
+        that.isLoading=false;
       })
     },
     getFilter(page){
@@ -796,6 +819,7 @@ export default {
     },
     //todo:筛选
     dealFilter(){
+      this.isLoading=true;
       let that=this;
       var toSend=this.getFilter(1);
       // console.log(toSend);
@@ -808,11 +832,13 @@ export default {
         that.paperNum=response.paper_num;
         that.papers=response.papers;
         that.nowPage=1;
+        that.isLoading=false;
         // console.log(res.data);
         this.toTop(100);
       })
     },
     dealSort(val){
+      this.isLoading=true;
       let that=this;
       let toSend=this.getFilter(1);
       toSend.sort_type=this.toIntSortType(val);
@@ -825,6 +851,7 @@ export default {
         that.papers=response.papers;
         that.nowPage=1;
         // console.log(res.data);
+        that.isLoading=false;
       })
     },
   },
@@ -1021,7 +1048,7 @@ export default {
   width: 40%;
 }
 
-.el-checkbox__label{
+/deep/ .el-checkbox__label{
   width: 206px!important;
 }
 
