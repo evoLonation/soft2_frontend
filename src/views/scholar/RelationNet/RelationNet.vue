@@ -65,6 +65,7 @@ export default {
       }).then(res=>{
         this.co_net_data = res.data.co_net;
         this.ci_net_data = res.data.ci_net;
+        console.log(this.ci_net_data)
         this.co_net.loadData(this.co_net_data)
         this.co_net.render()
         this.co_net.initListener()
