@@ -166,7 +166,7 @@ export default {
   },
   data(){
     return{
-      isScholar:true,
+      isScholar:false,
       scholar_id:'',
       form:[],
       pagePaper:1,
@@ -365,9 +365,7 @@ export default {
       this.$router.push({
         name:'Scholar',
         params:{
-          params:{
-            scholarId:this.scholar_id
-          }
+          scholarId:this.scholar_id
         }
       })
     },
@@ -450,8 +448,10 @@ export default {
         url:'scholar/check-scholar'
       }).then((res) =>{
         if(res.data.code===0){
+          console.log(res.data);
           this.isScholar=true;
           this.scholar_id=res.data.scholar_id;
+          console.log(this.scholar_id);
         }
         else {
           this.isScholar=false;

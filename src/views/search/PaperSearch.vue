@@ -181,7 +181,12 @@
               <span style="font-size: 15px">主题</span>
             </template>
             <div v-for="index in themes.length" :key="index">
-              <el-checkbox v-model="themesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.themes[index-1].name }}</el-checkbox>
+              <el-checkbox v-model="themesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
+                <div style="display: inline-block">
+                  {{ this.themes[index-1].name }}
+                </div>
+                <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.themes[index-1].count}})</div>
+              </el-checkbox>
             </div>
           </el-collapse-item>
           <el-collapse-item name="2">
@@ -236,7 +241,7 @@ export default {
   data(){
     return{
       inputProfession:'',
-      searchBegin:false,
+      searchBegin:true,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3','4'],
       nowPage:1,
@@ -251,8 +256,8 @@ export default {
           label: '标题',
         },
         {
-          value: '作者',
-          label: '作者',
+          value: '作者名称',
+          label: '作者名称',
         },
         {
           value: '关键字',
@@ -267,12 +272,12 @@ export default {
           label: 'DOI',
         },
         {
-          value: '期刊',
-          label: '期刊',
+          value: '发布期刊',
+          label: '发布期刊',
         },
         {
-          value: '作者单位',
-          label: '作者单位',
+          value: '作者机构',
+          label: '作者机构',
         },
       ],
       sortType:'',
@@ -409,13 +414,13 @@ export default {
       ],
       beginYear:0,
       endYear:0,
-      themes:[{name :'theme1'},{name:"theme2"}],
+      themes:[{name :'theme1',count:11},{name:"theme2",count:11}],
       themesCheck:[false,false],
-      years:[{name:2001},{name:2002}],
+      years:[{name:2001,count:11},{name:2002,count:123}],
       yearsCheck:[false,false],
-      venues:[{name:'NATURE'},{name:'北航学报'}],
+      venues:[{name:'NATURE',count:111},{name:'北航学报',count: 222}],
       venuesCheck:[false,false],
-      institutions:[{name:'BUAA'},{name:'beili'}],
+      institutions:[{name:'BUAA',count:1235},{name:'beili',count:1213}],
       institutionsCheck:[false,false]
     }
   },
@@ -541,7 +546,7 @@ export default {
       switch (str){
         case '标题':
           return 0;
-        case '作者':
+        case '作者名称':
           return 1;
         case '关键字':
           return 2;
@@ -551,7 +556,7 @@ export default {
           return 4;
         case '期刊':
           return 5;
-        case '作者单位':
+        case '作者机构':
           return 6;
       }
     },
@@ -565,9 +570,9 @@ export default {
           return "keywords";
         case 'DOI':
           return "doi";
-        case '作者单位':
+        case '作者机构':
           return "authors.org";
-        case '作者':
+        case '作者名称':
           return "authors.name";
         case '期刊':
           return "venue";
@@ -1014,6 +1019,10 @@ export default {
 .el-pagination {
   margin:50px auto 10px;
   width: 40%;
+}
+
+.el-checkbox__label{
+  width: 206px!important;
 }
 
 </style>
