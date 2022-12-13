@@ -20,8 +20,8 @@
       <template #empty>
         <h1 style="margin:20px auto;">暂无消息</h1>
       </template>
-      <el-table-column prop="content" label="内容" width="600" resizable :key="this.key"></el-table-column>
-      <el-table-column prop="date" label="日期" width="150" resizable :key="this.key"></el-table-column>
+      <el-table-column prop="content" label="内容" width="550" resizable :key="this.key"></el-table-column>
+      <el-table-column prop="msg_time" label="日期" width="200" resizable :key="this.key"></el-table-column>
       <el-table-column fixed="right" label="操作" resizable :key="this.key">
         <template #default="scope">
           <el-row>
@@ -73,12 +73,12 @@
       <el-form label-width="100px" >
         <el-form-item label="昵称:">
                 <span style="margin-left: 30px">
-                  {{userInfo.nickname}}
+                  {{this.userInfo.nickname}}
                 </span>
         </el-form-item>
         <el-form-item label="邮箱:">
                 <span style="margin-left: 30px">
-                  {{userInfo.email}}
+                  {{this.userInfo.email}}
                 </span>
         </el-form-item>
       </el-form>
@@ -223,8 +223,9 @@ export default {
       userAxios.post('user/get-nickname', {
         "user_id": id,
       }).then(res=>{
-        this.userInfo.username = res.data.username
-        this.userInfo.email = res.data.email;
+        console.log(res.data)
+        this.userInfo.nickname = res.data.nickname
+        this.userInfo.email = res.data.email===''?'暂无': res.data.email;
       })
     },
     openHelp(id){
@@ -258,7 +259,7 @@ export default {
     },
     accept(id){
       userAxios.post('grievance/accept', {
-        "id": id
+        "grievance_id": id
       }).then(()=>{
           ElMessage('已同意')
         this.flush++;
