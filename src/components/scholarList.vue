@@ -25,6 +25,7 @@
 import {useRouter} from "vue-router";
 import {ref} from "vue"
 import {userAxios,paperScholarAxios} from "@/axios"
+import {ElMessage} from "element-plus"
 
 export default {
   name: "scholarList",
@@ -56,10 +57,17 @@ export default {
       userAxios({
         method:'post',
         url:'scholar/delete-subscribe',
-        data:JSON.stringify(toSend)
+        data:toSend
       }).then((res)=>{
-        if(res.data.code==="0")this.$message('success',"取关成功");
-        else this.$message('error',"取关失败");
+        if(res.data.code===0)
+          ElMessage({
+          message: '取关成功！',
+          type: 'success',
+        });
+        else ElMessage({
+          message: '取关失败！',
+          type: 'error',
+        });
         inject.reload();
       })
     }

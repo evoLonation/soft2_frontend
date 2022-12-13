@@ -79,12 +79,14 @@
               type="year"
               placeholder="Pick a year"
               style="width: 130px; margin-left: 40px"
+              value-format="YYYY"
           /> ----
           <el-date-picker
               v-model="endYear"
               type="year"
               placeholder="Pick a year"
               style="width: 130px; margin-left: 5px"
+              value-format="YYYY"
           />
 
           <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px;color: white" color="#79B4F1" @click="toProfession(true)">
@@ -117,12 +119,14 @@
                 type="year"
                 placeholder="Pick a year"
                 style="width: 130px; margin-left: 40px"
+                value-format="YYYY"
             /> ----
             <el-date-picker
                 v-model="endYear"
                 type="year"
                 placeholder="Pick a year"
                 style="width: 130px; margin-left: 5px"
+                value-format="YYYY"
             />
             <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch">
               <template #icon>
@@ -137,14 +141,14 @@
               <div style="width:296px;margin: auto">
                 <el-scrollbar height="224px">
                   <div><span style="font-size: 18px">可检索字段：</span></div>
-                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">SU%=主题,TKA=篇关摘,TI=题名,KY=关键词,AB=摘要,FT=全文,AU=作者,FI=第一责任人,RP=通讯作者,AF=机构,JN=文献来源, RF=参考文献,YE=年,FU=基金,CLC=分类号,SN=ISSN,CN=统一刊号,IB=ISBN,CF=被引频次</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">title=标题 abstract=摘要 keywords=关键字 doi=DOI号 authors.org=作者机构 authors.name=作者名称 venue=发布期刊</span></div>
                   <div style="margin-top: 20px"><span style="font-size: 18px">示例：</span></div>
                   <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">
-                    1）TI='生态' and KY='生态文明' and (AU % '陈'+'王' ) 可以检索到篇名包括“生态”并且关键词包括“生态文明”并且作者为“陈”姓和“王”姓的所有文章；
+                    1）title:machine OR title:interesting
                     <br/>
-                    2）SU='北京'*'奥运' and FT='环境保护' 可以检索到主题包括“北京”及“奥运”并且全文中包括“环境保护”的信息；
+                    2）title:生态 AND keywords:"环境 卫生" OR title:标准
                     <br/>
-                    3）SU=('经济发展'+'可持续发展')*'转变'-'泡沫' 可检索“经济发展”或“可持续发展”有关“转变”的信息，并且可以去除与“泡沫”有关的部分内容。</span></div>
+                    3）abstract:发展 AND keywords:可持续发展 AND keywords:(经济~ AND 发展~)</span></div>
                 </el-scrollbar>
               </div>
           </div>
@@ -427,15 +431,15 @@ export default {
         url:'search/auto-complete',
         data:toSend
       }).then((res) =>{
-        console.log("auto");
-        console.log(res);
+        // console.log("auto");
+        // console.log(res);
         var toSuggest=[];
         for(let i=0;i<res.data.auto_completes.length;i++){
           toSuggest.push({
             value:res.data.auto_completes[i]
           });
         }
-        console.log(toSuggest);
+        // console.log(toSuggest);
         cb(toSuggest);
       })
     },
@@ -507,6 +511,16 @@ export default {
         resolve(data);
       }, 500);
     },
+    toTop(step){
+      //参数step表示时间间隔的幅度大小，以此来控制速度
+      //当回到页面顶部的时候需要将定时器清除
+      document.documentElement.scrollTop-=step;
+      if (document.documentElement.scrollTop>0) {
+        var time=setTimeout(()=>this.toTop(step),15);
+      }else {
+        clearTimeout(time);
+      }
+    },
     handleCurrentChange(){
       //todo:axios 页面变换 !
       // console.log(this.nowPage)
@@ -520,6 +534,7 @@ export default {
         let response=res.data;
         that.papers=response.papers;
         console.log(res.data);
+        this.toTop(100);
       })
     },
     toIntSearchType(str){
@@ -561,7 +576,10 @@ export default {
     dealTextArea(str,isExact){
       let strs=str.split(' ');
       if(strs.length===1){
-        return str;
+        if(isExact){
+          return str;
+        }
+        return str+'~';
       }
       else {
         if(isExact){
@@ -569,10 +587,14 @@ export default {
         }
         let ans='(';
         for(let i=0;i<strs.length;i++){
-          ans+=strs[i]+'~';
-          if(i!==strs.length-1){
-            ans+=' AND ';
+          console.log(strs[i]);
+          if(strs[i]!==''){
+            ans+=strs[i]+'~';
           }
+            if(i!==strs.length-1&&strs[i+1]!==''){
+              ans+=' AND ';
+            }
+
         }
         ans+=')';
         return ans;
@@ -581,6 +603,9 @@ export default {
     toProfession(jump){
       let ans='';
       for(let i=0;i<this.inputValue.length;i++){
+        if(this.inputValue[i]===''){
+          continue;
+        }
         if(i===0){
           ans+=this.proSwitch(this.value[0])+':';
           ans+=this.dealTextArea(this.inputValue[0],this.exact[0]==='精确');
@@ -623,6 +648,7 @@ export default {
     NormalSearch(page){
       let that=this;
       var toSend={
+        need_filter_statistics:true,
         query:this.toProfession(false),
         start_year:0,
         end_year:0,
@@ -643,21 +669,24 @@ export default {
         that.paperNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
+        that.venues=response.venues;
+        that.institutions=response.institutions;
         that.years=response.years;
         that.themesCheck=[];
         that.yearsCheck=[];
         that.venuesCheck=[];
         that.institutionsCheck=[];
         that.nowPage=1;
-        console.log(res.data);
+        // console.log(res.data);
         that.searchBegin=true;
       })
     },
     AdvanceSearch(){
       var toSend={
+        need_filter_statistics:true,
         query:this.toProfession(false),
-        start_year:this.beginYear,
-        end_year:this.end_year,
+        start_year:parseInt(this.beginYear),
+        end_year:parseInt(this.endYear),
         years:[],
         themes:[],
         venues:[],
@@ -666,6 +695,7 @@ export default {
         start:0,
         end:10,
       };
+      // console.log(toSend)
       let that=this;
       paperScholarAxios({
         method:'post',
@@ -677,12 +707,14 @@ export default {
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
+        that.venues=response.venues;
+        that.institutions=response.institutions;
         that.themesCheck=[];
         that.yearsCheck=[];
         that.venuesCheck=[];
         that.institutionsCheck=[];
         that.nowPage=1;
-        console.log(res.data);
+        // console.log(res.data);
         that.searchBegin=true;
       })
     },
@@ -690,8 +722,8 @@ export default {
     ProfessionSearch(){
       var toSend={
         query:this.inputProfession,
-        start_year:this.beginYear,
-        end_year:this.end_year,
+        start_year:parseInt(this.beginYear),
+        end_year:parseInt(this.endYear),
         years:[],
         themes:[],
         venues:[],
@@ -711,20 +743,22 @@ export default {
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
+        that.venues=response.venues;
+        that.institutions=response.institutions;
         that.themesCheck=[];
         that.yearsCheck=[];
         that.venuesCheck=[];
         that.institutionsCheck=[];
         that.nowPage=1;
-        console.log(res.data);
+        // console.log(res.data);
         that.searchBegin=true;
       })
     },
     getFilter(page){
       var toSend={
         query:this.toProfession(false),
-        start_year:this.beginYear,
-        end_year:this.end_year,
+        start_year:parseInt(this.beginYear),
+        end_year:parseInt(this.endYear),
         years:[],
         themes:[],
         venues:[],
@@ -759,6 +793,7 @@ export default {
     dealFilter(){
       let that=this;
       var toSend=this.getFilter(1);
+      // console.log(toSend);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -768,7 +803,8 @@ export default {
         that.paperNum=response.paper_num;
         that.papers=response.papers;
         that.nowPage=1;
-        console.log(res.data);
+        // console.log(res.data);
+        this.toTop(100);
       })
     },
     dealSort(val){
@@ -783,7 +819,7 @@ export default {
         let response=res.data;
         that.papers=response.papers;
         that.nowPage=1;
-        console.log(res.data);
+        // console.log(res.data);
       })
     },
   },
@@ -966,7 +1002,7 @@ export default {
   /*border-radius: 10px;*/
   /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
   vertical-align: top;
-  display: inline-block;
+  width: 1000px;
   flex: 1;
 }
 

@@ -32,7 +32,7 @@
   </div>
 
   <div class="paper_skeleton_3" v-else-if="type===4">
-    <div class="paper_name" @click="gotoPaper">
+    <div class="paper_name" @click.prevent="gotoPaper">
       {{this.paperName}}
     </div>
     <div class="paper_abstract_1">论文简介: {{this.abstract}}</div>
@@ -60,7 +60,7 @@
         {{this.org}}</div>
     </div>
     <div class="inf_divide" style="width: 20%; height: 100%">
-      <el-button type="danger" plain class="button_type" @click="cancelStar">取消收藏</el-button>
+      <el-button type="danger" plain class="button_type" @click.prevent="cancelStar">取消收藏</el-button>
     </div>
   </div>
 </template>
@@ -68,6 +68,7 @@
 <script>
 import {useRouter} from "vue-router";
 import {userAxios} from "@/axios";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "paperShow",
@@ -96,17 +97,24 @@ export default {
 
     const cancelStar = () =>{
       let toSend={
-        id:props.paperId
+        paper_id:props.paperId
       };
+      console.log(props.paperId);
         userAxios({
           method:'post',
           url:'paper/star/cancel',
-          data:JSON.stringify(toSend)
+          data:toSend
         }).then((res) =>{
-          if(res.data.code==="0"){
-            this.$message('success','取消成功');
+          if(res.data.code===0){
+            ElMessage({
+              message: '取消成功！',
+              type: 'success',
+            });
           }
-          else this.$message('error','取消失败');
+          else ElMessage({
+            message: '取消失败！',
+            type: 'error',
+          });
         })
     }
 
