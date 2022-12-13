@@ -48,8 +48,9 @@
             :name="item.name"
             :n_citation="item.n_citation"
             :n_paper="item.n_paper"
-            :weight="item.weight * 1000"
+            :weight="Math.round(item.weight * 1000)"
             :scholar_id="item.scholar_id"
+            style="padding: 18px 18px"
           />
       </div>
       <div class="loading">
@@ -93,9 +94,9 @@ export default {
       field_name: "",
       input: "",
       start1: 0,
-      end1: 5,
+      end1: 8,
       start2: 0,
-      end2: 5,
+      end2: 8,
       loading1: true,
       loading2: true,
       PaperList: [],
@@ -120,8 +121,8 @@ export default {
           this.PaperList.push(res.data.papers[i])
         }
         console.log(this.PaperList)
-        this.start1 = this.start1 + 5
-        this.end1 = this.end1 + 5
+        this.start1 = this.start1 + 8
+        this.end1 = this.end1 + 8
       }).catch(e=>{
         console.log(e)
       })
@@ -141,14 +142,14 @@ export default {
         for(let i = 0; i < res.data.scholars.length; i++) {
           this.ScholarList.push(res.data.scholars[i])
         }
-        this.start2 = this.start2 + 5
-        this.end2 = this.end2 + 5
+        this.start2 = this.start2 + 8
+        this.end2 = this.end2 + 8
       })
     },
     gotoField() {
       this.$router.push({name : "Field", query: {content: this.input,}})
     },
-    scrollFn() {
+    async scrollFn() {
       let windowHeight = window.innerHeight;
       let st = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
       let sectionTop1 = document.getElementById("paper").offsetTop;//card_section距离顶部的偏移高度（card_section为你的照片或div元素ID）
@@ -172,25 +173,38 @@ export default {
       if(this.loading2 === false) {
         document.getElementById("scholar").style.top = tmp2 + "px"
       }
-      if(sectionHeight1 + sectionTop1 - 50 < st + windowHeight && this.paper_num > 0) {
+      console.log(sectionHeight1 + sectionTop1, st + windowHeight)
+      console.log(sectionHeight2 + sectionTop2, st + windowHeight)
+      if((sectionHeight1 + sectionTop1  < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
       // if(winHeight1 + st >= docHeight1) {
         if(this.PaperList.length >= this.paper_num) {
           this.loading1 = false
         }
         else {
-          this.getPaperList()
+          if((sectionHeight2 + sectionTop2 -500 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
+            this.getPaperList()
+          }
         }
       }
-      if(sectionHeight2 + sectionTop2 - 50 < st + windowHeight && this.scholar_num > 0) {
-      // if(winHeight2 + st >= docHeight2) {
-        if(this.ScholarList.length >= this.scholar_num) {
+      if((sectionHeight2 + sectionTop2 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
+        // if(winHeight2 + st >= docHeight2) {
+        if (this.ScholarList.length >= this.scholar_num) {
           this.loading2 = false
         }
         else {
-          this.getScholarList()
+          if((sectionHeight1 + sectionTop1 -500 < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
+            this.getScholarList()
+          }
         }
       }
     },
+    wait (time) {
+      return new Promise(resolve => {
+      setTimeout(() => {
+      resolve()
+    }, time)
+  })
+}
   },
   mounted() {
     this.field_name = this.$route.query.content
@@ -240,7 +254,7 @@ export default {
 }
 
 .scholar {
-  width: 420px;
+  width: 400px;
   position: sticky;
   display: block;
   margin-left: 80px;
