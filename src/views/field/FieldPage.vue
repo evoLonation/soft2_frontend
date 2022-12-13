@@ -1,7 +1,7 @@
 <template>
 
   <div class="field" style="position: relative; text-align: center">
-    <h1 style="text-align: center; padding: 10px">{{field_name === undefined ? "-下方输入领域查询哦-" : field_name}}</h1>
+    <h1 style="text-align: center; padding: 20px 0">{{field_name === undefined ? "-下方输入领域查询哦-" : field_name}}</h1>
 
     <el-autocomplete
         v-model="input"
