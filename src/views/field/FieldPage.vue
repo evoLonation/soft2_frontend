@@ -46,7 +46,7 @@
             :name="item.name"
             :n_citation="item.n_citation"
             :n_paper="item.n_paper"
-            :weight="item.weight"
+            :weight="item.weight * 1000"
             :scholar_id="item.scholar_id"
           />
       </div>
@@ -146,11 +146,8 @@ export default {
       document.getElementById("scholar").style.height = docHeight2+ "px"
 
       let height = document.documentElement.clientHeight
-      // console.log(height)
       let tmp1 = height - docHeight1
       let tmp2 = height - docHeight2
-      // console.log(docHeight1, st, winHeight1, winHeight2)
-      // console.log(tmp1, tmp2)
 
       if(this.loading1 === false) {
         document.getElementById("paper").style.top = tmp1 + "px"
@@ -158,27 +155,19 @@ export default {
       if(this.loading2 === false) {
         document.getElementById("scholar").style.top = tmp2 + "px"
       }
-      if(sectionHeight1 + sectionTop1 - 50 < st + windowHeight) {
+      if(sectionHeight1 + sectionTop1 - 50 < st + windowHeight && this.paper_num > 0) {
       // if(winHeight1 + st >= docHeight1) {
-      //   console.log('1触底了')
-      //   console.log('1st', st)
         if(this.PaperList.length >= this.paper_num) {
-          // console.log('论文数目', this.paper_num)
-          // console.log('1需要固定')
           this.loading1 = false
         }
         else {
           this.getPaperList()
         }
       }
-      // console.log('2滚动')
-      if(sectionHeight2 + sectionTop2 - 50 < st + windowHeight) {
+      if(sectionHeight2 + sectionTop2 - 50 < st + windowHeight && this.scholar_num > 0) {
       // if(winHeight2 + st >= docHeight2) {
-      //   console.log('2触底了')
-      //   console.log('2st', st)
         if(this.ScholarList.length >= this.scholar_num) {
           this.loading2 = false
-          // console.log('2需要固定')
         }
         else {
           this.getScholarList()
