@@ -833,6 +833,9 @@ export default {
     else {
       this.showAdvance();
     }
+    if(this.inputValue[0]!==''){
+      this.NormalSearch(1);
+    }
   },
 }
 
