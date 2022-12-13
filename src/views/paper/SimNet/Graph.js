@@ -45,8 +45,10 @@ export class Graph {
             layout: f2,
             modes: {
                 default: [
-                    'drag-canvas',
-                    'zoom-canvas',
+                    {
+                        type: 'drag-canvas',
+                        enableOptimize: true,
+                    },
                     'drag-node',
                 ]
             },
@@ -61,7 +63,6 @@ export class Graph {
             },
             plugins: []
         });
-        this.graph.updateBehavior('zoom-canvas', { sensitivity: 1.0, enableOptimize: true}, 'default');
     }
 
     async setLayout() {

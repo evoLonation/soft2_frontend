@@ -45,8 +45,10 @@ export class Graph {
             },
             modes: {
                 default: [
-                    'drag-canvas',
-                    'zoom-canvas',
+                    {
+                        type: 'drag-canvas',
+                        enableOptimize: true,
+                    },
                     'drag-node',
                 ]
             },

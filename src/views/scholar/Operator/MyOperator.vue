@@ -9,12 +9,11 @@
     <div class="op_content">
       <el-button
           style="margin: auto auto auto 60px"
-          type="primary"
+          :type="dis"
           v-if="isMe === false"
           @click="toIdentify(this.scholar_id)"
-          :disabled="dis"
       >
-        学者认证
+        {{ content }}
       </el-button>
       <el-button
           style="margin: auto auto auto 60px"
@@ -54,7 +53,8 @@ export default {
       isMe: false,
       sub_content: "学者订阅",
       sub_type: "success",
-      dis: true,
+      dis: "primary",
+      content: "学者认证",
       uid: '',
       nickname: '',
       email: '',
@@ -67,7 +67,7 @@ export default {
           this.login.displayLoginWindow = true;
         }
         else {
-          if(!this.dis) {
+          if(this.dis === "primary") {
             router.push({
               name: 'Identify',
               params: {
@@ -93,7 +93,6 @@ export default {
           "scholar_id": this.scholar_id,
         }).then((res) => {
           let code = res.data.code;
-          console.log(code);
           if (code === 0) {
             this.$message.success("订阅成功!");
             this.sub_content = "取消订阅";
@@ -104,9 +103,7 @@ export default {
         userAxios.post('scholar/delete-subscribe/', {
           "scholar_id": this.scholar_id,
         }).then((res) => {
-          console.log("have res");
           let code = res.data.code;
-          console.log(code);
           if (code === 0) {
             this.$message.success("取消订阅成功!");
             this.sub_content = "学者订阅";
@@ -125,7 +122,8 @@ export default {
   created() {
     this.login.checkLogin().then(async (res) => {
       if(!res) {
-        this.dis = false;
+        this.dis = "primary";
+        this.content = "学者认证";
         this.sub_content = "学者订阅";
         this.sub_type = "success";
       }
@@ -148,11 +146,13 @@ export default {
         }).then((res) => {
           let code = res.data.code;
           if(code === 0) {
-            this.dis = true;
+            this.dis = "warning";
+            this.content = "已经认证";
             this.uid = res.data.user_id;
           }
           else {
-            this.dis = false;
+            this.dis = "primary";
+            this.content = "学者认证";
           }
         })
       }
@@ -161,7 +161,8 @@ export default {
       if (!state.displayLoginWindow) {
         this.login.checkLogin().then(async (res) => {
           if (!res) {
-            this.dis = false;
+            this.dis = "primary";
+            this.content = "学者认证";
             this.sub_content = "学者订阅";
             this.sub_type = "success";
           } else {
@@ -182,10 +183,12 @@ export default {
             }).then((res) => {
               let code = res.data.code;
               if (code === 0) {
-                this.dis = true;
+                this.dis = "warning";
+                this.content = "已经认证";
                 this.uid = res.data.user_id;
               } else {
-                this.dis = false;
+                this.dis = "primary";
+                this.content = "学者认证";
               }
             })
           }
