@@ -145,8 +145,6 @@ export default {
         is_first = 2;
       }
       time_order = time !== "按时间降序";
-      console.log((this.current_page - 1) * 15);
-      console.log(this.current_page * 15 - 1);
       paperScholarAxios.post('scholar/papers/', {
         "scholar_id": this.scholarId,
         "is_first": is_first,

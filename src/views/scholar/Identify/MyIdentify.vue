@@ -47,9 +47,13 @@ export default {
         this.active = this.active + 1;
       }
     },
-    mailIdentify(formList) {
+    mailIdentify(email, viaCode) {
       let msg = null;
-      applyAxios.post('scholar/email-identify', formList).then((res) => {
+      applyAxios.post('scholar/email-identify/', {
+        "email" : email,
+        "scholar_id": this.scholar_id,
+        "verify_code" : viaCode,
+      }).then((res) => {
         msg = res.data.msg;
         if(msg === "验证码正确!") {
           this.activate();
