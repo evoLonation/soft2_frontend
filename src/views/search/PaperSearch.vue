@@ -829,12 +829,11 @@ export default {
     this.value[0]=searchType.type;
     if(this.$route.query.type==null){
       this.showNormal();
+      if(this.inputValue[0]!=='')
+      this.NormalSearch(1);
     }
     else {
       this.showAdvance();
-    }
-    if(this.inputValue[0]!==''){
-      this.NormalSearch(1);
     }
   },
 }
@@ -848,7 +847,6 @@ export default {
   width: 1690px;
   min-width: 1500px;
   height: 100%;
-  min-height: 2300px;
   flex-direction: column;
   margin: auto;
 }
