@@ -103,7 +103,7 @@ export default {
         ({name, store, args, after, onError,}) => {
           console.log(name, store, args, onError)
           after(() => {
-            if (!loginStore1.isLogin) {
+            if (!loginStore1.checkLogin) {
               if (comments.length>0)
                 comments.forEach(cmt => {
                   cmt.is_liked = 1

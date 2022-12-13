@@ -79,16 +79,15 @@ export default {
         ({name, store, args, after, onError}) => {
           console.log(name, store, args, onError)
           after(() => {
-            userAxios.post('paper/is-star', {
-              "paper_id": router.params.paperId,
-            }).then(res => {
-              paperStore1.storeStar(res.data.is_star)
-              console.log('onAction_star: ', res.data.is_star)
-            }).catch((e) => {
-              console.log('未获取或未登录，默认没有收藏过', e)
-              paperStore1.storeStar(1)
-            })
-            console.log('action')
+              userAxios.post('paper/is-star', {
+                "paper_id": router.params.paperId,
+              }).then(res => {
+                paperStore1.storeStar(res.data.is_star)
+                console.log('onAction_star: ', res.data.is_star)
+              }).catch((e) => {
+                console.log('未获取或未登录，默认没有收藏过', e)
+                paperStore1.storeStar(1)
+              })
           })
         })
     return {
@@ -109,7 +108,7 @@ export default {
       this.paperStore1.storeInfo(res.data)
       console.log(res.data)
 
-      if (!this.loginStore1.isLogin) this.paperStore1.paperInfo.starred = 1
+      if (!this.loginStore1.checkLogin) this.paperStore1.paperInfo.starred = 1
       else {
         userAxios.post('paper/is-star', {
           "paper_id": this.paperId
