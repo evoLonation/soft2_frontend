@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     openAuthor(id){
-      this.$router.push({name: "Scholar", params:{id: id
+      this.$router.push({name: "Scholar", params:{scholarId: id
         }})
     },
     initData(){
