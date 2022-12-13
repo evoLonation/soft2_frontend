@@ -1,5 +1,11 @@
 <template>
-  <div id="charts-contianer" class="charts-container" v-if="show"/>
+<!--  <div id="charts-contianer" class="charts-container" v-if="show"/>-->
+  <div>
+    <div id="charts-contianer" class="charts-container" v-if="show"/>
+    <div class="charts-container" v-if="show === false">
+      <el-empty style="margin: auto"/>
+    </div>
+  </div>
 </template>
 
 <script>

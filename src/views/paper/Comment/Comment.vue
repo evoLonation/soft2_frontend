@@ -141,7 +141,7 @@ export default {
   },
   data() {
     return {
-      comment: {username: 'username'},
+      comment: {username: 'username', is_liked: 1},
       showComment: false,
       key: 1,
     }
@@ -160,7 +160,6 @@ export default {
           this.key++
         }
         else {
-          console.log('no cmt')
           this.comments = [{username: 'username', is_liked: 1}]
           this.key++
         }
@@ -178,9 +177,11 @@ export default {
         userAxios.post('paper/comment-liked', {
           "paper_id": this.paperStore1.paperId
         }).then(res => {
-          const comments_liked = res.data.comments_liked
+          if (res.data.comments_liked === null){
+            return
+          }
           for (let i = 0; i < this.comments.length; i++) {
-            this.comments[i].is_liked = comments_liked[i]
+            this.comments[i].is_liked = res.data.comments_liked[i]
           }
           this.comment = this.comments[0]
           this.key++

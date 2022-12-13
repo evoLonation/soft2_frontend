@@ -27,6 +27,7 @@
               :num="item.n_citation"
               :org="item.publisher"
               :paperName="item.title"
+              :paperId="item.id"
           />
           <el-divider  style="width: 100%;"/>
         </div>

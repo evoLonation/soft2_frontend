@@ -105,6 +105,7 @@ export default {
           url:'paper/star/cancel',
           data:toSend
         }).then((res) =>{
+          router.go();
           if(res.data.code===0){
             ElMessage({
               message: '取消成功！',
