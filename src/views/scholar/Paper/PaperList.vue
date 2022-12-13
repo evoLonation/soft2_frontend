@@ -9,7 +9,7 @@
     <p
         style="margin-left: 10px; font-size: 27px; margin-top: 22px"
     >
-      {{years.length}}篇
+      {{ paper_num }}篇
     </p>
     <el-select
         v-model="year"
@@ -50,14 +50,15 @@
     </el-select>
   </div>
   <div v-if="isShow === true">
-    <div v-for="item in 15" :key="item">
+    <div v-for="item in papers" :key="item">
       <list
-          :type="books.at(0).type"
-          :author="books.at(0).author"
-          :abstract="books.at(0).abstract"
-          :num="books.at(0).num"
-          :org="books.at(0).org"
-          :paper-name="books.at(0).name"
+          :type="0"
+          :author="item.authors"
+          :abstract="item.abstract"
+          :num="item.n_citation"
+          :org="item.publisher"
+          :paper-name="item.title"
+          :paper-id="item.id"
           style="margin: auto auto 10px auto"
       />
     </div>
@@ -67,7 +68,7 @@
         class="pagination"
         background
         layout="prev, pager, next"
-        :total="1000"
+        :page-count="page_count"
         @current-change="change_page"
     />
   </div>
@@ -76,47 +77,20 @@
 
 <script>
 import list from "../../../components/paperShow"
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "PaperList",
   components: {
     list,
   },
+  props: {
+    "scholarId": String,
+  },
   data() {
     return {
-      books: [
-          {
-            type: 0,
-            author: "柯南道尔",
-            abstract: "这是一篇侦探故事",
-            num: 11,
-            org: "爱丁堡大学",
-            name: "福尔摩斯探案全集",
-          }
-      ],
-      books1: [
-        {
-          type: 0,
-          author: "大仲马",
-          abstract: "这是达达尼昂的故事",
-          num: 12,
-          org: "巴黎圣母院",
-          name: "三个火枪手",
-        }
-      ],
-      books2: [
-        {
-          type: 0,
-          author: "柯南道尔",
-          abstract: "这是一篇侦探故事",
-          num: 11,
-          org: "爱丁堡大学",
-          name: "福尔摩斯探案全集",
-        }
-      ],
-      years: [
-        2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022
-      ],
+      papers: [],
+      years: [],
       authors: [
           "第一作者","通讯作者",
       ],
@@ -127,21 +101,104 @@ export default {
       author: null,
       time: "按时间降序",
       isShow: true,
+      current_page: 1,
+      paper_num: 0,
+      page_count: 1,
     }
   },
-  methods: {
-    change_page() {
+  watch: {
+    async year() {
       this.isShow = false;
-      this.$nextTick(()=> {
-        if(this.books === this.books2) {
-          this.books = this.books1;
+      this.current_page = 1;
+      this.page_count = 1;
+      await this.getPaperList(this.year, this.author, this.time);
+    },
+    async author() {
+      this.isShow = false;
+      this.current_page = 1;
+      this.page_count = 1;
+      await this.getPaperList(this.year, this.author, this.time);
+    },
+    async time() {
+      this.isShow = false;
+      this.current_page = 1;
+      this.page_count = 1;
+      await this.getPaperList(this.year, this.author, this.time);
+    },
+  },
+  methods: {
+    getPaperList(year, author, time, init) {
+      let axios_year, is_first, time_order;
+      if(year === null) {
+        axios_year = 0;
+      }
+      else {
+        axios_year = year;
+      }
+      if(author === null) {
+        is_first = 0;
+      }
+      else if(author === "第一作者") {
+        is_first = 1;
+      }
+      else {
+        is_first = 2;
+      }
+      time_order = time !== "按时间降序";
+      console.log((this.current_page - 1) * 15);
+      console.log(this.current_page * 15 - 1);
+      paperScholarAxios.post('scholar/papers/', {
+        "scholar_id": this.scholarId,
+        "is_first": is_first,
+        "year": axios_year,
+        "time_order": time_order,
+        "start": (this.current_page - 1) * 15,
+        "end": this.current_page * 15 - 1,
+      }).then((res) => {
+        this.paper_num = res.data.paper_num;
+        let start_year = res.data.start_year;
+        let end_year = res.data.end_year;
+        this.papers = res.data.papers;
+        this.years = [];
+        if(start_year !== 3000) {
+          for (let i = start_year; i <= end_year; i++) {
+            this.years.push(i);
+          }
+        }
+        if(init === 0) {
+          this.$nextTick(()=> {
+            this.isShow = true;
+          })
+        }
+        else if(init === 1) {
+          if(this.paper_num % 15 === 0) {
+            this.page_count = this.paper_num / 15;
+          }
+          else {
+            this.page_count = Math.ceil(this.paper_num / 15);
+          }
         }
         else {
-          this.books = this.books2;
+          this.$nextTick(()=> {
+            if(this.paper_num % 15 === 0) {
+              this.page_count = this.paper_num / 15;
+            }
+            else {
+              this.page_count = Math.ceil(this.paper_num / 15);
+            }
+            this.isShow = true;
+          })
         }
-        this.isShow = true;
       })
+    },
+    async change_page(val) {
+      this.isShow = false;
+      this.current_page = val;
+      await this.getPaperList(this.year, this.author, this.time, 0);
     }
+  },
+  async created() {
+    await this.getPaperList(this.year, this.author, this.time, 1);
   }
 }
 </script>

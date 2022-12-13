@@ -6,21 +6,20 @@
       <div class="border">
         <el-empty class="no_data" v-if="tab_show === false"/>
         <div style="height: 500px; width: 750px" v-loading="loading" v-if="tab_show === true">
-          <el-table border :data="documents" style="width: 100%;" height="120">
+          <el-table border :data="documents" style="width: 100%;" height="170">
             <el-table-column align="center" fixed prop="name" label="文件名称" width="250"/>
             <el-table-column align="center" label="作者列表">
-              <el-table-column align="center" v-for="item in max_authors" :key="item" :label="'作者'+item" width="100">
+              <el-table-column align="center" v-for="item in max_authors" :key="item" :label="'作者'+item">
                 <template v-slot="scope">
                   <span>{{scope.row.authors[item-1]}}</span>
                 </template>
               </el-table-column>
             </el-table-column>
           </el-table>
-          <el-table border :data="writers" style="width: 100%" height="380">
+          <el-table border :data="writers" style="width: 100%" height="320">
             <el-table-column fixed align="center" prop="name" label="作者名称" width="250"/>
             <el-table-column align="center" prop="institution" label="作者机构" width="300"/>
             <el-table-column align="center" prop="position" label="作者职称" width="200"/>
-            <el-table-column align="center" prop="mailbox" label="作者邮箱" width="300"/>
             <el-table-column align="center" fixed="right" label="操作" width="100">
               <template #default="scope">
                 <el-button :type="buttonType(scope.$index)" icon="Check" @click="chose(scope.$index)" circle/>
@@ -37,13 +36,15 @@
             <el-table-column align="center" prop="value" label="相关内容" width="300"/>
           </el-table>
         </div>
-        <el-button style="margin-top: 75px; margin-left: 50%" type="primary">转让文章</el-button>
+        <el-button @click="transfer" style="margin-top: 75px; margin-left: 50%" type="primary">转让文章</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
+import {paperScholarAxios} from "@/axios";
 
 export default {
   name: "MvPaper",
@@ -56,104 +57,92 @@ export default {
       owner_show: false,
       loading: true,
       loading1: true,
-      documents: [
-        {
-          name: "人工智能理论研究",
-          authors: ["姜星如","赵正阳","龙亿舟","刘禹宏","高亦天","王逸风","蔡徐坤"],
-        },
-      ],
-      writers: [
-        {
-          name: "姜星如",
-          institution: "北京航空航天大学",
-          position: "学生",
-          mailbox: "boxuan10258@qq.com",
-          chose: false,
-        },
-        {
-          name: "赵正阳",
-          institution: "北京航空航天大学",
-          position: "学生",
-          mailbox: "boxuan10258@qq.com",
-          chose: false,
-        },
-        {
-          name: "龙亿舟",
-          institution: "北京航空航天大学",
-          position: "学生",
-          mailbox: "boxuan10258@qq.com",
-          chose: false,
-        },
-        {
-          name: "刘禹宏",
-          institution: "北京航空航天大学",
-          position: "学生",
-          mailbox: "boxuan10258@qq.com",
-          chose: false,
-        },
-        {
-          name: "高亦天",
-          institution: "北京航空航天大学",
-          position: "学生",
-          mailbox: "boxuan10258@qq.com",
-          chose: false,
-        },
-        {
-          name: "王逸风",
-          institution: "北京航空航天大学",
-          position: "学生",
-          mailbox: "boxuan10258@qq.com",
-          chose: false,
-        },
-        {
-          name: "蔡徐坤",
-          institution: "ikun俱乐部",
-          position: "个人练习生",
-          mailbox: "ikun@xiaoheizi.com",
-          chose: false,
-        }
-      ],
-      scholars: [
-        {
-          label: "学者姓名",
-          value: "姜星如",
-        },
-        {
-          label: "学者机构",
-          value: "北京航空航天大学",
-        },
-        {
-          label: "学者职称",
-          value: "学生",
-        },
-        {
-          label: "学者邮箱",
-          value: "boxuan10258@qq.com",
-        }
-      ],
+      documents: [],
+      writers: [],
+      scholars: [],
       max_authors: -1,
+      index: -1,
     }
   },
   watch: {
     id (newData) {
-      for(let i = 0; i < this.documents.length; i++) {
-        if(this.max_authors < this.documents.at(i).authors.length) {
-          this.max_authors = this.documents.at(i).authors.length;
-        }
-      }
-      // 检查newData的格式
+      let module = new RegExp("^OA:W[0-9]{10}$");
+      // newData是更新后的数据
+      this.tab_show = !(newData === null || newData === "");
       this.$nextTick(() => {
-        this.loading = false;
-        // newData是更新后的数据
-        this.tab_show = !(newData === null || newData === "");
+        this.loading = true;
+        this.index = -1;
       })
+      if(newData === null) {
+        return;
+      }
+      if(newData.match(module)) {
+        paperScholarAxios.post('paper/', {
+          "id": newData,
+        }).then(async (res) => {
+          let name = res.data.title;
+          let authors = res.data.authors;
+          this.documents = [];
+          let my_authors = [];
+          this.writers = [];
+          for (let i = 0; i < authors.length; i++) {
+            my_authors.push(authors[i].name);
+            await paperScholarAxios.post('scholar/basic/', {
+              "scholar_id": authors[i].id,
+            }).then((res) => {
+              let name = res.data.name;
+              let pos = res.data.pos;
+              let institution = res.data.institution[0];
+              this.writers.push({
+                name: name,
+                institution: institution,
+                position: pos,
+                id: authors[i].id,
+                chose: false,
+              })
+            })
+          }
+          this.documents.push({name: name, authors: my_authors});
+          for (let i = 0; i < this.documents.length; i++) {
+            if (this.max_authors < this.documents.at(i).authors.length) {
+              this.max_authors = this.documents.at(i).authors.length;
+            }
+          }
+          // 检查newData的格式
+          this.$nextTick(() => {
+            this.loading = false;
+          })
+        })
+      }
     },
     owner_id (newData) {
-      this.$nextTick(() => {
-        this.loading1 = false;
-        // newData是更新后的数据
-        this.owner_show = !(newData === null || newData === "");
-      })
+      let module = new RegExp("^OA:A[0-9]{10}$");
+      // newData是更新后的数据
+      this.owner_show = !(newData === null || newData === "");
+      if(newData === null) {
+        return;
+      }
+      if(newData.match(module)) {
+        paperScholarAxios.post('scholar/basic/', {
+          "scholar_id": newData,
+        }).then((res) => {
+          let name = res.data.name;
+          let pos = res.data.pos;
+          let institution = res.data.institution[0];
+          this.scholars = [];
+          this.scholars.push({label: "学者姓名", value: name});
+          this.scholars.push({label: "学者职称", value: pos});
+          this.scholars.push({label: "学者机构", value: institution});
+          this.$nextTick(() => {
+            this.loading1 = false;
+          })
+        })
+      }
+      else {
+        this.$nextTick(() => {
+          this.loading1 = true;
+        })
+      }
     },
   },
   methods: {
@@ -166,8 +155,36 @@ export default {
       }
     },
     chose(index) {
-      console.log(this.writers[index]);
-      this.writers[index].chose = !this.writers[index].chose;
+      if(this.writers[index].chose === true) {
+        this.writers[index].chose = !this.writers[index].chose;
+        this.index = -1;
+      }
+      else {
+        if(this.index === -1) {
+          this.writers[index].chose = !this.writers[index].chose;
+          this.index = index;
+        }
+        else {
+          this.$message.warning("不能选择超过1人!");
+        }
+      }
+    },
+    transfer() {
+      if(this.index === -1) {
+        this.$message.warning("尚未选择原作者!");
+        return;
+      }
+      console.log(this.id);
+      console.log(this.writers[this.index].id);
+      console.log(this.owner_id);
+      paperScholarAxios.post('admin/move-paper/', {
+        "paper_id" : this.id,
+        "owner_id" : this.writers[this.index].id,
+        "target_id": this.owner_id,
+      }).then(() => {
+        this.$message.success("转让成功!");
+        location.reload();
+      })
     },
     // eslint-disable-next-line no-unused-vars
     cellStyle({row, column, rowIndex, columnIndex}) {

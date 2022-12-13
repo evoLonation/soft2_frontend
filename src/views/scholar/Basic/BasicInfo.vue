@@ -101,7 +101,6 @@ export default {
         if(!got) {
           console.log('未获取到详情，使用本地测试数据')
         }
-        console.log(res);
       })
     },
     getAvatar() {

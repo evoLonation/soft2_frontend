@@ -98,10 +98,20 @@ export const paperStore = defineStore('paper', {
     state: () => {
         return {
             paperId: '',
-            paperInfo: null,
-            paperRelationNet: null,
-            scholarCoNet: null,
-            scholarCiNet: null,
+            paperInfo: {
+                starred: 1,
+            },
+        }
+    },
+    actions: {
+        storeId(id){
+            this.paperId = id;
+        },
+        storeInfo(info){
+            this.paperInfo = info;
+        },
+        storeStar(star){
+            this.paperInfo.starred = star;
         }
     }
 });

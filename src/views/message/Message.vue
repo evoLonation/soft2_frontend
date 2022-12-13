@@ -12,18 +12,17 @@
       <el-menu-item index="1" >全部</el-menu-item>
       <el-menu-item index="2">互动</el-menu-item>
       <el-menu-item index="3">申诉</el-menu-item>
-      <el-menu-item index="4">文献互助</el-menu-item>
+      <el-menu-item index="4">互助</el-menu-item>
       <el-menu-item index="5">系统</el-menu-item>
     </el-menu>
     <el-table
-      :data="this.curMessages" table-layout="fixed" :key="this.flush" empty-text="暂无消息">
+      :data="this.curMessages" table-layout="fixed" :key="this.flush">
       <template #empty>
         <h1 style="margin:20px auto;">暂无消息</h1>
       </template>
-      <el-table-column prop="content" label="内容" width="600" resizable>
-      </el-table-column>
-      <el-table-column prop="date" label="日期" width="150" resizable></el-table-column>
-      <el-table-column fixed="right" label="操作" resizable>
+      <el-table-column prop="content" label="内容" width="600" resizable :key="this.key"></el-table-column>
+      <el-table-column prop="date" label="日期" width="150" resizable :key="this.key"></el-table-column>
+      <el-table-column fixed="right" label="操作" resizable :key="this.key">
         <template #default="scope">
           <el-row>
             <el-col :span="8" v-if="!scope.row.read">
@@ -32,19 +31,19 @@
             <el-col :span="8" v-else>
               <div  style="margin-left: 10px; font-size: small">已读</div>
             </el-col>
-            <el-col :span="6" v-if="scope.row.type==='1' || scope.row.type==='2' || scope.row.type==='4' || scope.row.type==='6'">
+            <el-col :span="6" v-if="scope.row.type===1 || scope.row.type===2 || scope.row.type===4 || scope.row.type===6">
               <el-button link type="primary" @click="this.openPaper(scope.row.pid)" class="msg-op">前往文献</el-button>
             </el-col>
-            <el-col :span="5" v-if="scope.row.type==='4'">
-              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)" class="msg-op">申诉者</el-button>
+            <el-col :span="5" v-if="scope.row.type===4">
+              <el-button link type="primary" @click="this.openScholar(scope.row.sid)" class="msg-op">学者信息</el-button>
             </el-col>
-            <el-col :span="5" v-if="scope.row.type==='1' || scope.row.type==='2' || scope.row.type==='3'">
-              <el-button link type="primary" @click="this.openAuthor(scope.row.uid)" class="msg-op">学者页</el-button>
+            <el-col :span="5" v-if="scope.row.type===1 || scope.row.type===2 || scope.row.type===3">
+              <el-button link type="primary" @click="this.openUser(scope.row.uid)" class="msg-op">用户信息</el-button>
             </el-col>
-            <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
-              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">打开互助</el-button>
+            <el-col :span="6" v-if="scope.row.type===7 || scope.row.type===8">
+              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">互助中心</el-button>
             </el-col>
-            <el-col :span="5" v-if="scope.row.type==='4' && !scope.row.read">
+            <el-col :span="5" v-if="scope.row.type===4 && !scope.row.read">
               <el-popconfirm
                   confirm-button-text="同意"
                   cancel-button-text="拒绝"
@@ -60,17 +59,34 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" style="float:right;" width="50"><template #default="scope">
+      <el-table-column fixed="right" style="float:right;" width="50" :key="this.key"><template #default="scope">
         <el-button circle size="small" @click="del(scope.row.id)"><el-icon><Delete></Delete></el-icon></el-button>
       </template></el-table-column>
     </el-table>
   </div>
 
+  <el-dialog custom-class="dialog" v-model="this.showInfo" center>
+    <template #title>
+      <el-icon size="30" style="color: lightgrey;vertical-align: bottom;margin-right: 10px"><InfoFilled /></el-icon>
+      个人信息
+    </template>
+      <el-form label-width="100px" >
+        <el-form-item label="昵称:">
+                <span style="margin-left: 30px">
+                  {{userInfo.nickname}}
+                </span>
+        </el-form-item>
+        <el-form-item label="邮箱:">
+                <span style="margin-left: 30px">
+                  {{userInfo.email}}
+                </span>
+        </el-form-item>
+      </el-form>
+  </el-dialog>
 </template>
 
 <script>
-import {Checked, Delete, DeleteFilled} from "@element-plus/icons";
-import Messages from "@/views/message/Data";
+import {Checked, Delete, DeleteFilled, InfoFilled} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
 import {messageAxios, userAxios} from "@/axios";
 import {loginStore} from "@/store";
@@ -78,27 +94,18 @@ import {loginStore} from "@/store";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Message",
-  components: {DeleteFilled, Delete, Checked},
+  components: {InfoFilled, DeleteFilled, Delete, Checked},
   setup(){
     const loginStore1 = loginStore()
     let messages , curMessages
     const checkGet = loginStore1.$onAction(
-        ({
-          name,
-          store,
-          args,
-          after,
-          onError
+        ({name, store, args, after, onError
         })=>{
           console.log(name,store,args,onError)
           after(()=>{
             messageAxios.post('message/get-all-messages',{
             }).then(res=>{
               messages = curMessages = res.data.messages
-            }).catch(()=>{
-              console.log('未能获取，使用本地数据')
-              messages = curMessages = Messages.Messages
-              console.log(curMessages)
             })
           })
         })
@@ -118,21 +125,24 @@ export default {
     return {
       showConfirm: false,
       flush: 0,
+      key: 1,
+      userInfo: {
+        username: '',
+        email: '',
+      },
+      showInfo: false,
     }
   },
   methods:{
     getMessages(){
-      if (!this.loginStore1.isLogin){
-        this.messages = this.curMessages = Messages.Messages
+      if (!this.loginStore1.checkLogin){
         return
       }
       messageAxios.post('message/get-all-messages',{
       }).then(res=>{
+        console.log(res.data)
         this.messages = this.curMessages = res.data.messages
         this.flush++;
-      }).catch(()=>{
-        console.log('未能获取，使用本地数据')
-        this.messages = this.curMessages = Messages.Messages
       })
     },
     changeType(key){
@@ -143,7 +153,7 @@ export default {
           break;
         case "2":
           this.messages.forEach((m)=>{
-            if (m.type === '1' || m.type === '2' || m.type === "3"){
+            if (m.type === 1 || m.type === 2 || m.type === 3){
               tmp.push(m);
             }
           });
@@ -151,7 +161,7 @@ export default {
           break;
         case "3":
           this.messages.forEach((m)=>{
-            if (m.type === '4' || m.type === '6'){
+            if (m.type === 4 || m.type === 6){
               tmp.push(m);
             }
           });
@@ -159,7 +169,7 @@ export default {
           break;
         case "4":
           this.messages.forEach((m)=>{
-            if (m.type === '7' || m.type === '8'){
+            if (m.type === 7 || m.type === 8){
               tmp.push(m);
             }
           });
@@ -167,7 +177,7 @@ export default {
           break;
         case "5":
           this.messages.forEach((m)=>{
-            if (m.type === '0' || m.type === '5'){
+            if (m.type === 0 || m.type === 5){
               tmp.push(m);
             }
           });
@@ -186,13 +196,15 @@ export default {
             m.read = true
           }
         })
+        this.flush++;
         this.curMessages.forEach((m)=>{
           if (m.id === id){
             m.read = true
           }
         })
+        this.flush++;
       })
-      this.flush++;
+
     },
     allRead(){
       this.messages.forEach((m)=>{
@@ -203,8 +215,17 @@ export default {
     openPaper(id){
       this.$router.push({name: 'Paper', params:{paperId: id}});
     },
-    openAuthor(id){
+    openScholar(id){
       this.$router.push({name:'Scholar', params:{scholarId: id}});
+    },
+    openUser(id){
+      this.showInfo = true;
+      userAxios.post('user/get-nickname', {
+        "user_id": id,
+      }).then(res=>{
+        this.userInfo.username = res.data.username
+        this.userInfo.email = res.data.email;
+      })
     },
     openHelp(id){
       //TODO: 跳转到那条互助页
@@ -240,17 +261,19 @@ export default {
         "id": id
       }).then(()=>{
           ElMessage('已同意')
+        this.flush++;
       }).catch(e=>{
         ElMessage('操作失败，发生错误')
         console.log(e)
       })
-      this.flush++;
+
     },
     refuse(id){
       userAxios.post('grievance/refuse', {
         "grievance_id": id
       }).then(()=>{
         ElMessage('已拒绝')
+        this.flush++;
       }).catch(e=>{
         ElMessage('操作失败，发生错误')
         console.log(e)
@@ -272,10 +295,15 @@ export default {
 .el-menu-demo{
   margin-top: 20px;
 }
-.msg-field{
-  color: #87bdd8;
-}
 .msg-op{
   color: #7682a2;
+}
+</style>
+<style>
+.dialog{
+  width: 500px;
+  min-height: 230px;
+  border-radius: 5px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
 }
 </style>

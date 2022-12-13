@@ -12,6 +12,7 @@
           type="primary"
           v-if="isMe === false"
           @click="toIdentify(this.scholar_id)"
+          :disabled="dis"
       >
         学者认证
       </el-button>
@@ -26,7 +27,7 @@
           style="margin: auto 60px auto auto"
           id="subscribe_icon"
           :type="sub_type"
-          @click="subscribe"
+          @click="subscribe(this.sub_type)"
       >
         {{ sub_content }}
       </el-button>
@@ -37,7 +38,8 @@
 <script>
 import Tools from "@element-plus/icons-vue";
 import router from "@/router";
-import {userAxios} from "@/axios"
+import {applyAxios, userAxios} from "@/axios"
+import {loginStore} from "@/store";
 
 export default {
   name: "MyOperator",
@@ -52,31 +54,145 @@ export default {
       isMe: false,
       sub_content: "学者订阅",
       sub_type: "success",
+      dis: true,
+      uid: '',
+      nickname: '',
+      email: '',
     }
   },
   methods: {
     toIdentify(id) {
-      router.push({
-        name: 'Identify',
-        params: {
-          scholarId: id,
+      this.login.checkLogin().then((res) => {
+        if(!res) {
+          this.login.displayLoginWindow = true;
+        }
+        else {
+          if(!this.dis) {
+            router.push({
+              name: 'Identify',
+              params: {
+                scholarId: id,
+              }
+            })
+          } else {
+            userAxios.post('user/get-nickname/', {
+              "user_id": this.uid,
+            }).then((res) => {
+              this.nickname = res.data.nickname;
+              this.email = res.data.email;
+              var msg = "你的邮件已被" + this.nickname + "认证\n" + "邮箱:" + this.email;
+              this.$message.warning(msg);
+            })
+          }
         }
       })
     },
-    subscribe() {
-      userAxios.post('scholar/subscribe/', {
-        "scholar_id": this.scholar_id,
-      }).then((res) => {
-        console.log("have res");
-        let code = res.data.code;
-        console.log(code);
-        if(code === 0) {
-          this.$message.success("订阅成功!");
-          this.sub_content = "取消订阅";
-          this.sub_type = "danger";
-        }
-      })
+    subscribe(val) {
+      if(val === "success") {
+        userAxios.post('scholar/subscribe/', {
+          "scholar_id": this.scholar_id,
+        }).then((res) => {
+          console.log("have res");
+          let code = res.data.code;
+          console.log(code);
+          if (code === 0) {
+            this.$message.success("订阅成功!");
+            this.sub_content = "取消订阅";
+            this.sub_type = "danger";
+          }
+        })
+      } else if(val === "danger") {
+        userAxios.post('scholar/delete-subscribe/', {
+          "scholar_id": this.scholar_id,
+        }).then((res) => {
+          console.log("have res");
+          let code = res.data.code;
+          console.log(code);
+          if (code === 0) {
+            this.$message.success("取消订阅成功!");
+            this.sub_content = "学者订阅";
+            this.sub_type = "success";
+          }
+        })
+      }
     }
+  },
+  setup() {
+    const login = loginStore();
+    return {
+      login
+    }
+  },
+  created() {
+    this.login.checkLogin().then(async (res) => {
+      if(!res) {
+        this.dis = false;
+        this.sub_content = "学者订阅";
+        this.sub_type = "success";
+      }
+      else {
+        await userAxios.post('scholar/if-subscribe/', {
+          "scholar_id": this.scholar_id,
+        }).then((res) => {
+          let code = res.data.code;
+          if(code === 0) {
+            this.sub_content = "学者订阅";
+            this.sub_type = "success";
+          }
+          else if(code === 1) {
+            this.sub_content = "取消订阅";
+            this.sub_type = "danger";
+          }
+        })
+        await applyAxios.post('scholar/check-user/', {
+          "scholar_id": this.scholar_id,
+        }).then((res) => {
+          let code = res.data.code;
+          if(code === 0) {
+            this.dis = true;
+            this.uid = res.data.user_id;
+          }
+          else {
+            this.dis = false;
+          }
+        })
+      }
+    })
+    this.login.$subscribe((mutation, state) => {
+      if (!state.displayLoginWindow) {
+        this.login.checkLogin().then(async (res) => {
+          if (!res) {
+            this.dis = false;
+            this.sub_content = "学者订阅";
+            this.sub_type = "success";
+          } else {
+            await userAxios.post('scholar/if-subscribe/', {
+              "scholar_id": this.scholar_id,
+            }).then((res) => {
+              let code = res.data.code;
+              if (code === 0) {
+                this.sub_content = "学者订阅";
+                this.sub_type = "success";
+              } else if (code === 1) {
+                this.sub_content = "取消订阅";
+                this.sub_type = "danger";
+              }
+            })
+            await applyAxios.post('scholar/check-user/', {
+              "scholar_id": this.scholar_id,
+            }).then((res) => {
+              let code = res.data.code;
+              if (code === 0) {
+                this.dis = true;
+                this.uid = res.data.user_id;
+              } else {
+                this.dis = false;
+              }
+            })
+          }
+        })
+      }
+    });
   }
 }
 </script>

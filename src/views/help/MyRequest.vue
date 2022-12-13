@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card" style="min-height: 600px">
     <el-tabs stretch=stretch
              v-model="listFilter"
     >
@@ -11,7 +11,7 @@
       <el-tab-pane label="应助失败" name="5"/>
     </el-tabs>
 
-    <el-table :data="showList" style="width: 100%">
+    <el-table :data="showList" style="width: 100%;">
       <el-table-column prop="type" label="状态" width="80" >
         <template #default="scope">
           <el-icon>
@@ -23,8 +23,11 @@
           </el-icon>
         </template>
       </el-table-column>
+
       <el-table-column prop="request_time" label="求助时间" width="180" />
+
       <el-table-column prop="title" label="标题" width="200" />
+
       <el-table-column prop="res" label="结果" width="100" >
         <template #default="scope">
           <p v-if="scope.row.type === 0">待应助</p>
@@ -34,7 +37,14 @@
           <p v-if="scope.row.type === 4">应助失败</p>
         </template>
       </el-table-column>
-      <el-table-column prop="request_content" label="描述" width="200" />
+
+      <el-table-column width="200" >
+        <template #default="scope">
+          <el-button @click="preInfo(scope.row)">
+            查看详情
+          </el-button>
+        </template>
+      </el-table-column>
 
 
       <el-table-column label="操作">
@@ -55,14 +65,14 @@
 
           </div>
 
-          <div v-else>
-            <p>无可执行操作</p>
-          </div>
-
-          <div v-if="4 === scope.row.type">
-            <el-button type="success" @click="requestAgain">
+          <div v-else-if="4 === scope.row.type">
+            <el-button type="success" @click="requestAgain(scope.row.request_id)">
               再次求助
             </el-button>
+          </div>
+
+          <div v-else>
+            <p>无可执行操作</p>
           </div>
         </template>
 
@@ -82,6 +92,31 @@
       </template>
 
     </el-dialog>
+
+    <el-dialog v-model="infoDialog" title="求助详情">
+      <el-descriptions
+          :column="2"
+      >
+        <el-descriptions-item label="标题">
+          {{showInfo.title}}
+        </el-descriptions-item>
+        <el-descriptions-item >
+        </el-descriptions-item>
+        <el-descriptions-item label="求助时间">
+          {{showInfo.request_time}}
+        </el-descriptions-item>
+        <el-descriptions-item label="财富值">
+          {{showInfo.wealth}}
+        </el-descriptions-item>
+        <el-descriptions-item label="备注">
+          {{showInfo.request_content}}
+        </el-descriptions-item>
+      </el-descriptions>
+
+      <el-button type="primary" style="margin-left: 300px" @click="infoDialog = false">
+        确定
+      </el-button>
+    </el-dialog>
   </el-card>
 
 </template>
@@ -96,6 +131,8 @@ export default {
     return {
       listFilter: "0",
       select_id: "",
+      infoDialog: false,
+      showInfo: "",
       content: "",
       errorDialog: false,
       requestList: [],
@@ -109,6 +146,10 @@ export default {
   },
 
   methods: {
+    preInfo(item){
+      this.infoDialog = true;
+      this.showInfo = item
+    },
     download(request_id){
       console.log("downloading " + request_id)
       helpAxios.post('help/download ', {
@@ -136,6 +177,7 @@ export default {
       }).then(res=>{
         console.log(res.status)
         console.log(res.data)
+        this.getRequest();
         ElMessage({
           message: '确认文件正确',
           type: 'success',
@@ -160,11 +202,12 @@ export default {
       }).then(res=>{
         console.log(res.status)
         console.log(res.data)
+        this.errorDialog = false
+        this.getRequest();
         ElMessage({
           message: '已提交申诉',
           type: 'success',
         })
-        this.errorDialog = false
       }).catch((e)=>{
         ElMessage({
           message: '提交申诉失败',
@@ -174,12 +217,27 @@ export default {
       })
     },
 
-    requestAgain(){
-      ElMessage({
-        message: '再次求助成功',
-        type: 'success',
+    requestAgain(id){
+
+      helpAxios.post('help/request-again', {
+        "request_id": id
+      }).then(res=>{
+        console.log(res.status)
+        console.log(res.data)
+        ElMessage({
+          message: '再次求助成功',
+          type: 'success',
+        })
+        this.getRequest();
+      }).catch((e)=>{
+        ElMessage({
+          message: '创建失败',
+          type: 'error',
+        })
+        console.log(e)
       })
     },
+
     getRequest(){
       helpAxios.post('help/user-request', {
         "start": -1,
