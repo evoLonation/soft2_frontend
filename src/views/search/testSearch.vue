@@ -1,7 +1,8 @@
 <template>
   <paper-show style="margin-top: 30px;margin-left: 30px;width: 1000px;"
               :paper-name="paperName" :abstract="this.abstract"
-                :author="this.author" :org="org"  :num="num" :type="0"
+                :author="this.author" :org="org"  :num="num" :type="1"
+              :paperId="id"
   ></paper-show>
   <el-button @click="JumpToSearch">test</el-button>
 
@@ -22,12 +23,13 @@ export default {
   components: {ScholarList, PaperShow},
   data(){
     return{
+      id:"OA:W2164990341",
       paperName:"论文标题十大阿三大苏打撒旦撒大苏打撒旦大苏打顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶的顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶",
-      abstract:"test abstract:城市的生态基础设施是城市及其居民持续获撒大大大啊实打实打算大撒到啊实打实大苏打实打实的撒大苏打实打实打大撒到啊得自然生态服务的保障.面对中国未来巨大的城市化前景,前瞻性的城市生态基础设施建设具有非常重要的战略意义.为此,本文提出",
-      author:[{name:"MyShirtdddd"},{name:"MyShirt"},{name:"MyShirt"},{name:"MyShirt"},{name:"MyShirt"}],
+      abstract:"test abstract:城市的生态基础设施是城市及其顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶居民持续获撒大大大啊实打实打算大撒到啊实打实大苏打实打实的撒大苏打实打实打大撒到啊得自然生态服务的保障.面对中国未来巨大的城市化前景,前瞻性的城市生态基础设施建设具有非常重要的战略意义.为此,本文等单提出",
+      author:[{name:"MyShirtdddd"},{name:"MyShirt",id:"OA:A2787897896"},{name:"MyShirt"},{name:"MyShirt"},{name:"MyShirt"}],
       org:"北航",
       num:12,
-      type:1,
+      type:0,
     }
   },
   methods:{

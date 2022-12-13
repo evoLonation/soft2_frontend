@@ -3,8 +3,8 @@
   <div class="main_body">
     <el-container style="margin: auto;width: 1400px">
       <el-aside class="navigation">
-        <div class="left_inform" id="inform" @click="clickInform">
-          <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><User /></el-icon>个人信息
+        <div class="left_inform" id="inform" @click="clickInform" style="color: #007dfa" >
+          <el-icon size="20" style="margin-right: 5px;vertical-align: bottom;"><User /></el-icon>个人信息
         </div>
         <div class="left_scholar" id="scholar" @click="clickScholar">
           <el-icon size="20" style="margin-right: 5px;vertical-align: bottom"><View /></el-icon>关注学者
@@ -84,18 +84,21 @@
             <div style="margin-left: 431px;margin-top: 30px;"><el-button type="danger" round @click="logout">退出登录</el-button></div>
           </div>
 
-          <div v-if="pageType===1&&scholars!=null" style="margin-bottom: 30px">
+          <div v-if="pageType===1&&scholars!=null" style="margin-bottom: 30px;min-height: 560px">
             <div style="margin-top: 20px">
               <span style="margin-left: 30px;font-size: 15px;color: #73767a">
                 关注的学者:
               </span>
             </div>
-            <div v-for="(item,index) in scholars.slice((pageScholar-1)*6,pageScholar*6)" :key="index" style="display: inline-block;margin-left: 72px;margin-top: 20px;">
-              <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :id="item.scholar_id"
+            <div style="min-height: 450px">
+              <div v-for="(item,index) in scholars.slice((pageScholar-1)*6,pageScholar*6)" :key="index" style="display: inline-block;margin-left: 72px;margin-top: 20px;">
+                <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :id="item.scholar_id"
                               :type="1"
-                            ></scholar-list>
-              <el-divider  style="width: 100%; margin: 10px"/>
+                ></scholar-list>
+                <el-divider  style="width: 100%; margin: 10px"/>
+              </div>
             </div>
+
             <el-pagination background layout="prev, pager, next,jumper" :total="this.pageScholarCount" v-model:current-page="pageScholar" :page-size="6"
             />
           </div>
@@ -105,18 +108,21 @@
           </div>
 
 
-          <div v-if="pageType===2&&papers!=null" style="margin-bottom: 30px">
+          <div v-if="pageType===2&&papers!=null" style="margin-bottom: 30px;">
             <div style="margin-top: 20px">
               <span style="margin-left: 30px;font-size: 15px;color: #73767a">
                 收藏的论文:
               </span>
             </div>
-            <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;">
-              <paper-show :author="item.author" :abstract="item.abstract" :org="item.org"
-                          :paper-name="item.paper_name" :type="1" :num="item.n_citation"
-                          style="margin-left: auto;margin-top: 20px;"></paper-show>
-              <el-divider  style="width: 100%; margin: 10px"/>
+            <div style="min-height: 450px">
+              <div v-for="(item,index) in papers.slice((pagePaper-1)*6,pagePaper*6)" :key="index" style="margin-top: 20px;">
+                <paper-show :author="item.author" :abstract="item.abstract" :org="item.org"
+                            :paper-name="item.paper_name" :type="1" :num="item.n_citation" :paper-id="item.paper_id"
+                            style="margin-left: auto;margin-top: 20px;"></paper-show>
+                <el-divider  style="width: 100%; margin: 10px"/>
+              </div>
             </div>
+
             <el-pagination background layout="prev, pager, next,jumper" :total="this.pagePaperCount"  v-model:current-page="pagePaper" :page-size="6"
             />
           </div>
@@ -413,6 +419,7 @@ export default {
       }).then((res) =>{
         // if(res.data.all_star!=null)
         this.papers=res.data.all_star;
+        this.pagePaperCount=res.data.all_star.length;
         console.log(res.data);
       })
       userAxios({
@@ -421,6 +428,7 @@ export default {
       }).then((res) =>{
         // if(res.data.all_subscribe!=null)
         this.scholars=res.data.all_subscribe;
+        this.pageScholarCount=res.data.all_subscribe.length;
         console.log(res.data);
       })
 
