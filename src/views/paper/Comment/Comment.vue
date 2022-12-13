@@ -233,18 +233,24 @@ export default {
         ElMessage('评论不能为空')
         return
       }
-      console.log('id: ', this.paperStore1.paperId, 'cnt: ', this.commentText)
-      userAxios.post('paper/comment', {
-        'paper_id': this.paperStore1.paperId,
-        'content': this.commentText
-      }).then(() => {
-        this.commentText = ''
-        setTimeout(() => {
-          this.getCommentsAPI()
-          this.key++
-        }, 1000)
-        this.key++
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          userAxios.post('paper/comment', {
+            'paper_id': this.paperStore1.paperId,
+            'content': this.commentText
+          }).then(() => {
+            this.commentText = ''
+            setTimeout(() => {
+              this.getCommentsAPI()
+              this.key++
+            }, 1000)
+            this.key++
+          })
+        }else {
+          ElMessage('请先登录')
+        }
       })
+
     },
     del(id) {
       userAxios.post('paper/comment/delete', {
