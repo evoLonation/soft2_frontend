@@ -98,7 +98,7 @@ export default {
   setup() {
     const loginStore1 = loginStore()
     const paperStore1 = paperStore()
-    let comments = [{username: 'username'}]
+    let comments = [{username: 'username', is_liked: 1}]
     const checkLike = loginStore1.$onAction(
         ({name, store, args, after, onError,}) => {
           console.log(name, store, args, onError)
@@ -114,7 +114,7 @@ export default {
               }).then(res => {
                 const comments_liked = res.data.comments_liked
                 for (let i = 0; i < this.comments.length; i++) {
-                  comments[i].is_liked = comments_liked[i].is_liked
+                  comments[i].is_liked = comments_liked[i]
                 }
               })
             }
@@ -161,7 +161,7 @@ export default {
         }
         else {
           console.log('no cmt')
-          this.comments = [{username: 'username'}]
+          this.comments = [{username: 'username', is_liked: 1}]
           this.key++
         }
       })
@@ -180,7 +180,7 @@ export default {
         }).then(res => {
           const comments_liked = res.data.comments_liked
           for (let i = 0; i < this.comments.length; i++) {
-            this.comments[i].is_liked = comments_liked[i].is_liked
+            this.comments[i].is_liked = comments_liked[i]
           }
           this.comment = this.comments[0]
           this.key++
