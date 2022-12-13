@@ -139,7 +139,6 @@ export default {
       this.paperStore1.paperInfo.urls.forEach(u=>{
         this.urls.push({url: u, name: u.split('/')[2]})
       })
-      console.log(this.urls)
       this.starred = this.paperStore1.paperInfo.starred
       this.title = this.paperStore1.paperInfo.title
       const authors = this.paperStore1.paperInfo.authors
@@ -217,6 +216,7 @@ export default {
         ElMessage('请先登录')
         return
       }
+      console.log(this.title, qs.stringify(this.author), this.magazine)
       this.$router.push({
         name: 'CreateRequest',
         query: {
