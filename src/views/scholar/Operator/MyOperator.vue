@@ -92,7 +92,6 @@ export default {
         userAxios.post('scholar/subscribe/', {
           "scholar_id": this.scholar_id,
         }).then((res) => {
-          console.log("have res");
           let code = res.data.code;
           console.log(code);
           if (code === 0) {
