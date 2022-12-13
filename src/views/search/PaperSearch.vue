@@ -182,6 +182,22 @@
           </el-collapse-item>
           <el-collapse-item name="2">
             <template #title >
+              <span style="font-size: 15px">会议/期刊</span>
+            </template>
+            <div v-for="index in venues.length" :key="index">
+              <el-checkbox v-model="venuesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.venues[index-1].name }}</el-checkbox>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item name="3">
+            <template #title >
+              <span style="font-size: 15px">机构</span>
+            </template>
+            <div v-for="index in institutions.length" :key="index">
+              <el-checkbox v-model="institutionsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px">{{ this.institutions[index-1].name }}</el-checkbox>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item name="4">
+            <template #title >
               <span style="font-size: 15px">年份</span>
             </template>
             <div v-for="index in years.length" :key="index">
@@ -218,7 +234,7 @@ export default {
       inputProfession:'',
       searchBegin:false,
       exact:['精确','精确','精确'],
-      activeNames:['1','2','3'],
+      activeNames:['1','2','3','4'],
       nowPage:1,
       type:0,
       searchType:false,
@@ -391,8 +407,12 @@ export default {
       endYear:0,
       themes:[{name :'theme1'},{name:"theme2"}],
       themesCheck:[false,false],
-      years:[{name:"2001"},{name:"2002"}],
+      years:[{name:2001},{name:2002}],
       yearsCheck:[false,false],
+      venues:[{name:'NATURE'},{name:'北航学报'}],
+      venuesCheck:[false,false],
+      institutions:[{name:'BUAA'},{name:'beili'}],
+      institutionsCheck:[false,false]
     }
   },
   methods:{
@@ -608,6 +628,8 @@ export default {
         end_year:0,
         years:[],
         themes:[],
+        venues:[],
+        institutions:[],
         sort_type:this.toIntSortType(this.sortType),
         start:10*(page-1),
         end:10*page,
@@ -624,6 +646,8 @@ export default {
         that.years=response.years;
         that.themesCheck=[];
         that.yearsCheck=[];
+        that.venuesCheck=[];
+        that.institutionsCheck=[];
         that.nowPage=1;
         console.log(res.data);
         that.searchBegin=true;
@@ -636,6 +660,8 @@ export default {
         end_year:this.end_year,
         years:[],
         themes:[],
+        venues:[],
+        institutions:[],
         sort_type:this.toIntSortType(this.sortType),
         start:0,
         end:10,
@@ -653,6 +679,8 @@ export default {
         that.years=response.years;
         that.themesCheck=[];
         that.yearsCheck=[];
+        that.venuesCheck=[];
+        that.institutionsCheck=[];
         that.nowPage=1;
         console.log(res.data);
         that.searchBegin=true;
@@ -666,6 +694,8 @@ export default {
         end_year:this.end_year,
         years:[],
         themes:[],
+        venues:[],
+        institutions:[],
         sort_type:this.toIntSortType(this.sortType),
         start:0,
         end:10,
@@ -683,6 +713,8 @@ export default {
         that.years=response.years;
         that.themesCheck=[];
         that.yearsCheck=[];
+        that.venuesCheck=[];
+        that.institutionsCheck=[];
         that.nowPage=1;
         console.log(res.data);
         that.searchBegin=true;
@@ -695,6 +727,8 @@ export default {
         end_year:this.end_year,
         years:[],
         themes:[],
+        venues:[],
+        institutions:[],
         sort_type:this.toIntSortType(this.sortType),
         start:10*(page-1),
         end:10*page,
@@ -707,6 +741,16 @@ export default {
       for(let i=0;i<this.yearsCheck.length;i++){
         if(this.yearsCheck[i]===true){
           toSend.years.push(this.years[i].name);
+        }
+      }
+      for(let i=0;i<this.venuesCheck.length;i++){
+        if(this.venuesCheck[i]===true){
+          toSend.venues.push(this.venues[i].name);
+        }
+      }
+      for(let i=0;i<this.institutionsCheck.length;i++){
+        if(this.institutionsCheck[i]===true){
+          toSend.institutions.push(this.institutions[i].name);
         }
       }
       return toSend;
