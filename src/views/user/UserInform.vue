@@ -121,7 +121,7 @@
                 <paper-show :author="item.author" :abstract="item.abstract" :org="item.org"
                             :paper-name="item.paper_name" :type="1" :num="item.n_citation" :paper-id="item.paper_id"
                             style="margin-left: auto;margin-top: 20px;"></paper-show>
-                <el-divider  style="width: 100%; margin: 10px"/>
+                <el-divider  style="width: 100%; margin: 10px;margin-left: 0px"/>
               </div>
             </div>
 
