@@ -14,6 +14,7 @@
 
 import * as echarts from "echarts/core";
 import {paperScholarAxios} from "@/axios";
+import router from "@/router";
 
 export default {
   name: "MyContribution",
@@ -96,6 +97,12 @@ export default {
           ]
         };
         myPie.setOption(option);
+        myPie.on('click', function (e) {
+          router.push({
+            name : "Field",
+            query: {content: e.data.name,}
+          });
+        })
       })
     }
   },
