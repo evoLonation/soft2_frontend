@@ -168,6 +168,7 @@ export default {
   background-color: white;
   padding: 10px 15px;
   max-height: 500px;
+  min-width: 495px;
   margin-left: 2%;
   border-radius: 5px;
   box-shadow: 0 0 14px rgba(0,0,0,0.08),0 0 6px rgba(0,0,0,0.06);
