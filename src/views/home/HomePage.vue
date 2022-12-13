@@ -19,7 +19,7 @@
       </div>
 
     </div>
-    <div class="field-area">
+    <div class="field-area" v-loading="fieldLoading">
       <div class="top">
         <div class="header">
           探索你想探索的领域....
@@ -51,7 +51,7 @@
           <div class="paper">
             <div class="header">热门论文</div>
             <div class="item" v-for="paper in field.papers" :key="paper">
-              <div class="title clickable" @click="gotoPaper(paper.paper_id)">{{paper.name}}</div>
+              <div class="title clickable" @click="gotoPaper(paper.paper_id)">{{paper.title}}</div>
               <div class="foot other-info">
                 <div class="authors overflow">{{paperAuthorText(paper.authors)}}</div>
                 <div class="cite">{{paper.n_citation}}次被引</div>
@@ -136,21 +136,35 @@ export default {
         search_type : 2,
         text : queryString,
       }).then((res) => {
+        console.log("auto complete")
         cb(res.data.auto_completes.map((value) => {return {value : value}}))
       })
       // const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
       // cb(results);
     }
     const paperAuthorText = (authors) => {
+      if(authors === null){
+        return "暂无作者信息"
+      }
       return authors.join(", ");
     }
-    let fieldInfos = ([data, data, data, data]);
+    let fieldInfos = ref([data]);
+    const fieldLoading = ref(true);
     paperScholarAxios.post("home/info", {
       "paper_num" : 6,//每个大类显示的最多论文数量
       "scholar_num" : 6,//每个大类显示的最多学者数量
       "journal_num" : 6,//每个大类显示的最多期刊数量
     }).then((res) => {
-      fieldInfos = res.data;
+      console.log("请求成功")
+      let datas = res.data.areas;
+      datas.forEach((data) => {
+        let type = data.type[0];
+        data.fields = data.type.slice(1);
+        data.type = type; 
+      });
+      fieldInfos.value = datas;
+      console.log(datas);
+      fieldLoading.value = false
     });
 
     window.addEventListener("scroll", scrollListener,true);
@@ -170,6 +184,7 @@ export default {
       gotoPaper,
       gotoScholar,
       searchJournal,
+      fieldLoading,
     }
   },
 

@@ -65,7 +65,9 @@ export default {
       router.push({name : "ScholarSearch"});
     }
     const toAdvancedSearch = () => {
-      router.push({name : "Search"});
+      router.push({name : "PaperSearch", query:{
+          type:"1"
+        }});
     }
 
     return{
