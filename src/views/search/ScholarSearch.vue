@@ -2,15 +2,15 @@
   <!--  顶部栏-->
   <div class="main_skeleton">
     <p class="main_title" id="title">
-        学者主页
+        学者检索页
     </p>
     <div class="main_search" id="search">
       <el-input v-model="inputName" placeholder="请输入要搜索的学者名"  size="large"  style=" width: 20%;
-               margin-left: 20%;">
+               margin-left: auto;margin-right: 0px">
         <template #prepend>学者名</template>
       </el-input>
       <el-input v-model="inputOrg" placeholder="请输入该学者的机构名" size="large"  style="width: 35%;
-               margin-left: 0px">
+               margin-left: 0px;margin-right: auto">
         <template #prepend>机构名</template>
         <template #append>
           <el-icon size="20" style="width: 30px;" @click="scholarSearch"><Search/></el-icon>
@@ -86,10 +86,7 @@ export default {
 .main_skeleton{
   background-color: #f3f3f3;
   position: relative;
-  width: 1690px;
-  min-width: 1500px;
-  height: 100%;
-  min-height: 2300px;
+  width: 1600px;
   flex-direction: column;
   margin: auto;
 }
@@ -118,6 +115,7 @@ export default {
 }
 
 .main_search{
+  display: flex;
   /*border: 3px blue solid;*/
 }
 

@@ -848,7 +848,6 @@ export default {
   width: 1690px;
   min-width: 1500px;
   height: 100%;
-  min-height: 2300px;
   flex-direction: column;
   margin: auto;
 }
