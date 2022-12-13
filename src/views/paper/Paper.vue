@@ -79,11 +79,13 @@ export default {
         ({name, store, args, after, onError}) => {
           console.log(name, store, args, onError)
           after(() => {
+            if (name === 'login'){
               userAxios.post('paper/is-star', {
                 "paper_id": router.params.paperId,
               }).then(res => {
                 paperStore1.storeStar(res.data.is_star)
               })
+            }
           })
         })
     return {
@@ -102,17 +104,17 @@ export default {
       "id": this.paperId,
     }).then((res) => {
       this.paperStore1.storeInfo(res.data)
-      console.log(res.data)
-
-      if (!this.loginStore1.checkLogin) this.paperStore1.paperInfo.starred = 1
-      else {
-        userAxios.post('paper/is-star', {
-          "paper_id": this.paperId
-        }).then(res=>{
-          this.paperStore1.storeStar(res.data.is_star)
-          console.log('is star: ', res.data.is_star)
-        })
-      }
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          userAxios.post('paper/is-star', {
+            "paper_id": this.paperId
+          }).then(res=>{
+            this.paperStore1.storeStar(res.data.is_star)
+          })
+        }else {
+          this.paperStore1.paperInfo.starred = 1
+        }
+      })
     })
     window.addEventListener('scroll', this.handleScroll, true)
   },

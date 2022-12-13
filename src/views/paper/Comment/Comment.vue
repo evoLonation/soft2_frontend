@@ -103,18 +103,22 @@ export default {
         ({name, store, args, after, onError,}) => {
           console.log(name, store, args, onError)
           after(() => {
-            if (!loginStore1.checkLogin) {
-              if (comments.length>0)
-                comments.forEach(cmt => {
-                  cmt.is_liked = 1
-                })
-            } else {
-              userAxios.post('paper/comment-liked', {
-                "paper_id": paperStore1.paperId
-              }).then(res => {
-                const comments_liked = res.data.comments_liked
-                for (let i = 0; i < this.comments.length; i++) {
-                  comments[i].is_liked = comments_liked[i]
+            if (name === 'login'){
+              loginStore1.checkLogin().then(res=>{
+                if (res){
+                  userAxios.post('paper/comment-liked', {
+                    "paper_id": paperStore1.paperId
+                  }).then(res => {
+                    const comments_liked = res.data.comments_liked
+                    for (let i = 0; i < this.comments.length; i++) {
+                      comments[i].is_liked = comments_liked[i]
+                    }
+                  })
+                }else {
+                  if (comments.length>0)
+                    comments.forEach(cmt => {
+                      cmt.is_liked = 1
+                    })
                 }
               })
             }
@@ -134,8 +138,10 @@ export default {
     paperStore().$onAction(({name, store, args, after, onError})=>{
       console.log(name, store, args, onError)
       after(() => {
-        this.getCommentsAPI()
-        this.key++
+        if (name === 'login'){
+          this.getCommentsAPI()
+          this.key++
+        }
       })
     })
   },
@@ -167,26 +173,28 @@ export default {
       this.getLiked()
     },
     getLiked() {
-      if (!this.loginStore1.isLogin) {
-        if (this.comments.length>0)
-          this.comments.forEach(cmt => {
-            cmt.is_liked = 1
+      this.loginStore1.checkLogin().then(res=>{
+        if (res){
+          userAxios.post('paper/comment-liked', {
+            "paper_id": this.paperStore1.paperId
+          }).then(res => {
+            if (res.data.comments_liked === null){
+              return
+            }
+            for (let i = 0; i < this.comments.length; i++) {
+              this.comments[i].is_liked = res.data.comments_liked[i]
+            }
+            this.comment = this.comments[0]
+            this.key++
           })
-        this.key++
-      }else {
-        userAxios.post('paper/comment-liked', {
-          "paper_id": this.paperStore1.paperId
-        }).then(res => {
-          if (res.data.comments_liked === null){
-            return
-          }
-          for (let i = 0; i < this.comments.length; i++) {
-            this.comments[i].is_liked = res.data.comments_liked[i]
-          }
-          this.comment = this.comments[0]
+        }else {
+          if (this.comments.length>0)
+            this.comments.forEach(cmt => {
+              cmt.is_liked = 1
+            })
           this.key++
-        })
-      }
+        }
+      })
     },
     like(id) {
       userAxios.post('paper/comment/like', {
