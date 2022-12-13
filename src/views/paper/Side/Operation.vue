@@ -85,7 +85,7 @@
 <script>
 import {Help, Link, Share, Star, Tools, DocumentCopy, StarFilled, Avatar, Close, Check} from "@element-plus/icons";
 import {ElMessage} from "element-plus";
-import {paperStore} from "@/store";
+import {paperStore, loginStore} from "@/store";
 import {applyAxios, userAxios} from "@/axios";
 import {paperScholarAxios} from "@/axios";
 import qs from "qs";
@@ -99,7 +99,8 @@ export default {
   setup(){
 
     return{
-      store: paperStore(),
+      paperStore1: paperStore(),
+      loginStore1: loginStore(),
       input: ref('')
     }
   },
@@ -134,19 +135,19 @@ export default {
   },
   methods: {
     getInfo(){
-      this.urls = this.store.paperInfo.urls
-      this.starred = this.store.paperInfo.starred
-      this.title = this.store.paperInfo.title
-      const authors = this.store.paperInfo.authors
+      this.urls = this.paperStore1.paperInfo.urls
+      this.starred = this.paperStore1.paperInfo.starred
+      this.title = this.paperStore1.paperInfo.title
+      const authors = this.paperStore1.paperInfo.authors
       authors.forEach((au)=>{
         this.author.push(au.name)
       })
-      this.magazine = this.store.paperInfo.publisher
+      this.magazine = this.paperStore1.paperInfo.publisher
     },
     cite(){
       this.showCite = true;
       paperScholarAxios.post('paper/cite',{
-        'id': this.store.paperId
+        'id': this.paperStore1.paperId
       }).then(res=>{
         this.citations = res.data
         this.citation = this.citations.gb
@@ -172,8 +173,12 @@ export default {
       ElMessage("已复制")
     },
     star(){
+      if (!this.loginStore1.checkLogin){
+        ElMessage('请先登录')
+        return
+      }
       userAxios.post('paper/star', {
-        'paper_id': this.store.paperId
+        'paper_id': this.paperStore1.paperId
       }).then(res=>{
         const code = res.data.code
         console.log(code)
@@ -186,8 +191,12 @@ export default {
       })
     },
     deStar(){
+      if (!this.loginStore1.checkLogin){
+        ElMessage('请先登录')
+        return
+      }
       userAxios.post('paper/star/cancel', {
-        'paper_id': this.store.paperId
+        'paper_id': this.paperStore1.paperId
       }).then(res=>{
         const code = res.data.code
         console.log(code)
@@ -200,6 +209,10 @@ export default {
       })
     },
     help(){ //跳转到互助
+      if (!this.loginStore1.checkLogin){
+        ElMessage('请先登录')
+        return
+      }
       this.$router.push({
         name: 'CreateRequest',
         query: {
@@ -210,15 +223,19 @@ export default {
       })
     },
     adopt(){
+      if (!this.loginStore1.checkLogin){
+        ElMessage('请先登录')
+        return
+      }
       applyAxios.post('scholar/check-scholar', {
       }).then(res=>{
         if (res.data.code === 1){
           ElMessage(res.data.msg)
         }else {
           const scholar_id = res.data.scholar_id;
-          console.log(this.store.paperId, scholar_id)
+          console.log(this.paperStore1.paperId, scholar_id)
           paperScholarAxios.post('scholar/claim', {
-            "paper_id": this.store.paperId,
+            "paper_id": this.paperStore1.paperId,
             "scholar_id": scholar_id,
           }).then(res=>{
             const code = res.data.code
@@ -234,17 +251,16 @@ export default {
 
     },
     grievance(){
-      let got = false
+      if (!this.loginStore1.checkLogin){
+        ElMessage('请先登录')
+        return
+      }
       userAxios.post('paper/grievance',{
-        "paper_id": this.store.paperId,
+        "paper_id": this.paperStore1.paperId,
         "scholar_id": this.griScholarId,
       }).then(()=>{
         ElMessage('发起成功')
-        got = true
       })
-      if (!got){
-        ElMessage('发起失败，发生了错误')
-      }
     }
   }
 }
