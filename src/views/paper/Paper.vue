@@ -83,10 +83,6 @@ export default {
                 "paper_id": router.params.paperId,
               }).then(res => {
                 paperStore1.storeStar(res.data.is_star)
-                console.log('onAction_star: ', res.data.is_star)
-              }).catch((e) => {
-                console.log('未获取或未登录，默认没有收藏过', e)
-                paperStore1.storeStar(1)
               })
           })
         })
@@ -115,9 +111,6 @@ export default {
         }).then(res=>{
           this.paperStore1.storeStar(res.data.is_star)
           console.log('is star: ', res.data.is_star)
-        }).catch((e)=>{
-          console.log('未获取或未登录，默认没有收藏过', e)
-          this.paperStore1.storeStar(1)
         })
       }
     })
