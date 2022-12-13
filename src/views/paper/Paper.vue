@@ -103,6 +103,7 @@ export default {
     paperScholarAxios.post('paper', {
       "id": this.paperId,
     }).then((res) => {
+      console.log(res.data)
       this.paperStore1.storeInfo(res.data)
       this.loginStore1.checkLogin().then(res=>{
         if (res){
