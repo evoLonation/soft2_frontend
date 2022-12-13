@@ -3,15 +3,17 @@
   <div class="field" style="position: relative; text-align: center">
     <h1 style="text-align: center; padding: 10px">{{field_name === undefined ? "-下方输入领域查询哦-" : field_name}}</h1>
 
-    <el-input
+    <el-autocomplete
         v-model="input"
-        style="width: 500px; padding-top: 20px; align-items: center"
-        placeholder="请输入搜索领域"
+        class=""
+        style="width: 450px;margin-right: 12px;"
+        placeholder="输入特定领域..."
+        :fetch-suggestions="querySearch"
     >
       <template #suffix>
-        <el-icon size="large" @click="gotoField" ><search /></el-icon>
+        <el-icon size="large" @click="gotoField()"><search /></el-icon>
       </template>
-    </el-input>
+    </el-autocomplete>
   </div>
   <div class="show">
 
@@ -68,6 +70,21 @@ export default {
   name: 'FieldPage',
   components: {
     list, list2
+  },
+  setup() {
+    const querySearch = (queryString , cb) => {
+      paperScholarAxios.post("search/auto-complete", {
+        search_type : 2,
+        text : queryString,
+      }).then((res) => {
+        cb(res.data.auto_completes.map((value) => {return {value : value}}))
+      })
+      // const results = [{value : '人工智能'}, {value: '深度学习'}, {value: '自动生成'},]
+      // cb(results);
+    }
+    return {
+      querySearch
+    }
   },
   data() {
     return {
