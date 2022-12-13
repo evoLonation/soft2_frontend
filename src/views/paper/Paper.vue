@@ -53,11 +53,9 @@ import RefNet from "@/views/paper/RefNet/RefNet";
 import Operation from "@/views/paper/Side/Operation";
 import Reference from "@/views/paper/Reference/Reference";
 import PaperComment from "@/views/paper/Comment/Comment";
-import {HomeFilled, Opportunity, Comment, Reading, InfoFilled} from "@element-plus/icons";
-import PaperInfo from "@/views/paper/Data/PaperInfo";
-import { useRoute } from "vue-router";
-import {paperStore, loginStore} from "@/store";
-import {onBeforeMount} from "vue";
+import {Comment, HomeFilled, InfoFilled, Opportunity, Reading} from "@element-plus/icons";
+import {useRoute} from "vue-router";
+import {loginStore, paperStore} from "@/store";
 import {paperScholarAxios, userAxios} from "@/axios";
 import Similar from "@/views/paper/Similar/Similar";
 import SimNet from "@/views/paper/SimNet/SimNet";
@@ -70,78 +68,60 @@ export default {
     SimNet,
     Similar, Opportunity, HomeFilled, Reading, Comment, Reference, Operation, RefNet, Info, PaperComment},
   props: [],
-  setup() {//读路由参调用接口，用接口获取详情和关系网并存入state，子组件mount时再从state获取
-    // eslint-disable-next-line no-unused-vars
+  setup() {
     const router = useRoute();
     const paperStore1 = paperStore();
     const loginStore1 = loginStore();
-    onBeforeMount(()=>{
-      const paperId = router.params.paperId;
-      paperStore1.paperId = paperId
-      let got = false
-
-      paperScholarAxios.post('paper', {
-        "id": paperId,
-      }).then((res) => {
-        paperStore1.paperInfo = res.data
-        got = true
-      }).catch(e=>{
-        console.log(e)
-      })
-
-      if (!got){
-        paperStore1.paperInfo = PaperInfo.info
-        console.log('未获取到详情，使用本地测试数据')
-      }
-
-      if (!loginStore1.isLogin){
-        paperStore1.paperInfo.starred = 1
-        console.log('return')
-        return{
-          checkStar
-        }; //没登录就不获取收藏状态
-      }
-
-      userAxios.post('paper/is-star', {
-        "paper_id": paperId
-      }).then(res=>{
-        paperStore1.paperInfo.starred = res.data.is_star
-      }).catch((e)=>{
-        console.log(e)
-        console.log('未获取或未登录，默认没有收藏过')
-        paperStore1.paperInfo.starred = 1
-      })
-    })
+    const paperId = router.params.paperId;
+    paperStore1.storeId(paperId)
 
     const checkStar = loginStore1.$onAction(
-        ({
-           name,
-           store,
-           args,
-           after,
-           onError
-         })=>{
+        ({name, store, args, after, onError}) => {
           console.log(name, store, args, onError)
-          after(()=>{
+          after(() => {
             userAxios.post('paper/is-star', {
               "paper_id": router.params.paperId,
-            }).then(res=>{
-              paperStore1.paperInfo.starred = res.data.is_star
-            }).catch((e)=>{
-              console.log(e)
-              console.log('未获取或未登录，默认没有收藏过')
-              paperStore1.paperInfo.starred = 1
+            }).then(res => {
+              paperStore1.storeStar(res.data.is_star)
+              console.log('onAction_star: ', res.data.is_star)
+            }).catch((e) => {
+              console.log('未获取或未登录，默认没有收藏过', e)
+              paperStore1.storeStar(1)
             })
+            console.log('action')
           })
         })
-    return{
-      checkStar
+    return {
+      checkStar,
+      paperStore1,
+      loginStore1,
+      paperId
     }
+
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll, true)
   },
   mounted() {
+    paperScholarAxios.post('paper', {
+      "id": this.paperId,
+    }).then((res) => {
+      this.paperStore1.storeInfo(res.data)
+      console.log(res.data)
+
+      if (!this.loginStore1.isLogin) this.paperStore1.paperInfo.starred = 1
+      else {
+        userAxios.post('paper/is-star', {
+          "paper_id": this.paperId
+        }).then(res=>{
+          this.paperStore1.storeStar(res.data.is_star)
+          console.log('is star: ', res.data.is_star)
+        }).catch((e)=>{
+          console.log('未获取或未登录，默认没有收藏过', e)
+          this.paperStore1.storeStar(1)
+        })
+      }
+    })
     window.addEventListener('scroll', this.handleScroll, true)
   },
   data(){

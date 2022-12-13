@@ -1,28 +1,20 @@
 <template>
   <div class="home_root">
     <div class="top_search">
-      <div class="top_search_img">
-  <!--      可能的logo-->
-      </div>
       <div class="top_search_mid" >
-          <div style="width: 40% ;margin-left: 30%;margin-top: 70px">
-            <div class = "right-head-choose-tab" id="normal-search-btn" @click="showNormal">
-              <span class = "font-1"> 普通检索</span>
+            <div class = "right-head-choose-tab"  @click="showNormal">
+              <span class = "font-1" id="normal-search-btn" style="margin: 100px"> 普通检索</span>
             </div>
-            <div class = "right-head-choose-tab" id="advanced-search-btn" style="margin-left: 220px" @click="showAdvance">
-              <span class = "font-1"> 高级检索</span>
+            <div class = "right-head-choose-tab"  @click="showAdvance">
+              <span class = "font-1" id="advanced-search-btn" style="margin: 100px"> 高级检索</span>
             </div>
-          </div>
-      </div>
-      <div class="top_search_right">
-  <!--      <el-avatar-->
-  <!--          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"-->
-  <!--          style="margin-left: 30%;margin-top: 10%"-->
-  <!--      />-->
+            <div class = "right-head-choose-tab"  @click="showProfession">
+              <span class = "font-1" id="profession-search-btn" style="margin: 100px"> 专业检索</span>
+            </div>
       </div>
     </div>
     <div class="search_main">
-        <div class="normal_search" v-if="this.searchType===false">
+        <div class="normal_search" v-if="this.searchType===0">
           <el-select v-model="value[0]" class="m-2" placeholder="Select" size="middle" style="width: 100px;margin-left: 110px ">
             <el-option
                 v-for="item in options"
@@ -34,7 +26,7 @@
           <el-autocomplete v-model="inputValue[0]" tabindex="s"
                            placeholder="Please input" clearable :fetch-suggestions="querySearch" :trigger-on-focus="false"
                            style="width: 800px; margin-left: 30px;margin-top: 30px"/>
-          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(0)">
+          <el-button style="margin-left: 40px;vertical-align: top;margin-top: 30px;margin-bottom: 25px" color="#15AB00" @click="NormalSearch(1)">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
@@ -43,7 +35,7 @@
 
         </div>
 
-        <div class="advance_search" v-else>
+        <div class="advance_search" v-else-if="searchType===1">
           <div v-for="index in searchNum" :key="index">
             <el-select v-if="index===1" disabled v-model="ANvalue[index-1]" class="m-2" placeholder="Select" size="middle" style="width: 75px;margin-left: 110px">
               <el-option
@@ -94,12 +86,68 @@
               placeholder="Pick a year"
               style="width: 130px; margin-left: 5px"
           />
-          <el-button style="margin-left: 200px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch(0)">
+
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px;color: white" color="#79B4F1" @click="toProfession(true)">
+            <template #icon>
+              <el-icon size="15px" ><Switch/></el-icon>
+            </template>
+            生成检索式
+          </el-button>
+
+          <el-button style="margin-left: 101px;vertical-align: top;margin-top: 36px;margin-bottom: 20px" color="#15AB00" @click="AdvanceSearch">
             <template #icon>
               <el-icon size="15px" ><Search/></el-icon>
             </template>
             搜索
           </el-button>
+        </div>
+
+        <div class="profession_search" v-else-if="searchType===2">
+          <div class="profession_search_left">
+            <el-input
+                v-model="inputProfession"
+                :rows="8"
+                type="textarea"
+                placeholder="请输入检索式"
+                style="width: 800px;margin-left: 100px;margin-top: 10px"
+            />
+            <div style="display: inline-block;margin-left: 100px;margin-top: 30px;">年份范围</div>
+            <el-date-picker
+                v-model="beginYear"
+                type="year"
+                placeholder="Pick a year"
+                style="width: 130px; margin-left: 40px"
+            /> ----
+            <el-date-picker
+                v-model="endYear"
+                type="year"
+                placeholder="Pick a year"
+                style="width: 130px; margin-left: 5px"
+            />
+            <el-button style="margin-left: 313px;vertical-align: top;margin-top: 30px;" color="#15AB00" @click="ProfessionSearch">
+              <template #icon>
+                <el-icon size="15px" ><Search/></el-icon>
+              </template>
+              搜索
+            </el-button>
+          </div>
+          <div class="profession_search_right">
+              <div style="margin-top: 20px"><span style="font-size: 20px;margin-left: 20px;margin-top: 20px">专业检索规则:</span></div>
+              <el-divider style="margin:10px auto;width: 90%"></el-divider>
+              <div style="width:296px;margin: auto">
+                <el-scrollbar height="224px">
+                  <div><span style="font-size: 18px">可检索字段：</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">SU%=主题,TKA=篇关摘,TI=题名,KY=关键词,AB=摘要,FT=全文,AU=作者,FI=第一责任人,RP=通讯作者,AF=机构,JN=文献来源, RF=参考文献,YE=年,FU=基金,CLC=分类号,SN=ISSN,CN=统一刊号,IB=ISBN,CF=被引频次</span></div>
+                  <div style="margin-top: 20px"><span style="font-size: 18px">示例：</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">
+                    1）TI='生态' and KY='生态文明' and (AU % '陈'+'王' ) 可以检索到篇名包括“生态”并且关键词包括“生态文明”并且作者为“陈”姓和“王”姓的所有文章；
+                    <br/>
+                    2）SU='北京'*'奥运' and FT='环境保护' 可以检索到主题包括“北京”及“奥运”并且全文中包括“环境保护”的信息；
+                    <br/>
+                    3）SU=('经济发展'+'可持续发展')*'转变'-'泡沫' 可检索“经济发展”或“可持续发展”有关“转变”的信息，并且可以去除与“泡沫”有关的部分内容。</span></div>
+                </el-scrollbar>
+              </div>
+          </div>
         </div>
     </div>
 
@@ -167,6 +215,7 @@ export default {
   components: {PaperShow},
   data(){
     return{
+      inputProfession:'',
       searchBegin:false,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3'],
@@ -221,7 +270,7 @@ export default {
           value:'按时间降序'
         }
       ],
-      inputValue:['',''],
+      inputValue:[''],
       ANvalue:['AND','AND','AND'],
       ANoptions:[
         {
@@ -348,20 +397,25 @@ export default {
   },
   methods:{
     querySearch(queryString, cb) {
-      console.log(queryString)
+      // console.log(queryString)
       let toSend={
-        search_type:0,
         text:queryString,
+        size:5
       };
       paperScholarAxios({
         method:'post',
         url:'search/auto-complete',
         data:toSend
       }).then((res) =>{
-        var toSuggest;
+        console.log("auto");
+        console.log(res);
+        var toSuggest=[];
         for(let i=0;i<res.data.auto_completes.length;i++){
-          toSuggest[i].value=res.data.auto_completes[i];
+          toSuggest.push({
+            value:res.data.auto_completes[i]
+          });
         }
+        console.log(toSuggest);
         cb(toSuggest);
       })
     },
@@ -369,14 +423,22 @@ export default {
       console.log(item)
     },
     showNormal() {
-      this.searchType=false;
+      this.searchType=0;
       document.getElementById("normal-search-btn").style.borderBottom = "4px solid lightblue";
       document.getElementById("advanced-search-btn").style.borderBottom = "0px solid white";
+      document.getElementById("profession-search-btn").style.borderBottom = "0px solid white";
     },
     showAdvance() {
-      this.searchType=true;
+      this.searchType=1;
       document.getElementById("advanced-search-btn").style.borderBottom = "4px solid lightblue";
       document.getElementById("normal-search-btn").style.borderBottom = "0px solid white";
+      document.getElementById("profession-search-btn").style.borderBottom = "0px solid white";
+    },
+    showProfession() {
+      this.searchType=2;
+      document.getElementById("profession-search-btn").style.borderBottom = "4px solid lightblue";
+      document.getElementById("normal-search-btn").style.borderBottom = "0px solid white";
+      document.getElementById("advanced-search-btn").style.borderBottom = "0px solid white";
     },
     decreaseNum(index){
       this.inputValue.splice(index,1);
@@ -429,7 +491,7 @@ export default {
       //todo:axios 页面变换 !
       // console.log(this.nowPage)
       let that=this;
-      let toSend=this.getSearchList(this.nowPage);
+      let toSend=this.getFilter(this.nowPage);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -458,6 +520,70 @@ export default {
           return 6;
       }
     },
+    proSwitch(str){
+      switch (str){
+        case '标题':
+          return "title";
+        case '摘要':
+          return "abstract";
+        case '关键字':
+          return "keywords";
+        case 'DOI':
+          return "doi";
+        case '作者单位':
+          return "authors.org";
+        case '作者':
+          return "authors.name";
+        case '期刊':
+          return "venue";
+      }
+    },
+    dealTextArea(str,isExact){
+      let strs=str.split(' ');
+      if(strs.length===1){
+        return str;
+      }
+      else {
+        if(isExact){
+          return "\""+str+"\"";
+        }
+        let ans='(';
+        for(let i=0;i<strs.length;i++){
+          ans+=strs[i]+'~';
+          if(i!==strs.length-1){
+            ans+=' AND ';
+          }
+        }
+        ans+=')';
+        return ans;
+      }
+    },
+    toProfession(jump){
+      let ans='';
+      for(let i=0;i<this.inputValue.length;i++){
+        if(i===0){
+          ans+=this.proSwitch(this.value[0])+':';
+          ans+=this.dealTextArea(this.inputValue[0],this.exact[0]==='精确');
+        }
+        else {
+          if(this.ANvalue[i]==='NOT'){
+            ans+=' AND NOT ';
+          }
+          else {
+            ans+=' '+this.ANvalue[i]+' ';
+          }
+          ans+=this.proSwitch(this.value[i])+':';
+          ans+=this.dealTextArea(this.inputValue[i],this.exact[i]==='精确');
+        }
+      }
+      if(jump){
+        this.inputProfession=ans;
+        this.showProfession();
+      }
+      else {
+        return ans;
+      }
+    },
     toIntExact(str){
       return (str==='精确')?0:1;
     },
@@ -477,19 +603,14 @@ export default {
     NormalSearch(page){
       let that=this;
       var toSend={
-        searchContent:[
-          {
-            type:this.toIntType(this.ANvalue[0]),
-            search_type:this.toIntSearchType(this.value[0]),
-            content:this.inputValue[0],
-            is_exact:this.toIntExact(this.exact[0])
-          }
-        ],
+        query:this.toProfession(false),
         start_year:0,
         end_year:0,
+        years:[],
+        themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:10*(page-1),
+        end:10*page,
       };
       paperScholarAxios({
         method:'post',
@@ -508,28 +629,17 @@ export default {
         that.searchBegin=true;
       })
     },
-    getSearchList(page){
+    AdvanceSearch(){
       var toSend={
-        searchContent:[],
+        query:this.toProfession(false),
         start_year:this.beginYear,
         end_year:this.end_year,
+        years:[],
+        themes:[],
         sort_type:this.toIntSortType(this.sortType),
-        start:10*page,
-        end:10*(page+1),
+        start:0,
+        end:10,
       };
-      for(let i=0;i<this.searchNum;i++){
-        let search={
-          type:this.toIntType(this.ANvalue[i]),
-          search_type:this.toIntSearchType(this.value[i]),
-          content:this.inputValue[i],
-          is_exact:this.toIntExact(this.exact[i])
-        };
-        toSend.searchContent.push(search);
-      }
-      return toSend;
-    },
-    AdvanceSearch(page){
-      let toSend=this.getSearchList(page);
       let that=this;
       paperScholarAxios({
         method:'post',
@@ -548,32 +658,63 @@ export default {
         that.searchBegin=true;
       })
     },
+    //todo:专业检索
+    ProfessionSearch(){
+      var toSend={
+        query:this.inputProfession,
+        start_year:this.beginYear,
+        end_year:this.end_year,
+        years:[],
+        themes:[],
+        sort_type:this.toIntSortType(this.sortType),
+        start:0,
+        end:10,
+      };
+      let that=this;
+      paperScholarAxios({
+        method:'post',
+        url:"search/paper",
+        data:toSend
+      }).then((res)=>{
+        let response=res.data;
+        that.paperNum=response.paper_num;
+        that.papers=response.papers;
+        that.themes=response.themes;
+        that.years=response.years;
+        that.themesCheck=[];
+        that.yearsCheck=[];
+        that.nowPage=1;
+        console.log(res.data);
+        that.searchBegin=true;
+      })
+    },
+    getFilter(page){
+      var toSend={
+        query:this.toProfession(false),
+        start_year:this.beginYear,
+        end_year:this.end_year,
+        years:[],
+        themes:[],
+        sort_type:this.toIntSortType(this.sortType),
+        start:10*(page-1),
+        end:10*page,
+      };
+      for(let i=0;i<this.themesCheck.length;i++){
+        if(this.themesCheck[i]===true){
+          toSend.themes.push(this.themes[i].name);
+        }
+      }
+      for(let i=0;i<this.yearsCheck.length;i++){
+        if(this.yearsCheck[i]===true){
+          toSend.years.push(this.years[i].name);
+        }
+      }
+      return toSend;
+    },
     //todo:筛选
     dealFilter(){
       let that=this;
-        let toSend=this.getSearchList(0);
-        for(let i=0;i<this.themesCheck.length;i++){
-          if(this.themesCheck[i]===true){
-            let search={
-              type:0,
-              search_type:2,
-              content:this.themes[i].name,
-              is_exact:0
-            };
-            toSend.searchContent.push(search);
-          }
-        }
-      for(let i=0;i<this.yearsCheck.length;i++){
-        if(this.themesCheck[i]===true){
-          let search={
-            type:0,
-            search_type:7,
-            content:this.years[i].name,
-            is_exact:0
-          };
-          toSend.searchContent.push(search);
-        }
-      }
+      var toSend=this.getFilter(1);
       paperScholarAxios({
         method:'post',
         url:"search/paper",
@@ -588,7 +729,7 @@ export default {
     },
     dealSort(val){
       let that=this;
-      let toSend=this.getSearchList(0);
+      let toSend=this.getFilter(1);
       toSend.sort_type=this.toIntSortType(val);
       paperScholarAxios({
         method:'post',
@@ -633,35 +774,31 @@ export default {
   /*background-color: lavender;*/
 }
 
-.top_search_img{
-  vertical-align:top;
-  display: inline-block;
-  width: 20%;
-  text-align: center;
-  height: 100px;
-}
 
 .top_search_mid{
   vertical-align:top;
-  display: inline-block;
-  width: 60%;
-  height: 100px;
+  display: flex;
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 900px;
+  /*height: 100px;*/
 }
 
 .right-head-choose-tab {
   height: 37px;
-  margin-left: 2%;
-  display: inline-block;
-  position: absolute;
   font-size: 22px;
-  color: firebrick;
+  width: 300px;
+  margin: auto;
+  color: #7F8488;
   transition: all 0.25s;
 }
 .right-head-choose-tab:hover {
-  background-color: aliceblue;
+  background-color: white;
   border-radius: 4px;
+  margin: auto;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 25px;
 }
 #normal-search-btn{
   border-bottom: 4px solid lightblue;
@@ -670,6 +807,10 @@ export default {
 #advanced-search-btn{
   transition: all 0.5s;
 }
+#profession-search-btn{
+  transition: all 0.5s;
+}
+
 .font-1 {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
 }
@@ -711,6 +852,39 @@ export default {
   margin-right: auto;
   width: 1400px;
   /*margin-bottom: 20px;*/
+}
+
+.profession_search{
+  /*background-color: white;*/
+  /*border: 1px white solid;*/
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);*/
+  /*border-radius: 4px;*/
+  /*height: 300px;*/
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: auto;
+  width: 1400px;
+  /*margin-bottom: 20px;*/
+}
+.profession_search_left{
+  padding: 20px;
+  background-color: white;
+  border: 1px white solid;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 1px 1px 3px #888888;*/
+  border-radius: 4px;
+  width: 1000px;
+}
+
+.profession_search_right{
+  background-color: white;
+  border: 1px white solid;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);
+  /*box-shadow: 1px 1px 3px #888888;*/
+  border-radius: 4px;
+  margin-left: 20px;
+  flex: 1;
 }
 
 .paper_main{

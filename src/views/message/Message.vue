@@ -16,7 +16,7 @@
       <el-menu-item index="5">系统</el-menu-item>
     </el-menu>
     <el-table
-      :data="this.curMessages" table-layout="fixed" :key="this.flush" empty-text="暂无消息">
+      :data="this.curMessages" table-layout="fixed" :key="this.flush">
       <template #empty>
         <h1 style="margin:20px auto;">暂无消息</h1>
       </template>
@@ -42,7 +42,7 @@
               <el-button link type="primary" @click="this.openAuthor(scope.row.uid)" class="msg-op">学者页</el-button>
             </el-col>
             <el-col :span="6" v-if="scope.row.type==='7' || scope.row.type==='8'">
-              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">打开互助</el-button>
+              <el-button link type="primary" @click="this.openHelp(scope.row.rid)" class="msg-op">互助中心</el-button>
             </el-col>
             <el-col :span="5" v-if="scope.row.type==='4' && !scope.row.read">
               <el-popconfirm
@@ -83,12 +83,7 @@ export default {
     const loginStore1 = loginStore()
     let messages , curMessages
     const checkGet = loginStore1.$onAction(
-        ({
-          name,
-          store,
-          args,
-          after,
-          onError
+        ({name, store, args, after, onError
         })=>{
           console.log(name,store,args,onError)
           after(()=>{
@@ -123,16 +118,13 @@ export default {
   methods:{
     getMessages(){
       if (!this.loginStore1.isLogin){
-        this.messages = this.curMessages = Messages.Messages
         return
       }
       messageAxios.post('message/get-all-messages',{
       }).then(res=>{
+        console.log(res.data)
         this.messages = this.curMessages = res.data.messages
         this.flush++;
-      }).catch(()=>{
-        console.log('未能获取，使用本地数据')
-        this.messages = this.curMessages = Messages.Messages
       })
     },
     changeType(key){
