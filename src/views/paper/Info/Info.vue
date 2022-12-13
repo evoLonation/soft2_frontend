@@ -88,8 +88,8 @@ export default {
       if (this.info.starred === ''){
         this.info.starred = 1;
       }
-      if (this.info.urls.length === 0){
-        this.info.urls = ['暂无链接']
+      if (this.info.urls === null){
+        this.info.urls = []
       }
     },
     openAuthor(author){
