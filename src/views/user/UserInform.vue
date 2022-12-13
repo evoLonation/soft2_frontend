@@ -97,7 +97,7 @@
                 <scholar-list :name="item.scholar_name" :paper_num="item.paper_num" :institution="item.org" :id="item.scholar_id"
                               :type="1"
                 ></scholar-list>
-                <el-divider  style="width: 100%; margin: 10px"/>
+                <el-divider  style="width: 100%; margin: 10px;margin-left: 0px"/>
               </div>
             </div>
 
