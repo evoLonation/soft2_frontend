@@ -829,12 +829,11 @@ export default {
     this.value[0]=searchType.type;
     if(this.$route.query.type==null){
       this.showNormal();
+      if(this.inputValue[0]!=='')
+      this.NormalSearch(1);
     }
     else {
       this.showAdvance();
-    }
-    if(this.inputValue[0]!==''){
-      this.NormalSearch(1);
     }
   },
 }
