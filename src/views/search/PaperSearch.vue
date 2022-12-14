@@ -616,7 +616,7 @@ export default {
             ans+=strs[i]+'~';
           }
             if(i!==strs.length-1&&strs[i+1]!==''){
-              ans+=' AND ';
+              ans+=' ';
             }
 
         }
