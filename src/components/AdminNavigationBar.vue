@@ -1,7 +1,7 @@
 <template>
   <div class="outside">
     <div class="up-area">
-      <div class="main">
+      <div class="main" @click="toHome">
         金刚石学术
       </div>
       <div class="vice">
@@ -53,10 +53,14 @@ export default {
     const toComplianDeal = () => {
       router.push({name: "ComplainList"});
     }
+    const toHome = () => {
+      router.push({name: "Home"});
+    }
     return{
       toMovePaper,
       toApplyDeal,
       toComplianDeal,
+      toHome
     }
   }
 }
@@ -80,6 +84,9 @@ export default {
   .main{
     margin: 30px auto;
     font-size: 20px;
+  }
+  .main div:hover{
+    cursor: pointer;
   }
   .vice{
     margin: auto;
