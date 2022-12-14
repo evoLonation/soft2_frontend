@@ -774,6 +774,7 @@ export default {
       this.isLoading=true;
       this.searchBegin=true;
       var toSend={
+        need_filter_statistics:true,
         query:this.inputProfession,
         start_year:parseInt(this.beginYear),
         end_year:parseInt(this.endYear),
@@ -792,6 +793,7 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
+        console.log(response);
         that.paperNum=Math.min(response.paper_num,10000);
         that.trueNum=response.paper_num===10000?10001:response.paper_num;
         that.papers=response.papers;
@@ -812,8 +814,10 @@ export default {
           that.institutionsCheck[i]=false;
         }
         that.nowPage=1;
+        console.log(that.institutions);
         // console.log(res.data)
         that.isLoading=false;
+        that.reload();
       })
     },
     getFilter(page){
