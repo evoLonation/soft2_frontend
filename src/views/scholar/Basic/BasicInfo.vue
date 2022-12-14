@@ -31,6 +31,9 @@
           </div>
         </div>
       </div>
+      <div class="institution">
+        <span>{{ institution }}</span>
+      </div>
       <div class="indexes">
         <div class="index_first">
           <div class="index_title">
@@ -81,6 +84,7 @@ export default {
       ref_num: '',
       ach_num: '',
       h_index: '',
+      institution: '',
       url: '',
       tags: '',
     }
@@ -94,6 +98,7 @@ export default {
         this.name = res.data.name;
         this.pos = res.data.position;
         this.ID = res.data.scholar_id;
+        this.institution = res.data.institution[0];
         this.ref_num = res.data.ref_num;
         this.ach_num = res.data.ach_num;
         this.h_index = res.data.h_index;
@@ -119,8 +124,13 @@ export default {
   computed: {
     simplifiedName() {
       var n = this.name.split(" ");
-      return n[0] + " " + n[n.length - 1];
-    }
+      if(n.length - 1 !== 0) {
+        return n[0] + " " + n[n.length - 1];
+      }
+      else {
+        return n[0];
+      }
+    },
   },
   created() {
     this.getBasicInfo();
@@ -129,7 +139,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 .basic-info {
   background-color: white;
   min-width: 900px;
@@ -208,12 +218,26 @@ export default {
 }
 
 .index {
-  margin-top: 20px;
+  margin-top: 15px;
   width: 19%;
   height: 50%;
   border-left: 1px dashed rgba(0,0,0,0.40);
   text-align: center;
   display: inline-block;
+}
+
+.institution {
+  width: 100%;
+  padding-left: 40px;
+  font-size: 14px;
+  line-height: 15px;
+  color: rgba(0,0,0,0.40);
+  margin-top: 5px;
+  .overflow{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .index_title {

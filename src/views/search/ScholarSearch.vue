@@ -19,7 +19,7 @@
 
     </div>
 
-    <div class="main_result" v-if="searched==true">
+    <div class="main_result" v-if="searched">
         <div style="margin-top: 10px;margin-left: 5%"><span style="font-size: 20px">为您检索到{{ this.num }}条结果：</span></div>
         <div class="scholar_searched">
             <div v-for="(item,index) in scholars.slice(0,6)" :key="index"
@@ -47,7 +47,10 @@ export default {
       inputName:'',
       num:0,
       nowPage:1,
-      scholars:[]
+      scholars:[{"id":"",
+        "name":"ll",
+        "institution":"ss",
+        "paper_num":111,}]
     }
   },
   methods:{
@@ -74,9 +77,6 @@ export default {
         document.getElementById("search").style.marginTop="0px";
         that.searched=true;
       })
-
-
-
     }
   }
 }
@@ -131,11 +131,11 @@ export default {
   /*border: 3px yellow solid;*/
   margin-left: 5%;
   margin-right: 5%;
+  width: 100%;
   /*height: 300px;*/
 }
  .el-pagination {
   margin:50px auto 10px;
-   width: 40%;
 }
 
  .search_button:hover{
