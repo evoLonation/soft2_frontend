@@ -60,13 +60,26 @@ export default {
       this.$router.push({name: "Scholar", params:{scholarId: id
         }})
     },
+    processSize(nodes){
+      let ret = []
+      nodes.forEach(n=>{
+        n.size = 20 + (n.size - 20)*2
+        if (n.type === 'major'){
+          n.fx = n.fy = 200
+        }
+        ret.push(n)
+      })
+      return ret
+    },
     initData(){
       paperScholarAxios.post('scholar/relation-net', {
         "scholar_id": this.id
       }).then(res=>{
         this.co_net_data = res.data.co_net;
         this.ci_net_data = res.data.ci_net;
-        console.log(this.ci_net_data)
+        this.co_net_data.nodes = this.processSize(res.data.co_net.nodes)
+        this.ci_net_data.nodes = this.processSize(res.data.ci_net.nodes)
+        console.log(this.co_net_data.nodes)
         this.co_net.loadData(this.co_net_data)
         this.co_net.render()
         this.loading_co = false
@@ -87,15 +100,15 @@ export default {
     },
     initCo(){
       this.co_net = new Graph(
-          750,
-          550,
+          500,
+          350,
           document.getElementById("co_net")
       );
     },
     initCi(){
       this.ci_net = new Graph(
-          750,
-          550,
+          500,
+          350,
           document.getElementById("ci_net")
       );
     }
@@ -117,7 +130,7 @@ export default {
 <style>
 .dialog{
   border-radius: 10px;
-  height: 700px;
-  width: 800px;
+  height: 500px;
+  width: 600px;
 }
 </style>

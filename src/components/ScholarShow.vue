@@ -1,8 +1,8 @@
 <template>
   <div class="show_scholar">
-    <div class="scholar_name">
-      <el-icon ><User /></el-icon>
-      <div style="display: inline-block; padding-left: 10px; font-size: 20px; font-weight: bold" @click="gotoScholar">
+    <div class="scholar_name" >
+      <el-icon style="vertical-align: center"><User /></el-icon>
+      <div style="display: inline-block; padding-left: 10px; font-size: 20px; font-weight: bold; vertical-align: center" @click="gotoScholar">
         {{this.name}}</div> <br/>
     </div>
 

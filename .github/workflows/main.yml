@@ -1,0 +1,30 @@
+name: 前端部署
+
+on:
+  push:
+    # 分支
+    branches: [ dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Running go
+    steps:
+      - name: 在服务器上执行 前端部署
+        if: always()
+        uses: fifsky/ssh-action@master
+        with:
+          command: | # down命令必须在pull前进行
+            cd soft2
+            cd soft2_frontend
+            sudo git fetch --all
+            sudo git checkout dev
+            sudo git pull
+            sudo npm install
+            sudo npm run build
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.SSH_USER }}
+          pass: ${{ secrets.SSH_PASSWORD }}
+          args: "-tt"

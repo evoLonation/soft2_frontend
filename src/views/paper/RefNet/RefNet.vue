@@ -100,6 +100,13 @@ export default {
     },
     showInfo(info) { //显示详细信息
       const limit = 600;
+      let tmp = []
+      info.authors.forEach(a=>{
+        if (tmp.length<=10){
+          tmp.push(a)
+        }
+      })
+      info.authors = tmp
       if(info.abstract.length > limit){
         info.abstract = info.abstract.substring(0, limit) + "......";
       }

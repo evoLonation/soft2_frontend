@@ -13,7 +13,7 @@
     </div>
     <div class="info">
       <div class="name-pos">
-        <span class="name">{{ name }}</span>
+        <span class="name">{{ simplifiedName }}</span>
         <span class="pos">{{ pos }}</span>
         <div class="icon">
           <el-icon
@@ -114,6 +114,12 @@ export default {
       if(got === 0) {
         console.log('未获取到相关头像，使用默认头像');
       }
+    }
+  },
+  computed: {
+    simplifiedName() {
+      var n = this.name.split(" ");
+      return n[0] + " " + n[n.length - 1];
     }
   },
   created() {
