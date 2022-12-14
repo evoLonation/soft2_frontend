@@ -141,7 +141,7 @@
               <div style="width:296px;margin: auto">
                 <el-scrollbar height="224px">
                   <div><span style="font-size: 18px">可检索字段：</span></div>
-                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">title=标题 abstract=摘要 keywords=关键字 doi=DOI号 authors.org=作者机构 authors.name=作者名称 venue=发布期刊</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">title=标题 abstract=摘要 keywords=关键字 doi=DOI号 authors.org=作者机构 authors.name=作者名称 venue=期刊/会议</span></div>
                   <div style="margin-top: 20px"><span style="font-size: 18px">示例：</span></div>
                   <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">
                     1）title:machine OR title:interesting
@@ -161,7 +161,7 @@
           <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3;" >筛选</span>
         </div>
         <div style="margin-left: 50px;width: 900px">
-          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.paperNum}}条数据:</span>
+          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.trueNum}}条数据:</span>
         </div>
         <div style="flex: 1">
           <el-select  v-model="sortType"  @change="dealSort" placeholder="按相关性降序" style="border-radius: 4px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
@@ -183,7 +183,7 @@
             </template>
             <div v-for="index in themes.length" :key="index">
               <el-checkbox v-model="themesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.themes[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.themes[index-1].count}})</div>
@@ -192,11 +192,11 @@
           </el-collapse-item>
           <el-collapse-item name="2">
             <template #title >
-              <span style="font-size: 15px">会议/期刊</span>
+              <span style="font-size: 15px">期刊/会议</span>
             </template>
             <div v-for="index in venues.length" :key="index">
               <el-checkbox v-model="venuesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.venues[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.venues[index-1].count}})</div>
@@ -209,7 +209,7 @@
             </template>
             <div v-for="index in institutions.length" :key="index">
               <el-checkbox v-model="institutionsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.institutions[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.institutions[index-1].count}})</div>
@@ -222,7 +222,7 @@
             </template>
             <div v-for="index in years.length" :key="index">
               <el-checkbox v-model="yearsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.years[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.years[index-1].count}})</div>
@@ -258,6 +258,7 @@ export default {
     return{
       isLoading:false,
       inputProfession:'',
+      trueNum:0,
       searchBegin:false,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3','4'],
@@ -289,8 +290,8 @@ export default {
           label: 'DOI',
         },
         {
-          value: '发布期刊',
-          label: '发布期刊',
+          value: '期刊/会议',
+          label: '期刊/会议',
         },
         {
           value: '作者机构',
@@ -431,7 +432,7 @@ export default {
       ],
       beginYear:0,
       endYear:0,
-      themes:[{name :'theme1',count:11},{name:"theme2",count:11}],
+      themes:[{name :'theme111111111111111111111111111111111111111111111111111',count:11},{name:"theme2",count:11}],
       themesCheck:[false,false],
       years:[{name:2001,count:11},{name:2002,count:123}],
       yearsCheck:[false,false],
@@ -571,7 +572,7 @@ export default {
           return 3;
         case 'DOI':
           return 4;
-        case '期刊':
+        case '期刊/会议':
           return 5;
         case '作者机构':
           return 6;
@@ -591,7 +592,7 @@ export default {
           return "authors.org";
         case '作者名称':
           return "authors.name";
-        case '期刊':
+        case '期刊/会议':
           return "venue";
       }
     },
@@ -691,7 +692,8 @@ export default {
         data:toSend,
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.venues=response.venues;
@@ -731,7 +733,8 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
@@ -770,7 +773,8 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
@@ -832,7 +836,8 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.nowPage=1;
         that.isLoading=false;
