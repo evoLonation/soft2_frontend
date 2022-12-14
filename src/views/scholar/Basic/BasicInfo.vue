@@ -124,7 +124,12 @@ export default {
   computed: {
     simplifiedName() {
       var n = this.name.split(" ");
-      return n[0] + " " + n[n.length - 1];
+      if(n.length - 1 !== 0) {
+        return n[0] + " " + n[n.length - 1];
+      }
+      else {
+        return n[0];
+      }
     },
   },
   created() {
