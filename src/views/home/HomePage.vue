@@ -38,14 +38,14 @@
             <el-icon size="100px"><Management /></el-icon>
             <div>期刊/会议</div>
           </div>
-          <div class="number">{{statistics.journal_num.toLocaleString()}}</div>
+          <div class="number">{{Math.round((statistics.journal_num/100)).toLocaleString()}}</div>
         </div>
         <div>
           <div>
             <el-icon size="100px"><School /></el-icon>
             <div>机构</div>
           </div>
-          <div class="number">{{statistics.org_num.toLocaleString()}}</div>
+          <div class="number">{{Math.round((statistics.org_num/100)).toLocaleString()}}</div>
         </div>
       </div>
 

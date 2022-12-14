@@ -21,7 +21,6 @@
 
 <script>
 import {Graph} from "@/views/paper/RefNet/Graph";
-import Data from "@/views/paper/RefNet/Data";
 import {paperStore} from "@/store";
 import {paperScholarAxios} from "@/axios";
 
@@ -77,6 +76,17 @@ export default {
       // eslint-disable-next-line no-constant-condition
       while (true) if (new Date().getTime() > endTime) return;
     },
+    processSize(nodes){
+      let ret = []
+      nodes.forEach(n=>{
+        if (n.type === 'major'){
+          n.fx = 350
+          n.fy = 250
+        }
+        ret.push(n)
+      })
+      return ret
+    },
     initGraph(){
       this.graph = new Graph(
           700,
@@ -85,17 +95,13 @@ export default {
       paperScholarAxios.post('paper/relation-net', {
         'id': this.store.paperId
       }).then(res=>{
-        this.graph.loadData(res.data)
+        let data = res.data
+        data.nodes = this.processSize(data.nodes)
+        this.graph.loadData(data)
         this.graph.render()
         this.graph.initListener()
         this.loading = false
         console.log(res.data)
-      }).catch(e=>{
-        console.log(e)
-        this.graph.loadData(Data.data)
-        this.graph.render()
-        this.graph.initListener()
-        this.loading = false
       })
     },
     showInfo(info) { //显示详细信息

@@ -77,7 +77,7 @@ export default {
         this.info.year = '年份未知'
       }
       if (this.info.publisher === ''){
-        this.info.publisher = '期刊未知'
+        this.info.publisher = '期刊/会议未知'
       }
       if (this.info.doi === ''){
         this.info.doi = '未知'
