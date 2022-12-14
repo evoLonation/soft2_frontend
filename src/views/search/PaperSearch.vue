@@ -161,7 +161,7 @@
           <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3;" >筛选</span>
         </div>
         <div style="margin-left: 50px;width: 900px">
-          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.trueNum}}条数据:</span>
+          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.trueNum>10000?'10000以上条':this.trueNum+'条'}}数据:</span>
         </div>
         <div style="flex: 1">
           <el-select  v-model="sortType"  @change="dealSort" placeholder="按相关性降序" style="border-radius: 4px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
@@ -254,6 +254,7 @@ import {paperScholarAxios} from "@/axios/index";
 
 export default {
   components: {PaperShow},
+  inject:['reload'],
   data(){
     return{
       isLoading:false,
@@ -692,20 +693,30 @@ export default {
         data:toSend,
       }).then((res)=>{
         let response=res.data;
+        console.log(response);
         that.paperNum=Math.min(response.paper_num,10000);
-        that.trueNum=response.paper_num;
+        that.trueNum=response.paper_num===10000?10001:response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.venues=response.venues;
         that.institutions=response.institutions;
         that.years=response.years;
-        that.themesCheck=[];
-        that.yearsCheck=[];
-        that.venuesCheck=[];
-        that.institutionsCheck=[];
+        for(let i=0;i<response.themes.length;i++){
+          that.themesCheck[i]=false;
+        }
+        for(let i=0;i<response.years.length;i++){
+          that.yearsCheck[i]=false;
+        }
+        for(let i=0;i<response.venues.length;i++){
+          that.venuesCheck[i]=false;
+        }
+        for(let i=0;i<response.institutions.length;i++){
+          that.institutionsCheck[i]=false;
+        }
+        console.log(this.yearsCheck);
         that.nowPage=1;
+        this.reload();
         // console.log(res.data);
-
         that.isLoading=false;
       })
     },
@@ -734,16 +745,24 @@ export default {
       }).then((res)=>{
         let response=res.data;
         that.paperNum=Math.min(response.paper_num,10000);
-        that.trueNum=response.paper_num;
+        that.trueNum=response.paper_num===10000?10001:response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
         that.venues=response.venues;
         that.institutions=response.institutions;
-        that.themesCheck=[];
-        that.yearsCheck=[];
-        that.venuesCheck=[];
-        that.institutionsCheck=[];
+        for(let i=0;i<response.themes.length;i++){
+          that.themesCheck[i]=false;
+        }
+        for(let i=0;i<response.years.length;i++){
+          that.yearsCheck[i]=false;
+        }
+        for(let i=0;i<response.venues.length;i++){
+          that.venuesCheck[i]=false;
+        }
+        for(let i=0;i<response.institutions.length;i++){
+          that.institutionsCheck[i]=false;
+        }
         that.nowPage=1;
         // console.log(res.data);
 
@@ -774,16 +793,24 @@ export default {
       }).then((res)=>{
         let response=res.data;
         that.paperNum=Math.min(response.paper_num,10000);
-        that.trueNum=response.paper_num;
+        that.trueNum=response.paper_num===10000?10001:response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
         that.venues=response.venues;
         that.institutions=response.institutions;
-        that.themesCheck=[];
-        that.yearsCheck=[];
-        that.venuesCheck=[];
-        that.institutionsCheck=[];
+        for(let i=0;i<response.themes.length;i++){
+          that.themesCheck[i]=false;
+        }
+        for(let i=0;i<response.years.length;i++){
+          that.yearsCheck[i]=false;
+        }
+        for(let i=0;i<response.venues.length;i++){
+          that.venuesCheck[i]=false;
+        }
+        for(let i=0;i<response.institutions.length;i++){
+          that.institutionsCheck[i]=false;
+        }
         that.nowPage=1;
         // console.log(res.data)
         that.isLoading=false;
@@ -837,7 +864,7 @@ export default {
       }).then((res)=>{
         let response=res.data;
         that.paperNum=Math.min(response.paper_num,10000);
-        that.trueNum=response.paper_num;
+        that.trueNum=response.paper_num===10000?10001:response.paper_num;
         that.papers=response.papers;
         that.nowPage=1;
         that.isLoading=false;
@@ -1035,7 +1062,6 @@ export default {
   display: inline-block;
   margin-top: 10px;
   width: 300px;
-  height: 100%;
 }
 
 .paper_main_right{
