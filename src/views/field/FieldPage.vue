@@ -192,7 +192,6 @@ export default {
           if(this.paper_pre != this.start1) {
             this.getPaperList()
           }
-
           console.log('在获取论文', this.paper_pre, this.start1)
         }
       }
