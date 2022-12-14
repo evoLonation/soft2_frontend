@@ -161,7 +161,7 @@
           <span style="font-family: 微软雅黑; font-size: 13px;color: #B0B2B3;" >筛选</span>
         </div>
         <div style="margin-left: 50px;width: 900px">
-          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.paperNum}}条数据:</span>
+          <span style="font-family: 微软雅黑; font-size: 13px;color:#B0B2B3;">一共为您找到{{this.trueNum}}条数据:</span>
         </div>
         <div style="flex: 1">
           <el-select  v-model="sortType"  @change="dealSort" placeholder="按相关性降序" style="border-radius: 4px;box-shadow: 0 2px 4px rgba(0,0,0,0.15),0 0 6px rgba(0,0,0,0.06);">
@@ -258,6 +258,7 @@ export default {
     return{
       isLoading:false,
       inputProfession:'',
+      trueNum:0,
       searchBegin:false,
       exact:['精确','精确','精确'],
       activeNames:['1','2','3','4'],
@@ -691,7 +692,8 @@ export default {
         data:toSend,
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.venues=response.venues;
@@ -731,7 +733,8 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
@@ -770,7 +773,8 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.themes=response.themes;
         that.years=response.years;
@@ -832,7 +836,8 @@ export default {
         data:toSend
       }).then((res)=>{
         let response=res.data;
-        that.paperNum=response.paper_num;
+        that.paperNum=Math.min(response.paper_num,10000);
+        that.trueNum=response.paper_num;
         that.papers=response.papers;
         that.nowPage=1;
         that.isLoading=false;
