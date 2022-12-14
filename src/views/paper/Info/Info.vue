@@ -20,6 +20,9 @@
       <el-col  :span="5" class="doi-isbn">issn: {{this.info.issn}}</el-col>
     </el-row>
     <el-row>
+      <el-col  class="doi-isbn">{{this.info.publisher}}</el-col>
+    </el-row>
+    <el-row>
       <el-col  class="year">被引量: {{this.info.n_citation}}</el-col>
     </el-row>
     <el-row>
