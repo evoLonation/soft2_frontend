@@ -183,7 +183,7 @@
             </template>
             <div v-for="index in themes.length" :key="index">
               <el-checkbox v-model="themesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.themes[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.themes[index-1].count}})</div>
@@ -196,7 +196,7 @@
             </template>
             <div v-for="index in venues.length" :key="index">
               <el-checkbox v-model="venuesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.venues[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.venues[index-1].count}})</div>
@@ -209,7 +209,7 @@
             </template>
             <div v-for="index in institutions.length" :key="index">
               <el-checkbox v-model="institutionsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.institutions[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.institutions[index-1].count}})</div>
@@ -222,7 +222,7 @@
             </template>
             <div v-for="index in years.length" :key="index">
               <el-checkbox v-model="yearsCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
-                <div style="display: inline-block">
+                <div style="display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 130px">
                   {{ this.years[index-1].name }}
                 </div>
                 <div style="font-size: 12px;color: #b0b2b3;display: inline-block;vertical-align: bottom;float: right">({{this.years[index-1].count}})</div>
@@ -431,7 +431,7 @@ export default {
       ],
       beginYear:0,
       endYear:0,
-      themes:[{name :'theme1',count:11},{name:"theme2",count:11}],
+      themes:[{name :'theme111111111111111111111111111111111111111111111111111',count:11},{name:"theme2",count:11}],
       themesCheck:[false,false],
       years:[{name:2001,count:11},{name:2002,count:123}],
       yearsCheck:[false,false],
