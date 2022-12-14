@@ -181,9 +181,9 @@ export default {
           this.loading1 = false
         }
         else {
-          if((sectionHeight2 + sectionTop2 -500 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
+          // if((sectionHeight2 + sectionTop2 -400 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
             this.getPaperList()
-          }
+          // }
         }
       }
       if((sectionHeight2 + sectionTop2 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
@@ -192,9 +192,9 @@ export default {
           this.loading2 = false
         }
         else {
-          if((sectionHeight1 + sectionTop1 -500 < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
+          // if((sectionHeight1 + sectionTop1 -400 < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
             this.getScholarList()
-          }
+          // }
         }
       }
     },
@@ -254,7 +254,7 @@ export default {
 }
 
 .scholar {
-  width: 400px;
+  width: 420px;
   position: sticky;
   display: block;
   margin-left: 80px;
