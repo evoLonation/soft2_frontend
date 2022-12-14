@@ -20,7 +20,7 @@ jobs:
             cd soft2
             cd soft2_frontend
             sudo git fetch --all
-            sudo git checkout main
+            sudo git checkout dev
             sudo git pull
             sudo npm install
             sudo npm run build
