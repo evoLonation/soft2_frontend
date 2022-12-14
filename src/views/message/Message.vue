@@ -267,7 +267,7 @@ export default {
     },
     refuse(gid, id){
       userAxios.post('grievance/refuse', {
-        "grievance_id": id
+        "grievance_id": gid
       }).then(()=>{
         ElMessage('已拒绝')
         this.read(id)
