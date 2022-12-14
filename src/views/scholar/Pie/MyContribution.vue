@@ -111,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 .pies-container {
-  width: 250px;
+  width: 350px;
   margin: auto;
   height: 350px;
   display: flex;
