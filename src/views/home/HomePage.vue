@@ -7,7 +7,7 @@
           <div>
             <div class="main">金刚石学术</div>
 <!--            <button @click="loginState.logout()">退出登录</button>-->
-            <div class="vice">在学术的海洋中探索宝藏</div>
+            <div class="vice">“在学术的海洋中探索宝藏!”</div>
           </div>
 
         </div>
@@ -15,6 +15,37 @@
           <div style="width: 30px;height: 10px"></div>
           <search-box>
           </search-box>
+        </div>
+      </div>
+      <div class="statistics">
+        <div class="header">平台数据库</div>
+        <div>
+          <div>
+            <el-icon size="100px"><Document /></el-icon>
+            <div>学术成果</div>
+          </div>
+          <div class="number">{{ statistics.paper_num.toLocaleString() }}</div>
+        </div>
+        <div>
+          <div>
+            <el-icon size="100px"><UserFilled /></el-icon>
+            <div>学者</div>
+          </div>
+          <div class="number">{{statistics.scholar_num.toLocaleString()}}</div>
+        </div>
+        <div>
+          <div>
+            <el-icon size="100px"><Management /></el-icon>
+            <div>期刊/会议</div>
+          </div>
+          <div class="number">{{statistics.journal_num.toLocaleString()}}</div>
+        </div>
+        <div>
+          <div>
+            <el-icon size="100px"><School /></el-icon>
+            <div>机构</div>
+          </div>
+          <div class="number">{{statistics.org_num.toLocaleString()}}</div>
         </div>
       </div>
 
@@ -84,7 +115,7 @@
 
 <script>
 import data from "@/assets/homedata.json";
-import {ref, onMounted, onBeforeUnmount} from "vue";
+import {ref, onMounted, onBeforeUnmount, reactive} from "vue";
 import {loginStore, navigationStore} from "@/store";
 import {useRouter} from "vue-router";
 import searchType from "@/assets/searchType.json";
@@ -160,7 +191,7 @@ export default {
       datas.forEach((data) => {
         let type = data.type[0];
         data.fields = data.type.slice(1);
-        data.type = type; 
+        data.type = type;
       });
       fieldInfos.value = datas;
       console.log(datas);
@@ -170,6 +201,20 @@ export default {
     window.addEventListener("scroll", scrollListener,true);
     onMounted(() => scrollListener());
     onBeforeUnmount(() => window.removeEventListener("scroll", scrollListener, true))
+
+    const statistics = reactive({
+        "paper_num": 1000000000,
+        "scholar_num": 1000000000,
+        "journal_num": 1000000,
+        "org_num": 1000000
+    });
+    paperScholarAxios.post("/data/info").then((res) => {
+      statistics.paper_num = res.data.paper_num;
+      statistics.scholar_num = res.data.scholar_num;
+      statistics.journal_num = res.data.journal_num;
+      statistics.org_num = res.data.org_num;
+    })
+
 
     const loginState = loginStore();
     return {
@@ -185,6 +230,7 @@ export default {
       gotoScholar,
       searchJournal,
       fieldLoading,
+      statistics,
     }
   },
 
@@ -193,7 +239,10 @@ export default {
 </script>
 
 <style lang="scss" scoped >
-
+@font-face {
+  font-family: "shangshoumofangti";
+  src: url("../../assets/xingxingyueliangti.ttf") format("truetype");
+}
 *{
   margin: auto;
 }
@@ -217,39 +266,91 @@ export default {
   //background-image: linear-gradient(to bottom, #00000000, #f3f3f3ff), url("@/assets/home2.jpg") ;
   background-image: url("@/assets/home2.jpg") ;
   //background-position: center;
-  img{
-    height: 800px;
-    width: 100%;
-    position: absolute;
-    opacity: 70%;
-    background: -ms-linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,0.9));
-    top:0;
-    z-index: 0;
-    object-fit: cover;
-  }
+  //img{
+  //  height: 800px;
+  //  width: 100%;
+  //  position: absolute;
+  //  opacity: 70%;
+  //  background: -ms-linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,0.9));
+  //  top:0;
+  //  z-index: 0;
+  //  object-fit: cover;
+  //}
   .content{
+    display: flex;
+    flex-direction: column;
     .logo{
       //font-family: STZhongsong,serif;
       .main{
-        font-weight: bold;
-        font-size: 60px;
-        color: #f1e3dd;
+        //font-weight: bold;
+        font-size: 80px;
+        //color: #f1e3dd;
+        color: #f5ffff;
         margin-bottom: 30px;
       }
+
       .vice{
-        font-size: 30px;
+        font-size: 40px;
+        //font-family: Serif,serif;
+        //font-weight: bold;
         //text-align : right;
         //width: 1200px;
-        color: #7a3b2e;
+        color: #F1F5F9;
+        font-family: "shangshoumofangti", serif;
       }
+
       height: 300px;
       text-align: center;
 
     }
     .search-box{
+      transform: scale(1.2, 1.2);
       display: flex;
       margin-left: auto;
       margin-right: auto;
+      transition:  .3s ease;
+    }
+    .search-box:focus-within{
+      transform: scale(1.3, 1.3);
+      transition:  .3s ease;
+    }
+  }
+  .statistics{
+
+    margin-top: auto;
+    margin-bottom: 20px;
+    display: flex;
+    width: 1700px;
+    //margin-bottom: 0;
+    position:sticky;
+    //top: 30px;
+    //left: 30px;
+    bottom: 10px;
+    //bottom:1000px;
+    .header{
+      margin-left: 20px;
+      font-size: 30px;
+    }
+    .number{
+      font-size: 30px;
+      //font-weight: bold;
+    }
+    > div{
+      color: #faffff;
+      margin: auto;
+      display: flex;
+      div{
+
+        display: flex;
+        flex-direction: column;
+        font-family: 'Courier New',serif;
+        font-size: 20px;
+
+        div{
+          margin-top: 10px;
+        }
+
+      }
     }
   }
 
