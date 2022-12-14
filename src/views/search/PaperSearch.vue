@@ -141,7 +141,7 @@
               <div style="width:296px;margin: auto">
                 <el-scrollbar height="224px">
                   <div><span style="font-size: 18px">可检索字段：</span></div>
-                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">title=标题 abstract=摘要 keywords=关键字 doi=DOI号 authors.org=作者机构 authors.name=作者名称 venue=发布期刊</span></div>
+                  <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">title=标题 abstract=摘要 keywords=关键字 doi=DOI号 authors.org=作者机构 authors.name=作者名称 venue=期刊/会议</span></div>
                   <div style="margin-top: 20px"><span style="font-size: 18px">示例：</span></div>
                   <div style="margin-top: 10px"><span style="font-size: 16px;color: #b0b2b3;line-height: 28px">
                     1）title:machine OR title:interesting
@@ -192,7 +192,7 @@
           </el-collapse-item>
           <el-collapse-item name="2">
             <template #title >
-              <span style="font-size: 15px">会议/期刊</span>
+              <span style="font-size: 15px">期刊/会议</span>
             </template>
             <div v-for="index in venues.length" :key="index">
               <el-checkbox v-model="venuesCheck[index-1]" @change="dealFilter" style="margin-left: 10px;font-size: 13px;width: 230px">
@@ -289,8 +289,8 @@ export default {
           label: 'DOI',
         },
         {
-          value: '发布期刊',
-          label: '发布期刊',
+          value: '期刊/会议',
+          label: '期刊/会议',
         },
         {
           value: '作者机构',
@@ -571,7 +571,7 @@ export default {
           return 3;
         case 'DOI':
           return 4;
-        case '期刊':
+        case '期刊/会议':
           return 5;
         case '作者机构':
           return 6;
@@ -591,7 +591,7 @@ export default {
           return "authors.org";
         case '作者名称':
           return "authors.name";
-        case '期刊':
+        case '期刊/会议':
           return "venue";
       }
     },
