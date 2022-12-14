@@ -67,6 +67,7 @@
 import list from "../../components/paperShow"
 import list2 from "../../components/ScholarShow"
 import {paperScholarAxios} from "@/axios";
+import {debounce} from "@/views/field/debounce";
 export default {
   name: 'FieldPage',
   components: {
@@ -97,6 +98,8 @@ export default {
       end1: 8,
       start2: 0,
       end2: 8,
+      paper_pre: 0,
+      scholar_pre: 0,
       loading1: true,
       loading2: true,
       PaperList: [],
@@ -104,7 +107,11 @@ export default {
     }
   },
   methods: {
+    test() {
+      debounce(this.scrollFn(), 3000)()
+    },
     getPaperList() {
+      this.paper_pre = this.start1
       console.log('paper:',this.field_name, this.start1, this.end1)
       paperScholarAxios.post('field/paper', {
         "field": this.field_name,
@@ -128,6 +135,7 @@ export default {
       })
     },
     getScholarList() {
+      this.scholar_pre = this.start2
       console.log('scholar:',this.field_name, this.start2, this.end2)
       paperScholarAxios.post('field/scholar', {
         "field": this.field_name,
@@ -181,9 +189,11 @@ export default {
           this.loading1 = false
         }
         else {
-          // if((sectionHeight2 + sectionTop2 -400 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
+          if(this.paper_pre != this.start1) {
             this.getPaperList()
-          // }
+          }
+
+          console.log('在获取论文', this.paper_pre, this.start1)
         }
       }
       if((sectionHeight2 + sectionTop2 < st + windowHeight) && this.scholar_num > 0 && st + windowHeight > 932) {
@@ -192,9 +202,10 @@ export default {
           this.loading2 = false
         }
         else {
-          // if((sectionHeight1 + sectionTop1 -400 < st + windowHeight) && this.paper_num > 0 && st + windowHeight > 932) {
+          if(this.scholar_pre != this.start2) {
             this.getScholarList()
-          // }
+          }
+            console.log('在获取学者', this.scholar_pre, this.start2)
         }
       }
     },
@@ -209,12 +220,12 @@ export default {
   mounted() {
     this.field_name = this.$route.query.content
     console.log(this.field_name)
-    window.addEventListener("mousewheel", this.scrollFn);
+    window.addEventListener("mousewheel", this.test);
     this.getPaperList()
     this.getScholarList()
   },
   beforeUnmount() {
-    window.removeEventListener("mousewheel", this.scrollFn);
+    window.removeEventListener("mousewheel", this.test);
   },
   watch: {
     $route() {
